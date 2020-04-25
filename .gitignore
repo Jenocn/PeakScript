@@ -1,0 +1,9 @@
+**/*.obj
+**/*.lik
+**/*.bin
+**/*.sdf
+**/*.exe
+**/*.vs
+**/*.vscode
+**/*.pdb
+**/.DS_Store
