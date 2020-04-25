@@ -1,23 +1,19 @@
 #pragma once
 
-#include <memory>
-#include <string>
+#include "Sentence.h"
 
 namespace peak::interpreter {
 
 class Value;
 
-class Variable {
+class SentenceExpression : public Sentence {
 public:
-	Variable(const std::string& name);
-
-	const std::string& GetName() const;
-
-	void SetValue(std::shared_ptr<Value> value);
 	std::shared_ptr<Value> GetValue() const;
 
+protected:
+	void SetValue(std::shared_ptr<Value> value);
+
 private:
-	std::string _name;
 	std::shared_ptr<Value> _value{nullptr};
 };
 } // namespace peak::interpreter

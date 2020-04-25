@@ -4,8 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace peak {
-namespace interpreter {
+namespace peak::interpreter {
 
 class Variable;
 class Method;
@@ -29,5 +28,4 @@ private:
 	std::unordered_map<std::string, std::shared_ptr<Method>> _methods;
 	std::unordered_map<std::string, std::shared_ptr<Variable>> _variables;
 };
-} // namespace interpreter
-} // namespace peak
+} // namespace peak::interpreter

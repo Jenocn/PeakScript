@@ -1,34 +1,32 @@
 
 #include "../src/SentenceBlock.h"
-#include "../src/SentenceVarFromName.h"
-#include "../src/SentenceVarFromValue.h"
+#include "../src/SentenceExpression.h"
+#include "../src/SentenceExpressionValue.h"
+#include "../src/SentenceExpressionVariable.h"
+#include "../src/SentenceVar.h"
 #include "../src/ValueNumber.h"
 
 #include <iostream>
 
 using namespace peak::interpreter;
 
-class A {
-public:
-	A() {
-		std::cout << "A" << std::endl;
-	}
-	~A() {
-		std::cout << "~A" << std::endl;
-	}
-};
-
 int main(int argc, char** argv) {
 	std::shared_ptr<Space> space{new Space()};
-	SentenceBlock block;
 
-	auto number = new ValueNumber();
+	auto number = std::shared_ptr<ValueNumber>(new ValueNumber());
 	number->SetValue(999);
-	std::shared_ptr<Sentence> sentence{new SentenceVarFromValue("temp", std::shared_ptr<Value>(number))};
-	block.Push(sentence);
-	block.Execute(space);
 
-	std::cout << "end";
+{
+	SentenceBlock block;
+	block.Push(std::shared_ptr<Sentence>(new SentenceVar("temp", std::shared_ptr<SentenceExpressionValue>(new SentenceExpressionValue(number)))));
+	block.Push(std::shared_ptr<Sentence>(new SentenceVar("abc", std::shared_ptr<SentenceExpressionVariable>(new SentenceExpressionVariable("temp")))));
+	if (!block.Execute(space)) {
+		std::cout << "error" << std::endl;
+	}
+}
+
+	std::cout << number.use_count() << std::endl;
+	std::cout << "end" << std::endl;
 
 	return 0;
 }

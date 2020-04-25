@@ -4,8 +4,7 @@
 #include <list>
 #include <memory>
 
-namespace peak {
-namespace interpreter {
+namespace peak::interpreter {
 class SentenceBlock : public Sentence {
 public:
 	virtual bool Execute(std::shared_ptr<Space> space);
@@ -15,5 +14,4 @@ private:
 	std::list<std::shared_ptr<Sentence>> _list;
 	std::shared_ptr<Space> _space{nullptr};
 };
-} // namespace interpreter
-} // namespace peak
+} // namespace peak::interpreter

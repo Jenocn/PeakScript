@@ -2,8 +2,7 @@
 
 #include <string>
 
-namespace peak {
-namespace interpreter {
+namespace peak::interpreter {
 class Method {
 public:
 	const std::string& GetName() const;
@@ -11,5 +10,4 @@ public:
 private:
 	std::string _name;
 };
-} // namespace interpreter
-} // namespace peak
+} // namespace peak::interpreter
