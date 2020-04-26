@@ -21,20 +21,19 @@ ExecuteResult SentenceCondition::Execute(std::shared_ptr<Space> space) {
 	if (!IsSuccess(_expression->Execute(space))) {
 		return ExecuteResult::Failed;
 	}
-	if (ValueTool::ToLogic(_expression->GetValue())) {
-		if (_sentenceTrue) {
-			auto tempSpace = std::shared_ptr<Space>(new Space(space));
-			if (!IsSuccess(_sentenceTrue->Execute(tempSpace))) {
-				return ExecuteResult::Failed;
-			}
+	bool bTrue = ValueTool::ToLogic(_expression->GetValue());
+	auto tempSentence = bTrue ? _sentenceTrue : _sentenceFalse;
+	if (tempSentence) {
+		auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Condition, space));
+		auto executeRet = tempSentence->Execute(tempSpace);
+		if (!IsSuccess(executeRet)) {
+			return ExecuteResult::Failed;
 		}
-	} else {
-		if (_sentenceFalse) {
-			auto tempSpace = std::shared_ptr<Space>(new Space(space));
-			if (!IsSuccess(_sentenceFalse->Execute(tempSpace))) {
-				return ExecuteResult::Failed;
-			}
+		if (executeRet == ExecuteResult::Return) {
+			SetReturnValue(std::static_pointer_cast<SentenceReturn>(tempSentence)->GetReturnValue());
+			return ExecuteResult::Return;
 		}
 	}
+
 	return ExecuteResult::Successed;
 }

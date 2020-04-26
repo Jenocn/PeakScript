@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Sentence.h"
+#include "SentenceReturn.h"
 
 namespace peak::interpreter {
 class SentenceExpression;
-class SentenceCondition : public Sentence {
+class SentenceCondition : public SentenceReturn {
 public:
 	SentenceCondition(std::shared_ptr<SentenceExpression> expression);
 	void SetSentenceWhenTrue(std::shared_ptr<Sentence> sentence);

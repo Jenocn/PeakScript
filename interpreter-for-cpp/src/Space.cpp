@@ -1,14 +1,15 @@
 #include "Space.h"
+#include "Method.h"
 #include "Value/Value.h"
 #include "Variable.h"
-#include "Method.h"
 
 using namespace peak::interpreter;
 
-Space::Space() {
+Space::Space(SpaceType spaceType)
+	: _spaceType(spaceType) {
 }
-Space::Space(std::shared_ptr<Space> parent) {
-	_parent = parent;
+Space::Space(SpaceType spaceType, std::shared_ptr<Space> parent)
+	: _spaceType(spaceType), _parent(parent) {
 }
 
 void Space::Clear() {
@@ -17,7 +18,9 @@ void Space::Clear() {
 }
 
 bool Space::AddVariable(std::shared_ptr<Variable> value) {
-	if (!value) { return false; }
+	if (!value) {
+		return false;
+	}
 	if (_variables.find(value->GetName()) != _variables.end()) {
 		return false;
 	}
@@ -51,4 +54,8 @@ std::shared_ptr<Method> Space::FindMethod(const std::string& name) const {
 		return _parent->FindMethod(name);
 	}
 	return nullptr;
+}
+
+SpaceType Space::GetSpaceType() const {
+	return _spaceType;
 }

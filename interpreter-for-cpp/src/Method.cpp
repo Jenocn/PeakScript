@@ -22,7 +22,7 @@ void Method::SetParameters(const std::vector<std::string>& args) {
 }
 
 std::shared_ptr<Value> Method::Execute(std::shared_ptr<Space> space) {
-	auto tempSpace = std::shared_ptr<Space>(new Space());
+	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Method, space));
 
 	auto size = _parameters.size();
 	if (size > _args.size()) {

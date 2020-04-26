@@ -3,9 +3,13 @@
 #include "../Space.h"
 
 namespace peak::interpreter {
+
+class Value;
+
 enum class ExecuteResult {
 	Successed,
 	Failed,
+	Return,
 };
 class Sentence {
 public:

@@ -1,11 +1,13 @@
 #pragma once
 
-#include "Sentence.h"
+#include "SentenceReturn.h"
 #include <list>
 #include <memory>
 
 namespace peak::interpreter {
-class SentenceBlock : public Sentence {
+
+	
+class SentenceBlock : public SentenceReturn {
 public:
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 	void Push(std::shared_ptr<Sentence> sentence);

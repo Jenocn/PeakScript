@@ -13,7 +13,7 @@
 using namespace peak::interpreter;
 
 int main(int argc, char** argv) {
-	std::shared_ptr<Space> space{new Space()};
+	std::shared_ptr<Space> space{new Space(SpaceType::None)};
 
 	ValueString::Type();
 	auto number = std::shared_ptr<Value>(new ValueNumber(999));
