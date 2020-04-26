@@ -6,18 +6,18 @@ SentenceExpressionMath::SentenceExpressionMath(std::shared_ptr<SentenceExpressio
 	: _left(left), _right(right) {
 }
 
-bool SentenceExpressionMath::Execute(std::shared_ptr<Space> space) {
-	if (!_left || !_left->Execute(space)) {
-		return false;
+ExecuteResult SentenceExpressionMath::Execute(std::shared_ptr<Space> space) {
+	if (!_left || !IsSuccess(_left->Execute(space))) {
+		return ExecuteResult::Failed;
 	}
-	if (!_right || !_right->Execute(space)) {
-		return false;
+	if (!_right || !IsSuccess(_right->Execute(space))) {
+		return ExecuteResult::Failed;
 	}
 
 	auto value = Calculate(_left->GetValue(), _right->GetValue());
 	if (!value) {
-		return false;
+		return ExecuteResult::Failed;
 	}
 	SetValue(value);
-	return true;
+	return ExecuteResult::Successed;
 }

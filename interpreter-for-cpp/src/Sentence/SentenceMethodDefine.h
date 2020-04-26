@@ -10,7 +10,7 @@ public:
 	void PushParam(const std::string& name);
 	void SetSentence(std::shared_ptr<Sentence> sentence);
 
-	virtual bool Execute(std::shared_ptr<Space> space);
+	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 
 private:
 	std::string _name;

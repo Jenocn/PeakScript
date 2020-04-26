@@ -9,7 +9,7 @@ class SentenceMethodCall : public SentenceExpression {
 public:
 	SentenceMethodCall(const std::string& name);
 
-	virtual bool Execute(std::shared_ptr<Space> space);
+	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 
 private:
 	std::string _name;

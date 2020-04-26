@@ -6,7 +6,7 @@ namespace peak::interpreter {
 class SentenceExpressionMath : public SentenceExpression {
 public:
 	SentenceExpressionMath(std::shared_ptr<SentenceExpression> left, std::shared_ptr<SentenceExpression> right);
-	virtual bool Execute(std::shared_ptr<Space> space) final;
+	virtual ExecuteResult Execute(std::shared_ptr<Space> space) final;
 
 protected:
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right) = 0;

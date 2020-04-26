@@ -1,6 +1,6 @@
 #include "SentenceCondition.h"
-#include "SentenceExpression.h"
 #include "../Value/ValueTool.h"
+#include "SentenceExpression.h"
 
 using namespace peak::interpreter;
 
@@ -14,27 +14,27 @@ void SentenceCondition::SetSentenceWhenFalse(std::shared_ptr<Sentence> sentence)
 	_sentenceFalse = sentence;
 }
 
-bool SentenceCondition::Execute(std::shared_ptr<Space> space) {
+ExecuteResult SentenceCondition::Execute(std::shared_ptr<Space> space) {
 	if (!_expression) {
-		return false;
+		return ExecuteResult::Failed;
 	}
-	if (!_expression->Execute(space)) {
-		return false;
+	if (!IsSuccess(_expression->Execute(space))) {
+		return ExecuteResult::Failed;
 	}
 	if (ValueTool::ToLogic(_expression->GetValue())) {
 		if (_sentenceTrue) {
 			auto tempSpace = std::shared_ptr<Space>(new Space(space));
-			if (!_sentenceTrue->Execute(tempSpace)) {
-				return false;
+			if (!IsSuccess(_sentenceTrue->Execute(tempSpace))) {
+				return ExecuteResult::Failed;
 			}
 		}
 	} else {
 		if (_sentenceFalse) {
 			auto tempSpace = std::shared_ptr<Space>(new Space(space));
-			if (!_sentenceFalse->Execute(tempSpace)) {
-				return false;
+			if (!IsSuccess(_sentenceFalse->Execute(tempSpace))) {
+				return ExecuteResult::Failed;
 			}
 		}
 	}
-	return true;
+	return ExecuteResult::Successed;
 }

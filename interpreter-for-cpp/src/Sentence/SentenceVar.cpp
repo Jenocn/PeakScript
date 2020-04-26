@@ -10,12 +10,15 @@ SentenceVar::SentenceVar(const std::string& name, std::shared_ptr<SentenceExpres
 	_variable = std::shared_ptr<Variable>(new Variable(name));
 }
 
-bool SentenceVar::Execute(std::shared_ptr<Space> space) {
+ExecuteResult SentenceVar::Execute(std::shared_ptr<Space> space) {
 	if (_expression) {
-		if (!_expression->Execute(space)) {
-			return false;
+		if (!IsSuccess(_expression->Execute(space))) {
+			return ExecuteResult::Failed;
 		}
 		_variable->SetValue(_expression->GetValue());
 	}
-	return space->AddVariable(_variable);
+	if (!space->AddVariable(_variable)) {
+		return ExecuteResult::Failed;
+	}
+	return ExecuteResult::Successed;
 }

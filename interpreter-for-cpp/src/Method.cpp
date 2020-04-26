@@ -39,7 +39,7 @@ std::shared_ptr<Value> Method::Execute(std::shared_ptr<Space> space) {
 	}
 
 	if (_sentence) {
-		if (!_sentence->Execute(tempSpace)) {
+		if (!Sentence::IsSuccess(_sentence->Execute(tempSpace))) {
 			return nullptr;
 		}
 	}

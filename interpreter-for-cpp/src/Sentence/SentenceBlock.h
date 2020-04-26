@@ -7,7 +7,7 @@
 namespace peak::interpreter {
 class SentenceBlock : public Sentence {
 public:
-	virtual bool Execute(std::shared_ptr<Space> space);
+	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 	void Push(std::shared_ptr<Sentence> sentence);
 
 private:

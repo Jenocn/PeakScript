@@ -7,10 +7,10 @@ SentenceExpressionValue::SentenceExpressionValue(std::shared_ptr<Value> value)
 	: _value(value) {
 }
 
-bool SentenceExpressionValue::Execute(std::shared_ptr<Space> space) {
+ExecuteResult SentenceExpressionValue::Execute(std::shared_ptr<Space> space) {
 	if (!_value) {
-		return false;
+		return ExecuteResult::Failed;
 	}
 	SetValue(_value);
-	return true;
+	return ExecuteResult::Successed;
 }

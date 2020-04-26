@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
 	SentenceBlock block;
 	block.Push(std::shared_ptr<Sentence>(new SentenceVar("temp", std::shared_ptr<SentenceExpressionValue>(new SentenceExpressionValue(number)))));
 	block.Push(std::shared_ptr<Sentence>(new SentenceVar("abc", std::shared_ptr<SentenceExpressionVariable>(new SentenceExpressionVariable("temp")))));
-	if (!block.Execute(space)) {
+	if (!Sentence::IsSuccess(block.Execute(space))) {
 		std::cout << "error" << std::endl;
 	}
 
