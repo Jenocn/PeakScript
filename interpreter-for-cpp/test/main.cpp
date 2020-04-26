@@ -1,12 +1,12 @@
 
-#include "../src/Sentence/SentenceBlock.h"
-#include "../src/Sentence/SentenceExpression.h"
-#include "../src/Sentence/SentenceExpressionArithmeticInstance.h"
-#include "../src/Sentence/SentenceExpressionValue.h"
-#include "../src/Sentence/SentenceExpressionVariable.h"
-#include "../src/Sentence/SentenceVar.h"
-#include "../src/Value/ValueTool.h"
-#include "../src/Variable.h"
+#include "../src/Runtime/Sentence/SentenceBlock.h"
+#include "../src/Runtime/Sentence/SentenceExpression.h"
+#include "../src/Runtime/Sentence/SentenceExpressionArithmeticInstance.h"
+#include "../src/Runtime/Sentence/SentenceExpressionValue.h"
+#include "../src/Runtime/Sentence/SentenceExpressionVariable.h"
+#include "../src/Runtime/Sentence/SentenceVar.h"
+#include "../src/Runtime/Value/ValueTool.h"
+#include "../src/Runtime/Variable.h"
 
 #include <iostream>
 
