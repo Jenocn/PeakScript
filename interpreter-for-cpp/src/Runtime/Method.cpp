@@ -22,12 +22,12 @@ void Method::SetParameters(const std::vector<std::string>& args) {
 }
 
 std::shared_ptr<Value> Method::Execute(std::shared_ptr<Space> space) {
-	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Method, space));
 
 	auto size = _parameters.size();
 	if (size > _args.size()) {
 		return nullptr;
 	}
+	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Method, space));
 	for (std::size_t i = 0; i < size; ++i) {
 		const auto& paramName = _parameters[i];
 		auto paramValue = _args[i];
@@ -39,13 +39,14 @@ std::shared_ptr<Value> Method::Execute(std::shared_ptr<Space> space) {
 	}
 
 	if (_sentence) {
-		if (!Sentence::IsSuccess(_sentence->Execute(tempSpace))) {
+		auto executeRet = _sentence->Execute(tempSpace);
+		if (!Sentence::IsSuccess(executeRet)) {
 			return nullptr;
 		}
+		if (executeRet == ExecuteResult::Return) {
+			return std::static_pointer_cast<SentenceReturn>(_sentence)->GetReturnValue();
+		}
 	}
-
-	// temp todo... // return support
-
 	return std::shared_ptr<Value>(new ValueNull());
 }
 
