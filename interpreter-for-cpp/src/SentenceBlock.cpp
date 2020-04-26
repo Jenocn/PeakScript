@@ -11,7 +11,6 @@ bool SentenceBlock::Execute(std::shared_ptr<Space> space) {
 			return false;
 		}
 	}
-	tempSpace->Clear();
 	return true;
 }
 void SentenceBlock::Push(std::shared_ptr<Sentence> sentence) {
