@@ -3,9 +3,9 @@
 #include "Value.h"
 
 namespace peak::interpreter {
-class ValueNumber : public Value {
+class ValueNumber : public TypeValue<ValueNumber> {
 public:
-	void SetValue(double value);
+	ValueNumber(double value);
 	double GetValue() const;
 
 private:

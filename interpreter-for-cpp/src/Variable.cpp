@@ -1,8 +1,10 @@
 #include "Variable.h"
+#include "ValueNull.h"
 
 using namespace peak::interpreter;
 
 Variable::Variable(const std::string& name) : _name(name) {
+	_value = std::shared_ptr<Value>(new ValueNull());
 }
 
 const std::string& Variable::GetName() const {

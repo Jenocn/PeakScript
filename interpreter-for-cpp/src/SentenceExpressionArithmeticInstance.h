@@ -3,28 +3,29 @@
 #include "SentenceExpressionArithmetic.h"
 
 namespace peak::interpreter {
-class SentenceExpressionArithmeticAdd : SentenceExpressionArithmetic {
+class SentenceExpressionArithmeticAdd : public SentenceExpressionArithmetic {
 public:
+	using SentenceExpressionArithmetic::SentenceExpressionArithmetic;
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
 };
-class SentenceExpressionArithmeticSub : SentenceExpressionArithmetic {
+class SentenceExpressionArithmeticSub : public SentenceExpressionArithmetic {
 public:
+	using SentenceExpressionArithmetic::SentenceExpressionArithmetic;
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
 };
-class SentenceExpressionArithmeticMul : SentenceExpressionArithmetic {
+class SentenceExpressionArithmeticMul : public SentenceExpressionArithmetic {
 public:
+	using SentenceExpressionArithmetic::SentenceExpressionArithmetic;
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
 };
-class SentenceExpressionArithmeticDiv : SentenceExpressionArithmetic {
+class SentenceExpressionArithmeticDiv : public SentenceExpressionArithmetic {
 public:
+	using SentenceExpressionArithmetic::SentenceExpressionArithmetic;
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
 };
-class SentenceExpressionArithmeticMod : SentenceExpressionArithmetic {
+class SentenceExpressionArithmeticMod : public SentenceExpressionArithmetic {
 public:
-	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
-};
-class SentenceExpressionArithmeticPow : SentenceExpressionArithmetic {
-public:
+	using SentenceExpressionArithmetic::SentenceExpressionArithmetic;
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
 };
 } // namespace peak::interpreter
