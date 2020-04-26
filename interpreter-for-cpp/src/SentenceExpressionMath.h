@@ -3,9 +3,9 @@
 #include "SentenceExpression.h"
 
 namespace peak::interpreter {
-class SentenceExpressionArithmetic : public SentenceExpression {
+class SentenceExpressionMath : public SentenceExpression {
 public:
-	SentenceExpressionArithmetic(std::shared_ptr<SentenceExpression> left, std::shared_ptr<SentenceExpression> right);
+	SentenceExpressionMath(std::shared_ptr<SentenceExpression> left, std::shared_ptr<SentenceExpression> right);
 	virtual bool Execute(std::shared_ptr<Space> space) final;
 
 protected:

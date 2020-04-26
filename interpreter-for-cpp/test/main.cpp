@@ -24,8 +24,8 @@ int main(int argc, char** argv) {
 		std::cout << "error" << std::endl;
 	}
 
-	auto tempSentence = std::shared_ptr<SentenceExpressionArithmetic>(new SentenceExpressionArithmeticAdd(
-		std::shared_ptr<SentenceExpression>(new SentenceExpressionValue(std::shared_ptr<Value>(new ValueNumber(10)))),
+	auto tempSentence = std::shared_ptr<SentenceExpression>(new SentenceExpressionArithmeticAdd(
+		std::shared_ptr<SentenceExpression>(new SentenceExpressionValue(std::shared_ptr<Value>(new ValueString("aaa")))),
 		std::shared_ptr<SentenceExpression>(new SentenceExpressionValue(std::shared_ptr<Value>(new ValueNumber(20))))));
 	auto varSentence = std::shared_ptr<Sentence>(new SentenceVar("value", tempSentence));
 	varSentence->Execute(space);

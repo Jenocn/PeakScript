@@ -8,6 +8,9 @@ SentenceExpressionValue::SentenceExpressionValue(std::shared_ptr<Value> value)
 }
 
 bool SentenceExpressionValue::Execute(std::shared_ptr<Space> space) {
+	if (!_value) {
+		return false;
+	}
 	SetValue(_value);
 	return true;
 }

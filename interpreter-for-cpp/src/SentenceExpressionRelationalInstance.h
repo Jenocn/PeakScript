@@ -1,29 +1,33 @@
 #pragma once
 
 #include "SentenceExpressionMath.h"
-
 namespace peak::interpreter {
-class SentenceExpressionArithmeticAdd : public SentenceExpressionMath {
+class SentenceExpressionRelationalSame : public SentenceExpressionMath {
 public:
 	using SentenceExpressionMath::SentenceExpressionMath;
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
 };
-class SentenceExpressionArithmeticSub : public SentenceExpressionMath {
+class SentenceExpressionRelationalNotSame : public SentenceExpressionMath {
 public:
 	using SentenceExpressionMath::SentenceExpressionMath;
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
 };
-class SentenceExpressionArithmeticMul : public SentenceExpressionMath {
+class SentenceExpressionRelationalMore : public SentenceExpressionMath {
 public:
 	using SentenceExpressionMath::SentenceExpressionMath;
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
 };
-class SentenceExpressionArithmeticDiv : public SentenceExpressionMath {
+class SentenceExpressionRelationalSameOrMore : public SentenceExpressionMath {
 public:
 	using SentenceExpressionMath::SentenceExpressionMath;
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
 };
-class SentenceExpressionArithmeticMod : public SentenceExpressionMath {
+class SentenceExpressionRelationalLess : public SentenceExpressionMath {
+public:
+	using SentenceExpressionMath::SentenceExpressionMath;
+	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
+};
+class SentenceExpressionRelationalSameOrLess : public SentenceExpressionMath {
 public:
 	using SentenceExpressionMath::SentenceExpressionMath;
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right);
