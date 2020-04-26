@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Space.h"
+#include "../Space.h"
 
 namespace peak::interpreter {
+
 class Sentence {
 public:
 	Sentence() {}

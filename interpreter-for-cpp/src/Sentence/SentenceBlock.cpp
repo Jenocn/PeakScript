@@ -1,6 +1,6 @@
 
 #include "SentenceBlock.h"
-#include "Space.h"
+#include "../Space.h"
 
 using namespace peak::interpreter;
 

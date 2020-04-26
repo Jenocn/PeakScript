@@ -1,5 +1,5 @@
 #include "Space.h"
-#include "Value.h"
+#include "Value/Value.h"
 #include "Variable.h"
 #include "Method.h"
 

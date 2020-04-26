@@ -1,6 +1,6 @@
 #include "SentenceExpressionRelationalInstance.h"
+#include "../Value/ValueTool.h"
 
-#include "ValueTool.h"
 using namespace peak::interpreter;
 
 std::shared_ptr<Value> SentenceExpressionRelationalSame::Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right) {

@@ -1,5 +1,5 @@
 #include "SentenceMethodCall.h"
-#include "Method.h"
+#include "../Method.h"
 
 using namespace peak::interpreter;
 

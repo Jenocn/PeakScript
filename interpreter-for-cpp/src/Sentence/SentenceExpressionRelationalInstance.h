@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SentenceExpressionMath.h"
+
 namespace peak::interpreter {
 class SentenceExpressionRelationalSame : public SentenceExpressionMath {
 public:

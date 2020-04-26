@@ -1,7 +1,7 @@
 #include "Method.h"
-#include "Sentence.h"
-#include "SentenceBlock.h"
-#include "ValueTool.h"
+#include "Sentence/Sentence.h"
+#include "Sentence/SentenceBlock.h"
+#include "Value/ValueTool.h"
 #include "Variable.h"
 
 using namespace peak::interpreter;

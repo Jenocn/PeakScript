@@ -1,6 +1,6 @@
 #include "SentenceCondition.h"
 #include "SentenceExpression.h"
-#include "ValueTool.h"
+#include "../Value/ValueTool.h"
 
 using namespace peak::interpreter;
 

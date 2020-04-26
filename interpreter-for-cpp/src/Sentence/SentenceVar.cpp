@@ -1,7 +1,7 @@
 
 #include "SentenceVar.h"
 #include "SentenceExpression.h"
-#include "Variable.h"
+#include "../Variable.h"
 
 using namespace peak::interpreter;
 
