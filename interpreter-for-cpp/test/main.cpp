@@ -11,16 +11,43 @@
 #include "../src/Grammar/Grammar.h"
 #include "../src/Grammar/ParseTool.h"
 
+#include <fstream>
 #include <iostream>
+#include <string>
 
 using namespace peak::interpreter;
+
+std::string openFile(const std::string& filename) {
+	std::ifstream in(filename.c_str(), std::ios::in | std::ios::ate);
+	if (!in.is_open()) {
+		return "";
+	}
+	std::string result;
+	do {
+		std::size_t size = (std::size_t)in.tellg();
+		if (size == 0) {
+			break;
+		}
+		in.seekg(std::ios::beg);
+		char* buffer = new (std::nothrow) char[size];
+		if (!buffer) {
+			break;
+		}
+		memset(buffer, 0, size);
+		in.read(buffer, size);
+		result = buffer;
+		delete[] buffer;
+	} while (0);
+	in.close();
+	return result;
+}
 
 int main(int argc, char** argv) {
 	std::shared_ptr<Space> space{new Space(SpaceType::None)};
 
-	std::string src = "var num=\"Hello World!\"  ;  \n set num2 is \"Hello Peak!\"  ;  ";
-	std::size_t pos = 0;
-	std::string temp;
+	std::string src = std::move(openFile("/Users/jenocn/Project/PeakScript/interpreter-for-cpp/test/test.peak"));
+	std::cout << src << std::endl;
+	std::cout << "========================" << std::endl;
 
 	auto ret = std::move(ParseTool::Load(src));
 	for (auto sen : ret) {
@@ -28,9 +55,17 @@ int main(int argc, char** argv) {
 			std::cout << "error" << std::endl;
 		}
 	}
-	auto num2 = space->FindVariable("num");
-	if (num2) {
-		std::cout << ValueTool::ToString(num2->GetValue()) << std::endl;
+
+	while (true) {
+		std::string key;
+		std::cin >> key;
+		if (key == "q") {
+			break;
+		}
+		auto v = space->FindVariable(key);
+		if (v) {
+			std::cout << ValueTool::ToString(v->GetValue()) << std::endl;
+		}
 	}
 
 	return 0;

@@ -11,8 +11,10 @@ public:
 	static bool IsTextNumber(char ch);
 	static bool IsGrammarStringSign(char ch);
 	static bool IsGrammarEndSign(char ch);
+	static bool IsSpecialSign(const std::string& value);
 
 public:
+	static bool MatchNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, double* number);
 	static bool MatchName(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* name);
 	static bool MatchEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

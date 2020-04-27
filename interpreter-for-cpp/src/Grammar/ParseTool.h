@@ -21,7 +21,11 @@ public:
 
 public:
 	static std::shared_ptr<Sentence> _ParseVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+
+public:
 	static std::shared_ptr<SentenceExpression> _ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static std::shared_ptr<SentenceExpression> _ParseNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	
 
 private:
 	static std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_t, std::size_t, std::size_t*)>> _sentenceParseList;

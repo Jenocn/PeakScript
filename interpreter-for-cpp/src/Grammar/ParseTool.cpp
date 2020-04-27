@@ -13,6 +13,7 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 };
 std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceExpressionParseList = {
 	_ParseString,
+	_ParseNumber,
 };
 
 std::list<std::shared_ptr<Sentence>> ParseTool::Load(const std::string& src) {
@@ -132,6 +133,14 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseString(const std::string& s
 	if (Grammar::MatchPair(sign, sign, src, size, pos, &pos, &temp)) {
 		*nextPos = pos;
 		return std::shared_ptr<SentenceExpression>(new SentenceExpressionValue(std::shared_ptr<Value>(new ValueString(temp))));
+	}
+	return nullptr;
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::_ParseNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	double temp{0};
+	if (Grammar::MatchNumber(src, size, pos, nextPos, &temp)) {
+		return std::shared_ptr<SentenceExpression>(new SentenceExpressionValue(std::shared_ptr<Value>(new ValueNumber(temp))));
 	}
 	return nullptr;
 }
