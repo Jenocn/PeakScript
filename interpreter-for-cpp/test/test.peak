@@ -1,4 +1,6 @@
 
-var num0=.0
+var num0
 var num1 = "Hello World!"
 set num2 is "Hello Peak!"
+auto num3 as "Hahah"
+var num4=5

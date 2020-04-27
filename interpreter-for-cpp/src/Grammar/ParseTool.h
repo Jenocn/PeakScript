@@ -14,6 +14,7 @@ public:
 
 public:
 	static std::size_t JumpTextSpace(const std::string& src, std::size_t size, std::size_t pos);
+	static std::size_t JumpTextSpace(const std::string& src, std::size_t size, std::size_t pos, bool* bEndOfTail);
 	static std::size_t JumpComment(const std::string& src, std::size_t size, std::size_t pos);
 	static std::size_t JumpCommentBlock(const std::string& src, std::size_t size, std::size_t pos);
 	static std::shared_ptr<Sentence> ParseSentence(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

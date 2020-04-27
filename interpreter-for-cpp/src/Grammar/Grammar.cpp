@@ -79,7 +79,7 @@ bool Grammar::MatchNumber(const std::string& src, std::size_t size, std::size_t 
 		++pos;
 	}
 
-	if (pos == beginPos + 1) {
+	if (pos == beginPos) {
 		return false;
 	}
 
@@ -120,27 +120,25 @@ bool Grammar::MatchName(const std::string& src, std::size_t size, std::size_t po
 	while (pos < size) {
 		ch = src[pos];
 		if (IsTextSpecialChar(ch) || IsTextSpace(ch)) {
-			if (pos == beginPos) {
-				return false;
-			}
-			auto tempSize = pos - beginPos;
-			auto tempName = std::move(src.substr(beginPos, tempSize));
-			if (IsSpecialSign(tempName)) {
-				return false;
-			}
-			*name = std::move(tempName);
-			*nextPos = pos;
-			return true;
+			break;
 		}
 		++pos;
 	}
-	return false;
+
+	if (pos == beginPos) {
+		return false;
+	}
+	auto tempSize = pos - beginPos;
+	auto tempName = std::move(src.substr(beginPos, tempSize));
+	if (IsSpecialSign(tempName)) {
+		return false;
+	}
+	*name = std::move(tempName);
+	*nextPos = pos;
+	return true;
 }
 
 bool Grammar::MatchEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (pos >= size) {
-		return true;
-	}
 	while (pos < size) {
 		char ch = src[pos];
 		if (IsGrammarEndSign(ch)) {
@@ -152,7 +150,7 @@ bool Grammar::MatchEnd(const std::string& src, std::size_t size, std::size_t pos
 		}
 		++pos;
 	}
-	return false;
+	return pos >= size;
 }
 
 bool Grammar::MatchAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
