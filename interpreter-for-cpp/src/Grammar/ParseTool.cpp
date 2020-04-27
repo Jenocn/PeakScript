@@ -25,9 +25,7 @@ std::list<std::shared_ptr<Sentence>> ParseTool::Load(const std::string& src) {
 	std::size_t pos = 0;
 	auto size = src.size();
 	while (pos < size) {
-		pos = JumpTextSpace(src, size, pos);
-		pos = JumpComment(src, size, pos);
-		pos = JumpCommentBlock(src, size, pos);
+		Jump(src, size, pos, &pos);
 		if (pos >= size) {
 			break;
 		}
@@ -41,52 +39,55 @@ std::list<std::shared_ptr<Sentence>> ParseTool::Load(const std::string& src) {
 	return ret;
 }
 
-std::size_t ParseTool::JumpTextSpace(const std::string& src, std::size_t size, std::size_t pos) {
+bool ParseTool::Jump(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	bool bJump = false;
+	bool bRet = false;
+	do {
+		bJump = false;
+		bJump |= JumpTextSpace(src, size, pos, &pos);
+		bJump |= JumpComment(src, size, pos, &pos);
+		bJump |= JumpCommentBlock(src, size, pos, &pos);
+		bRet |= bJump;
+	} while (bJump);
+	*nextPos = pos;
+	return bRet;
+}
+
+bool ParseTool::JumpTextSpace(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	auto beginPos = pos;
 	while (pos < size) {
 		if (!Grammar::IsTextSpace(src[pos])) {
 			break;
 		}
 		++pos;
 	}
-	return pos;
+	*nextPos = pos;
+	return pos != beginPos;
 }
-std::size_t ParseTool::JumpTextSpace(const std::string& src, std::size_t size, std::size_t pos, bool* bEndOfTail) {
-	auto begin = pos;
-	*bEndOfTail = false;
-	while (pos < size) {
-		if (!Grammar::IsTextSpace(src[pos])) {
-			char tailCh = src[pos - 1];
-			if ((pos > begin) && Grammar::IsTextNewLine(tailCh)) {
-				*bEndOfTail = Grammar::IsGrammarEndSign(tailCh);
-			}
-			break;
-		}
-		++pos;
-	}
-	return pos;
-}
-std::size_t ParseTool::JumpComment(const std::string& src, std::size_t size, std::size_t pos) {
+bool ParseTool::JumpComment(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	if (Grammar::MatchComment(src, size, pos, &pos)) {
 		while (pos < size) {
 			if (Grammar::IsTextNewLine(src[pos])) {
-				return pos + 1;
+				*nextPos = pos + 1;
+				return true;
 			}
 			++pos;
 		}
 	}
-	return pos;
+	return false;
 }
 
-std::size_t ParseTool::JumpCommentBlock(const std::string& src, std::size_t size, std::size_t pos) {
+bool ParseTool::JumpCommentBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	if (Grammar::MatchCommentBlockBegin(src, size, pos, &pos)) {
 		while (pos < size) {
 			if (Grammar::MatchCommentBlockEnd(src, size, pos, &pos)) {
-				return pos;
+				*nextPos = pos;
+				return true;
 			}
 			++pos;
 		}
 	}
-	return pos;
+	return false;
 }
 
 std::shared_ptr<Sentence> ParseTool::ParseSentence(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
@@ -119,23 +120,30 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src
 	if (!Grammar::IsTextSpace(src[pos])) {
 		return nullptr;
 	}
-	pos = JumpTextSpace(src, size, pos);
+	Jump(src, size, pos, &pos);
 	std::string name;
 	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
 		return nullptr;
 	}
-	bool bEndOfTail = false;
-	pos = JumpTextSpace(src, size, pos, &bEndOfTail);
+	bool bCheckTail = Jump(src, size, pos, &pos);
 	std::shared_ptr<SentenceExpression> expression{nullptr};
 	if (Grammar::MatchAssign(src, size, pos, &pos)) {
-		pos = JumpTextSpace(src, size, pos, &bEndOfTail);
+		Jump(src, size, pos, &pos);
 		expression = _ParseExpression(src, size, pos, &pos);
 		if (!expression) {
 			return nullptr;
 		}
+		bCheckTail = Jump(src, size, pos, &pos);
 	}
-	if (!bEndOfTail && !Grammar::MatchEnd(src, size, pos, &pos)) {
-		return nullptr;
+
+	if (bCheckTail) {
+		if (!Grammar::IsGrammarEndSign(src[pos - 1])) {
+			return nullptr;
+		}
+	} else {
+		if (!Grammar::MatchEnd(src, size, pos, &pos)) {
+			return nullptr;
+		}
 	}
 
 	*nextPos = pos;
