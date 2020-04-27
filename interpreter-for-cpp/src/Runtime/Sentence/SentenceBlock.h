@@ -14,6 +14,5 @@ public:
 
 private:
 	std::list<std::shared_ptr<Sentence>> _list;
-	std::shared_ptr<Space> _space{nullptr};
 };
 } // namespace peak::interpreter

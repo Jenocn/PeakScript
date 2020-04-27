@@ -9,7 +9,7 @@ class SentenceExpression;
 
 class SentenceVar : public Sentence {
 public:
-	SentenceVar(const std::string& name, std::shared_ptr<SentenceExpression> expression);
+	SentenceVar(const std::string& name, std::shared_ptr<SentenceExpression> expression = nullptr);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 
 private:

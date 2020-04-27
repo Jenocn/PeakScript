@@ -1,0 +1,195 @@
+#include "Grammar.h"
+#include <set>
+
+using namespace peak::interpreter;
+
+// text
+static const std::set<char> SET_TEXT_SPACE = {' ', '\n', '\t'};
+static const std::set<char> SET_TEXT_NEW_LINE = {'\n'};
+
+// grammar
+static const std::set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
+static const std::set<char> SET_END_SIGN = {'\n', ';'};
+static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "auto", "set"};
+static const std::set<std::string> SET_ASSIGN_SIGN = {"=", ":", ":=", "is", "as"};
+static const std::set<std::string> SET_COMMENT_SIGN = {"//", "#", "-"};
+static const std::string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
+static const std::string STRING_COMMENT_BLOCK_END_SIGN = "*/";
+
+bool Grammar::IsTextSpace(char ch) {
+	return (SET_TEXT_SPACE.find(ch) != SET_TEXT_SPACE.end());
+}
+bool Grammar::IsTextNewLine(char ch) {
+	return (SET_TEXT_NEW_LINE.find(ch) != SET_TEXT_NEW_LINE.end());
+}
+bool Grammar::IsTextSpecialChar(char ch) {
+	return (ch >= 0 && ch <= 47) || (ch >= 58 && ch <= 94) || (ch == 96) || (ch >= 123 && ch <= 126);
+}
+bool Grammar::IsTextNumber(char ch) {
+	return ch >= '0' && ch <= '9';
+}
+bool Grammar::IsGrammarStringSign(char ch) {
+	return (SET_STRING_SIGN.find(ch) != SET_STRING_SIGN.end());
+}
+
+bool Grammar::IsGrammarEndSign(char ch) {
+	return (SET_END_SIGN.find(ch) != SET_END_SIGN.end());
+}
+
+bool Grammar::MatchName(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* name) {
+	if (pos >= size) {
+		return false;
+	}
+	char ch = src[pos];
+	if (IsTextNumber(ch) || IsTextSpecialChar(ch) || IsTextSpace(ch)) {
+		return false;
+	}
+	auto beginPos = pos;
+	while (pos < size) {
+		ch = src[pos];
+		if (IsTextSpecialChar(ch) || IsTextSpace(ch)) {
+			if (pos == beginPos) {
+				return false;
+			}
+			auto tempSize = pos - beginPos;
+			*name = std::move(src.substr(beginPos, tempSize));
+			*nextPos = pos;
+			return true;
+		}
+		++pos;
+	}
+	return false;
+}
+
+bool Grammar::MatchEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	while (pos < size) {
+		char ch = src[pos];
+		if (IsGrammarEndSign(ch)) {
+			*nextPos = pos + 1;
+			return true;
+		}
+		if (!IsTextSpace(ch)) {
+			return false;
+		}
+		++pos;
+	}
+	return false;
+}
+
+bool Grammar::MatchAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (const auto& sign : SET_ASSIGN_SIGN) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Grammar::MatchComment(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (const auto& sign : SET_COMMENT_SIGN) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			return true;
+		}
+	}
+	return false;
+}
+bool Grammar::MatchCommentBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_COMMENT_BLOCK_BEGIN_SIGN, src, size, pos, nextPos);
+}
+bool Grammar::MatchCommentBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_COMMENT_BLOCK_END_SIGN, src, size, pos, nextPos);
+}
+bool Grammar::MatchVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (const auto& sign : SET_VARIABLE_DEFINE_SIGN) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			return true;
+		}
+	}
+	return false;
+}
+bool Grammar::MatchSign(const std::string& sign, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	auto signSize = sign.size();
+	if (pos + signSize > size) {
+		return false;
+	}
+	for (std::size_t i = 0; i < signSize; ++i) {
+		if (sign[i] != src[pos + i]) {
+			return false;
+		}
+	}
+	*nextPos = pos + signSize;
+	return true;
+}
+bool Grammar::MatchSign(char sign, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (pos >= size) {
+		return false;
+	}
+	if (src[pos] == sign) {
+		*nextPos = pos + 1;
+		return true;
+	}
+	return false;
+}
+
+bool Grammar::MatchPair(const std::string& signLeft, const std::string& signRight, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* result) {
+	if (!MatchSign(signLeft, src, size, pos, &pos)) {
+		return false;
+	}
+	bool bSame = signLeft == signRight;
+	auto beginPos = pos;
+	int count = 0;
+	while (pos < size) {
+		if (!bSame && MatchSign(signLeft, src, size, pos, &pos)) {
+			++count;
+			continue;
+		}
+		if (MatchSign(signRight, src, size, pos, &pos)) {
+			if (count > 0) {
+				--count;
+				continue;
+			}
+			auto tempSize = pos - signRight.size() - beginPos;
+			*result = std::move(src.substr(beginPos, tempSize));
+			*nextPos = pos;
+			return true;
+		}
+		++pos;
+	}
+	return false;
+}
+bool Grammar::MatchPair(char signLeft, char signRight, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* result) {
+	if (src[pos] != signLeft) {
+		return false;
+	}
+	++pos;
+	bool bSame = signLeft == signRight;
+	auto beginPos = pos;
+	int count = 0;
+	bool bIgnore = false;
+	while (pos < size) {
+		char ch = src[pos];
+		do {
+			if (bIgnore) {
+				break;
+			}
+			if (!bSame && (ch == signLeft)) {
+				++count;
+				break;
+			}
+			if (ch == signRight) {
+				if (count > 0) {
+					--count;
+					break;
+				}
+				auto tempSize = pos - beginPos;
+				*result = std::move(src.substr(beginPos, tempSize));
+				*nextPos = pos + 1;
+				return true;
+			}
+		} while (false);
+
+		bIgnore = (ch == '\\' ? !bIgnore : false);
+		++pos;
+	}
+	return false;
+}
