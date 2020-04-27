@@ -3,4 +3,17 @@ var num0
 var num1 = "Hello World!"
 set num2 is "Hello Peak!"
 auto num3 as "Hahah"
-var num4=5
+var num4=999.32
+var num5=false;
+# ------------------------------------------
+set num6=true
+auto num7 = yes
+/*
+By Jenocn
+*/
+
+// Test
+auto num8 = no
+var num9 = `Jenocn`
+var num10 = 'Good'
+var num11 = `aa"您好"a`

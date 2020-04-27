@@ -14,6 +14,8 @@ public:
 	static bool IsSpecialSign(const std::string& value);
 
 public:
+	static bool MatchNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool* value);
 	static bool MatchNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, double* number);
 	static bool MatchName(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* name);
 	static bool MatchEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

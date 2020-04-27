@@ -12,9 +12,12 @@ static const std::set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
 static const std::set<char> SET_END_SIGN = {'\n', ';'};
 static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "auto", "set"};
 static const std::set<std::string> SET_ASSIGN_SIGN = {"=", ":", ":=", "is", "as"};
+static const std::set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
+static const std::set<std::string> SET_BOOL_FALSE_SIGN = {"false", "no"};
 static const std::set<std::string> SET_COMMENT_SIGN = {"//", "#"};
 static const std::string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
 static const std::string STRING_COMMENT_BLOCK_END_SIGN = "*/";
+static const std::string STRING_NULL_SIGN = "null";
 
 bool Grammar::IsTextSpace(char ch) {
 	return (SET_TEXT_SPACE.find(ch) != SET_TEXT_SPACE.end());
@@ -37,7 +40,6 @@ bool Grammar::IsGrammarEndSign(char ch) {
 }
 
 bool Grammar::IsSpecialSign(const std::string& value) {
-	bool bRet = false;
 	std::size_t pos = 0;
 	std::size_t size = value.size();
 	if (MatchVariableDefine(value, size, 0, &pos)) {
@@ -46,8 +48,35 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 	if (MatchAssign(value, size, 0, &pos)) {
 		return true;
 	}
+	if (MatchNull(value, size, 0, &pos)) {
+		return true;
+	}
+	bool bBoolValue = false;
+	if (MatchBool(value, size, 0, &pos, &bBoolValue)) {
+		return true;
+	}
 
 	// temp todo...
+	return false;
+}
+
+bool Grammar::MatchNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_NULL_SIGN, src, size, pos, nextPos);
+}
+
+bool Grammar::MatchBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool* value) {
+	for (const auto& sign : SET_BOOL_TRUE_SIGN) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			*value = true;
+			return true;
+		}
+	}
+	for (const auto& sign : SET_BOOL_FALSE_SIGN) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			*value = false;
+			return true;
+		}
+	}
 	return false;
 }
 
