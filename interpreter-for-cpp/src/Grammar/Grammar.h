@@ -24,6 +24,10 @@ public:
 	static int GetArithmeticSymbolLevel(char ch);
 
 public:
+	static bool MatchBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchConditionIf(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchConditionElse(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchArithmeticLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchArithmeticRightBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchArithmeticSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, char* symbol);

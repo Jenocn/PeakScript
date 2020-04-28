@@ -14,6 +14,10 @@ static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "auto", "s
 static const std::set<std::string> SET_ASSIGN_SIGN = {"=", ":", ":=", "is", "as"};
 static const std::set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
 static const std::set<std::string> SET_BOOL_FALSE_SIGN = {"false", "no"};
+static const std::set<std::string> SET_CONDITION_IF_SIGN = {"if"};
+static const std::set<std::string> SET_CONDITION_ELSE_SIGN = {"else"};
+static const std::set<std::string> SET_BLOCK_BEGIN = {"{", "begin"};
+static const std::set<std::string> SET_BLOCK_END = {"}", "end"};
 static const std::set<std::string> SET_COMMENT_SIGN = {"//", "#"};
 static const std::set<char> SET_ARITHMETIC_SYMBOL_LEVEL_2 = {'*', '/', '%'};
 static const std::set<char> SET_ARITHMETIC_SYMBOL_LEVEL_1 = {'+', '-'};
@@ -93,6 +97,40 @@ bool Grammar::IsArithmeticSymbolDiv(char ch) {
 }
 bool Grammar::IsArithmeticSymbolMod(char ch) {
 	return ch == '%';
+}
+
+bool Grammar::MatchBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (const auto& sign : SET_BLOCK_BEGIN) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			return true;
+		}
+	}
+	return false;
+}
+bool Grammar::MatchBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (const auto& sign : SET_BLOCK_END) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Grammar::MatchConditionIf(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (const auto& sign : SET_CONDITION_IF_SIGN) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			return true;
+		}
+	}
+	return false;
+}
+bool Grammar::MatchConditionElse(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (const auto& sign : SET_CONDITION_ELSE_SIGN) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 bool Grammar::MatchArithmeticLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

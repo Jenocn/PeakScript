@@ -3,8 +3,8 @@
 #include "../Runtime/Sentence/SentenceExpressionArithmeticInstance.h"
 #include "../Runtime/Sentence/SentenceExpressionValue.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
-#include "../Runtime/Sentence/SentenceVariableDefine.h"
 #include "../Runtime/Sentence/SentenceVariableAssign.h"
+#include "../Runtime/Sentence/SentenceVariableDefine.h"
 #include "../Runtime/Value/ValueTool.h"
 #include "../Runtime/Variable.h"
 #include "Grammar.h"
@@ -14,6 +14,7 @@ using namespace peak::interpreter;
 
 std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceParseList = {
 	_ParseVariableDefineOrAssign,
+	_ParseBlock,
 };
 std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceExpressionParseList = {
 	_ParseArithmetic,
@@ -183,6 +184,36 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefineOrAssign(const std::str
 		return std::shared_ptr<Sentence>(new SentenceVariableDefine(name, expression));
 	}
 	return std::shared_ptr<Sentence>(new SentenceVariableAssign(name, expression));
+}
+
+std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return nullptr;
+}
+
+std::shared_ptr<Sentence> ParseTool::_ParseBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchBlockBegin(src, size, pos, &pos)) {
+		return nullptr;
+	}
+
+	auto sentenceBlock = std::shared_ptr<SentenceBlock>(new SentenceBlock());
+	while (true) {
+		if (pos >= size) {
+			return nullptr;
+		}
+		Jump(src, size, pos, &pos);
+		if (Grammar::MatchBlockEnd(src, size, pos, &pos)) {
+			break;
+		}
+
+		auto parseSentence = ParseSentence(src, size, pos, &pos);
+		if (!parseSentence) {
+			return nullptr;
+		}
+		sentenceBlock->Push(parseSentence);
+	}
+
+	*nextPos = pos;
+	return sentenceBlock;
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

@@ -30,3 +30,8 @@ var num18 =
 	num17
 num17 = 0;
 var num19 = 0;
+{
+	var value0 = 10;
+	var value1 = "Hello";
+}
+var num20 = 99
