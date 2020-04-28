@@ -33,5 +33,9 @@ var num19 = 0;
 {
 	var value0 = 10;
 	var value1 = "Hello";
+	echo value0
 }
 var num20 = 99
+echo "hello"
+echo num20
+echo `this is test`

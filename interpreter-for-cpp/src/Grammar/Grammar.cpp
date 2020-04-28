@@ -24,6 +24,7 @@ static const std::set<char> SET_ARITHMETIC_SYMBOL_LEVEL_1 = {'+', '-'};
 static const std::string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
 static const std::string STRING_COMMENT_BLOCK_END_SIGN = "*/";
 static const std::string STRING_NULL_SIGN = "null";
+static const std::string STRING_ECHO_SIGN = "echo";
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
 
@@ -63,6 +64,9 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 	if (MatchBool(value, size, 0, &pos, &bBoolValue)) {
 		return true;
 	}
+	if (MatchEcho(value, size, 0, &pos)) {
+		return true;
+	}
 
 	// temp todo...
 	return false;
@@ -97,6 +101,10 @@ bool Grammar::IsArithmeticSymbolDiv(char ch) {
 }
 bool Grammar::IsArithmeticSymbolMod(char ch) {
 	return ch == '%';
+}
+
+bool Grammar::MatchEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_ECHO_SIGN, src, size, pos, nextPos);
 }
 
 bool Grammar::MatchBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

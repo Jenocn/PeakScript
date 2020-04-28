@@ -24,6 +24,7 @@ public:
 	static int GetArithmeticSymbolLevel(char ch);
 
 public:
+	static bool MatchEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchConditionIf(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
