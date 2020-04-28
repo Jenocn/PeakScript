@@ -40,6 +40,7 @@ private:
 	static std::shared_ptr<SentenceExpression> _ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 	static std::shared_ptr<SentenceExpression> _ParseArithmetic(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static std::shared_ptr<SentenceExpression> _ParseArithmeticCheckBracket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool bBracket);
 
 private:
 	static std::shared_ptr<SentenceExpressionMath> _CreateSentenceExpressionArithmetic(std::shared_ptr<SentenceExpression> left, std::shared_ptr<SentenceExpression> right, char symbol);

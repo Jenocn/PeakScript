@@ -6,10 +6,7 @@ namespace peak::interpreter {
 class SentenceExpression;
 class SentenceCondition : public SentenceReturn {
 public:
-	SentenceCondition(std::shared_ptr<SentenceExpression> expression);
-	void SetSentenceWhenTrue(std::shared_ptr<Sentence> sentence);
-	void SetSentenceWhenFalse(std::shared_ptr<Sentence> sentence);
-
+	SentenceCondition(std::shared_ptr<SentenceExpression> expression, std::shared_ptr<Sentence> sentenceTrue, std::shared_ptr<Sentence> sentenceFalse);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 
 private:

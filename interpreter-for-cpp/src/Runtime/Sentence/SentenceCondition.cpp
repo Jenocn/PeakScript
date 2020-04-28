@@ -4,14 +4,8 @@
 
 using namespace peak::interpreter;
 
-SentenceCondition::SentenceCondition(std::shared_ptr<SentenceExpression> expression)
-	: _expression(expression) {
-}
-void SentenceCondition::SetSentenceWhenTrue(std::shared_ptr<Sentence> sentence) {
-	_sentenceTrue = sentence;
-}
-void SentenceCondition::SetSentenceWhenFalse(std::shared_ptr<Sentence> sentence) {
-	_sentenceFalse = sentence;
+SentenceCondition::SentenceCondition(std::shared_ptr<SentenceExpression> expression, std::shared_ptr<Sentence> sentenceTrue, std::shared_ptr<Sentence> sentenceFalse)
+	: _expression(expression), _sentenceTrue(sentenceTrue), _sentenceFalse(sentenceFalse) {
 }
 
 ExecuteResult SentenceCondition::Execute(std::shared_ptr<Space> space) {

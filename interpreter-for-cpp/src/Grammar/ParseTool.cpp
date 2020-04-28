@@ -1,5 +1,6 @@
 #include "ParseTool.h"
 #include "../Runtime/Sentence/SentenceBlock.h"
+#include "../Runtime/Sentence/SentenceCondition.h"
 #include "../Runtime/Sentence/SentenceEcho.h"
 #include "../Runtime/Sentence/SentenceExpressionArithmeticInstance.h"
 #include "../Runtime/Sentence/SentenceExpressionValue.h"
@@ -15,6 +16,7 @@ using namespace peak::interpreter;
 
 std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceParseList = {
 	_ParseVariableDefineOrAssign,
+	_ParseCondition,
 	_ParseBlock,
 	_ParseEcho,
 };
@@ -194,7 +196,43 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefineOrAssign(const std::str
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	return nullptr;
+	if (!Grammar::MatchConditionIf(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	bool bBracket = Grammar::MatchArithmeticLeftBrcket(src, size, pos, &pos);
+	if (bBracket) {
+		Jump(src, size, pos, &pos);
+	}
+	auto expression = _ParseExpression(src, size, pos, &pos);
+	if (!expression) {
+		return nullptr;
+	}
+	if (bBracket) {
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchArithmeticRightBrcket(src, size, pos, &pos)) {
+			return nullptr;
+		}
+	}
+	Jump(src, size, pos, &pos);
+	auto sentenceBlock = _ParseBlock(src, size, pos, &pos);
+	if (!sentenceBlock) {
+		return nullptr;
+	}
+
+	std::shared_ptr<Sentence> sentenceElse{nullptr};
+
+	Jump(src, size, pos, &pos);
+	if (Grammar::MatchConditionElse(src, size, pos, &pos)) {
+		Jump(src, size, pos, &pos);
+		sentenceElse = _ParseCondition(src, size, pos, &pos);
+		if (!sentenceElse) {
+			sentenceElse = _ParseBlock(src, size, pos, &pos);
+		}
+	}
+
+	*nextPos = pos;
+	return std::shared_ptr<Sentence>(new SentenceCondition(expression, sentenceBlock, sentenceElse));
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
@@ -289,6 +327,10 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string&
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmetic(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return _ParseArithmeticCheckBracket(src, size, pos, nextPos, false);
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmeticCheckBracket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool bBracket) {
 	std::stack<std::shared_ptr<SentenceExpression>> expressionStack;
 	std::stack<char> symbolStack;
 
@@ -322,7 +364,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmetic(const std::strin
 		Jump(src, size, pos, &pos);
 		if (Grammar::MatchArithmeticLeftBrcket(src, size, pos, &pos)) {
 			Jump(src, size, pos, &pos);
-			auto priorityExpression = _ParseArithmetic(src, size, pos, &pos);
+			auto priorityExpression = _ParseArithmeticCheckBracket(src, size, pos, &pos, true);
 			if (!priorityExpression) {
 				return nullptr;
 			}
@@ -352,7 +394,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmetic(const std::strin
 		if (pos >= size) {
 			break;
 		}
-		if (Grammar::MatchArithmeticRightBrcket(src, size, pos, &pos)) {
+		if (bBracket && Grammar::MatchArithmeticRightBrcket(src, size, pos, &pos)) {
 			break;
 		}
 

@@ -39,3 +39,28 @@ var num20 = 99
 echo "hello"
 echo num20
 echo `this is test`
+
+var num21 = false
+var num22 = no
+var num23 = yes
+var num24 = no
+if (num21) {
+	echo "yes ---"
+} else if (num22) {
+	echo "no ---"
+} else if (num23) {
+	echo "num23 ---"
+} else if (num24) {
+	echo "num24 ---"
+} else {
+	echo "else ----"
+}
+
+if num21 {
+	echo "num21"
+} else if yes {
+	echo "else if"
+}
+
+the num25 is false
+echo num25

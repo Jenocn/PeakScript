@@ -10,7 +10,7 @@ static const std::set<char> SET_TEXT_NEW_LINE = {'\n'};
 // grammar
 static const std::set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
 static const std::set<char> SET_END_SIGN = {'\n', ';'};
-static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "auto", "set"};
+static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "auto", "set", "the"};
 static const std::set<std::string> SET_ASSIGN_SIGN = {"=", ":", ":=", "is", "as"};
 static const std::set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
 static const std::set<std::string> SET_BOOL_FALSE_SIGN = {"false", "no"};
