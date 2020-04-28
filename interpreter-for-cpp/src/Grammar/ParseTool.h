@@ -15,14 +15,12 @@ public:
 
 private:
 	static bool Jump(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool JumpEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 	static bool JumpTextSpace(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool JumpTextSpaceAndEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool JumpComment(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool JumpCommentBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-
-private:
-	// [0:success] [-1:jump but not end] [1:not jump, not end] [2:pos >= size]
-	static int CheckAndJumpEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 private:
 	static std::shared_ptr<Sentence> ParseSentence(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

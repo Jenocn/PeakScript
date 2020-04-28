@@ -271,21 +271,6 @@ bool Grammar::MatchName(const std::string& src, std::size_t size, std::size_t po
 	return true;
 }
 
-bool Grammar::MatchEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	while (pos < size) {
-		char ch = src[pos];
-		if (IsGrammarEndSign(ch)) {
-			*nextPos = pos + 1;
-			return true;
-		}
-		if (!IsTextSpace(ch)) {
-			return false;
-		}
-		++pos;
-	}
-	return pos >= size;
-}
-
 bool Grammar::MatchAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (const auto& sign : SET_ASSIGN_SIGN) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {

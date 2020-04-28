@@ -36,7 +36,6 @@ public:
 	static bool MatchBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool* value);
 	static bool MatchNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, double* number);
 	static bool MatchName(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* name);
-	static bool MatchEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchComment(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchCommentBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

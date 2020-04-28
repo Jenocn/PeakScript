@@ -69,6 +69,24 @@ bool ParseTool::Jump(const std::string& src, std::size_t size, std::size_t pos, 
 	return bRet;
 }
 
+bool ParseTool::JumpEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	bool bJump = false;
+	bool bRet = false;
+	do {
+		bJump = false;
+		bool bEnd = JumpTextSpaceAndEnd(src, size, pos, &pos);
+		bJump |= bEnd;
+		bJump |= JumpComment(src, size, pos, &pos);
+		bJump |= JumpCommentBlock(src, size, pos, &pos);
+		bRet |= bEnd;
+	} while (bJump);
+	*nextPos = pos;
+	if (Grammar::IsGrammarEndSign('\n')) {
+		bRet |= (pos >= size);
+	}
+	return bRet;
+}
+
 bool ParseTool::JumpTextSpace(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	auto beginPos = pos;
 	while (pos < size) {
@@ -79,6 +97,20 @@ bool ParseTool::JumpTextSpace(const std::string& src, std::size_t size, std::siz
 	}
 	*nextPos = pos;
 	return pos != beginPos;
+}
+bool ParseTool::JumpTextSpaceAndEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	bool bRet = false;
+	while (pos < size) {
+		char ch = src[pos];
+		bool bEnd = Grammar::IsGrammarEndSign(ch);
+		if (!bEnd && !Grammar::IsTextSpace(ch)) {
+			break;
+		}
+		bRet |= bEnd;
+		++pos;
+	}
+	*nextPos = pos;
+	return bRet;
 }
 bool ParseTool::JumpComment(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	if (Grammar::MatchComment(src, size, pos, &pos)) {
@@ -106,24 +138,6 @@ bool ParseTool::JumpCommentBlock(const std::string& src, std::size_t size, std::
 	return false;
 }
 
-int ParseTool::CheckAndJumpEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	bool bCheckTail = Jump(src, size, pos, &pos);
-	if (bCheckTail) {
-		if (!Grammar::IsGrammarEndSign(src[pos - 1])) {
-			return -1;
-		}
-	} else {
-		if (!Grammar::MatchEnd(src, size, pos, &pos)) {
-			return 1;
-		}
-	}
-	*nextPos = pos;
-	if (pos >= size) {
-		return 2;
-	}
-	return 0;
-}
-
 std::shared_ptr<Sentence> ParseTool::ParseSentence(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto func : _sentenceParseList) {
 		auto parseData = func(src, size, pos, nextPos);
@@ -146,35 +160,30 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpression(const std::strin
 
 std::shared_ptr<Sentence> ParseTool::_ParseVariableDefineOrAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	bool bDefine = Grammar::MatchVariableDefine(src, size, pos, &pos);
-	if (bDefine) {
-		if (!Jump(src, size, pos, &pos)) {
-			return nullptr;
-		}
+	if (bDefine && !Jump(src, size, pos, &pos)) {
+		return nullptr;
 	}
 
 	std::string name;
 	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
 		return nullptr;
 	}
-	bool bCheckTail = Jump(src, size, pos, &pos);
-	std::shared_ptr<SentenceExpression> expression{nullptr};
-	if (Grammar::MatchAssign(src, size, pos, &pos)) {
-		Jump(src, size, pos, &pos);
-		expression = _ParseExpression(src, size, pos, &pos);
-		if (!expression) {
-			return nullptr;
-		}
-		bCheckTail = Jump(src, size, pos, &pos);
+	if (JumpEnd(src, size, pos, &pos) && !bDefine) {
+		return nullptr;
 	}
 
-	if (bCheckTail) {
-		if (!Grammar::IsGrammarEndSign(src[pos - 1])) {
-			return nullptr;
-		}
-	} else {
-		if (!Grammar::MatchEnd(src, size, pos, &pos)) {
-			return nullptr;
-		}
+	Jump(src, size, pos, &pos);
+	if (!Grammar::MatchAssign(src, size, pos, &pos)) {
+		return nullptr;
+	}
+
+	Jump(src, size, pos, &pos);
+	auto expression = _ParseExpression(src, size, pos, &pos);
+	if (!expression && !bDefine) {
+		return nullptr;
+	}
+	if (!JumpEnd(src, size, pos, &pos)) {
+		return nullptr;
 	}
 
 	*nextPos = pos;
@@ -227,7 +236,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseEcho(const std::string& src, std::siz
 		return nullptr;
 	}
 
-	if (!Grammar::MatchEnd(src, size, pos, &pos)) {
+	if (!JumpEnd(src, size, pos, &pos)) {
 		return nullptr;
 	}
 
@@ -334,20 +343,20 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmetic(const std::strin
 			break;
 		}
 
-		int jumpEndState = CheckAndJumpEnd(src, size, pos, &pos);
-		if (jumpEndState == 0) {
-			--pos;
+		auto savePos = pos;
+		if (JumpEnd(src, size, pos, &pos)) {
+			pos = savePos;
 			break;
-		} else if (jumpEndState == 2) {
+		}
+		Jump(src, size, pos, &pos);
+		if (pos >= size) {
 			break;
-		} else {
-			if (Grammar::MatchArithmeticRightBrcket(src, size, pos, &pos)) {
-				break;
-			}
+		}
+		if (Grammar::MatchArithmeticRightBrcket(src, size, pos, &pos)) {
+			break;
 		}
 
 		char symbol = 0;
-		Jump(src, size, pos, &pos);
 		if (Grammar::MatchArithmeticSymbol(src, size, pos, &pos, &symbol)) {
 			bRet = false;
 			if (!calcLoopFunc(symbol, &expressionStack, &symbolStack)) {
