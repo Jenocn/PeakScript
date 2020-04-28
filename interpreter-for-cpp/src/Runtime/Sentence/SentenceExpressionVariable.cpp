@@ -3,7 +3,7 @@
 
 using namespace peak::interpreter;
 
-SentenceExpressionVariable::SentenceExpressionVariable(std::string name)
+SentenceExpressionVariable::SentenceExpressionVariable(const std::string& name)
 	: _name(name) {
 }
 

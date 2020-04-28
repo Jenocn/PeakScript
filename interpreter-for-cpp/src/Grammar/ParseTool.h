@@ -21,7 +21,7 @@ public:
 	static bool JumpCommentBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 public:
-	// [0:success] [-1:jump but not end] [1:not jump, not end]
+	// [0:success] [-1:jump but not end] [1:not jump, not end] [2:pos >= size]
 	static int CheckAndJumpEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 public:
@@ -36,6 +36,7 @@ public:
 	static std::shared_ptr<SentenceExpression> _ParseNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static std::shared_ptr<SentenceExpression> _ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 	static std::shared_ptr<SentenceExpression> _ParseArithmetic(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
@@ -45,5 +46,6 @@ private:
 private:
 	static std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_t, std::size_t, std::size_t*)>> _sentenceParseList;
 	static std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> _sentenceExpressionParseList;
+	static std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> _sentenceValueParseList;
 };
 } // namespace peak::interpreter

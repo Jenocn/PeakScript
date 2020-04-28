@@ -21,3 +21,6 @@ var num12 = 333
 var num13 = // jflskajlfs
 	35
 var num14=null
+var num15=num0+num1
+var num16=num0*num0
+var num17="Hello" + " " + "World"

@@ -8,7 +8,7 @@ class Value;
 
 class SentenceExpressionVariable : public SentenceExpression {
 public:
-	SentenceExpressionVariable(std::string name);
+	SentenceExpressionVariable(const std::string& name);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 
 private:

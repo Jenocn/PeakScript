@@ -2,6 +2,7 @@
 #include "../Runtime/Sentence/SentenceBlock.h"
 #include "../Runtime/Sentence/SentenceExpressionArithmeticInstance.h"
 #include "../Runtime/Sentence/SentenceExpressionValue.h"
+#include "../Runtime/Sentence/SentenceExpressionVariable.h"
 #include "../Runtime/Sentence/SentenceVar.h"
 #include "../Runtime/Value/ValueTool.h"
 #include "../Runtime/Variable.h"
@@ -19,6 +20,14 @@ std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, 
 	_ParseNumber,
 	_ParseBool,
 	_ParseNull,
+	_ParseVariable,
+};
+std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceValueParseList = {
+	_ParseString,
+	_ParseNumber,
+	_ParseBool,
+	_ParseNull,
+	_ParseVariable,
 };
 
 std::list<std::shared_ptr<Sentence>> ParseTool::Load(const std::string& src) {
@@ -105,6 +114,9 @@ int ParseTool::CheckAndJumpEnd(const std::string& src, std::size_t size, std::si
 		}
 	}
 	*nextPos = pos;
+	if (pos >= size) {
+		return 2;
+	}
 	return 0;
 }
 
@@ -204,6 +216,14 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseNull(const std::string& src
 	return nullptr;
 }
 
+std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	std::string name;
+	if (Grammar::MatchName(src, size, pos, nextPos, &name)) {
+		return std::shared_ptr<SentenceExpression>(new SentenceExpressionVariable(name));
+	}
+	return nullptr;
+}
+
 std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmetic(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	std::stack<std::shared_ptr<SentenceExpression>> expressionStack;
 	std::stack<char> symbolStack;
@@ -245,12 +265,14 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmetic(const std::strin
 			expressionStack.emplace(priorityExpression);
 			bRet = true;
 		} else {
-			auto number = _ParseNumber(src, size, pos, &pos);
-			if (!number) {
-				return nullptr;
+			for (auto func : _sentenceValueParseList) {
+				auto value = func(src, size, pos, &pos);
+				if (value) {
+					expressionStack.emplace(value);
+					bRet = true;
+					break;
+				}
 			}
-			expressionStack.emplace(number);
-			bRet = true;
 		}
 
 		if (!bRet) {
@@ -260,6 +282,8 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmetic(const std::strin
 		int jumpEndState = CheckAndJumpEnd(src, size, pos, &pos);
 		if (jumpEndState == 0) {
 			--pos;
+			break;
+		} else if (jumpEndState == 2) {
 			break;
 		} else {
 			if (Grammar::MatchArithmeticRightBrcket(src, size, pos, &pos)) {
