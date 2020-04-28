@@ -7,9 +7,9 @@ namespace peak::interpreter {
 class Variable;
 class SentenceExpression;
 
-class SentenceVar : public Sentence {
+class SentenceVariableDefine : public Sentence {
 public:
-	SentenceVar(const std::string& name, std::shared_ptr<SentenceExpression> expression = nullptr);
+	SentenceVariableDefine(const std::string& name, std::shared_ptr<SentenceExpression> expression = nullptr);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 
 private:

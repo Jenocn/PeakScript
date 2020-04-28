@@ -3,7 +3,8 @@
 #include "../Runtime/Sentence/SentenceExpressionArithmeticInstance.h"
 #include "../Runtime/Sentence/SentenceExpressionValue.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
-#include "../Runtime/Sentence/SentenceVar.h"
+#include "../Runtime/Sentence/SentenceVariableDefine.h"
+#include "../Runtime/Sentence/SentenceVariableAssign.h"
 #include "../Runtime/Value/ValueTool.h"
 #include "../Runtime/Variable.h"
 #include "Grammar.h"
@@ -12,7 +13,7 @@
 using namespace peak::interpreter;
 
 std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceParseList = {
-	_ParseVariableDefine,
+	_ParseVariableDefineOrAssign,
 };
 std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceExpressionParseList = {
 	_ParseArithmetic,
@@ -140,17 +141,18 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpression(const std::strin
 	return nullptr;
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchVariableDefine(src, size, pos, &pos)) {
-		return nullptr;
+std::shared_ptr<Sentence> ParseTool::_ParseVariableDefineOrAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	bool bDefine = Grammar::MatchVariableDefine(src, size, pos, &pos);
+	if (bDefine) {
+		if (pos >= size) {
+			return nullptr;
+		}
+		if (!Grammar::IsTextSpace(src[pos])) {
+			return nullptr;
+		}
+		Jump(src, size, pos, &pos);
 	}
-	if (pos >= size) {
-		return nullptr;
-	}
-	if (!Grammar::IsTextSpace(src[pos])) {
-		return nullptr;
-	}
-	Jump(src, size, pos, &pos);
+
 	std::string name;
 	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
 		return nullptr;
@@ -177,7 +179,10 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src
 	}
 
 	*nextPos = pos;
-	return std::shared_ptr<Sentence>(new SentenceVar(name, expression));
+	if (bDefine) {
+		return std::shared_ptr<Sentence>(new SentenceVariableDefine(name, expression));
+	}
+	return std::shared_ptr<Sentence>(new SentenceVariableAssign(name, expression));
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

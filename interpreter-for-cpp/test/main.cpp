@@ -4,7 +4,7 @@
 #include "../src/Runtime/Sentence/SentenceExpressionArithmeticInstance.h"
 #include "../src/Runtime/Sentence/SentenceExpressionValue.h"
 #include "../src/Runtime/Sentence/SentenceExpressionVariable.h"
-#include "../src/Runtime/Sentence/SentenceVar.h"
+#include "../src/Runtime/Sentence/SentenceVariableDefine.h"
 #include "../src/Runtime/Value/ValueTool.h"
 #include "../src/Runtime/Variable.h"
 

@@ -23,4 +23,10 @@ var num13 = // jflskajlfs
 var num14=null
 var num15=num0+num1
 var num16=num0*num0
-var num17="Hello" + " " + "World"
+var num17="Hello" + " " /*test*/ + "World"// hehe
+	+ 32 + # test Hahaha
+	32
+var num18 =
+	num17
+num17 = 0;
+var num19 = 0;
