@@ -1,6 +1,5 @@
-var num = // ac
-	0;/*temp*/ var abc = 0
-var num0
+var num = (2) * (1 + (2 - 1)) * (1 + 1)
+var num0 = num + 2
 var num1 = "Hello World!"
 set num2 is "Hello Peak!"
 auto num3 as "Hahah"
@@ -21,3 +20,4 @@ var num11 = `aa"您好"a`
 var num12 = 333
 var num13 = // jflskajlfs
 	35
+var num14=null

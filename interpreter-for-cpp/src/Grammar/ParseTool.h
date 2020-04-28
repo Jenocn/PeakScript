@@ -7,6 +7,7 @@ namespace peak::interpreter {
 
 class Sentence;
 class SentenceExpression;
+class SentenceExpressionMath;
 
 class ParseTool {
 public:
@@ -20,6 +21,10 @@ public:
 	static bool JumpCommentBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 public:
+	// [0:success] [-1:jump but not end] [1:not jump, not end]
+	static int CheckAndJumpEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+
+public:
 	static std::shared_ptr<Sentence> ParseSentence(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
@@ -31,7 +36,11 @@ public:
 	static std::shared_ptr<SentenceExpression> _ParseNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	
+
+	static std::shared_ptr<SentenceExpression> _ParseArithmetic(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+
+private:
+	static std::shared_ptr<SentenceExpressionMath> _CreateSentenceExpressionArithmetic(std::shared_ptr<SentenceExpression> left, std::shared_ptr<SentenceExpression> right, char symbol);
 
 private:
 	static std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_t, std::size_t, std::size_t*)>> _sentenceParseList;

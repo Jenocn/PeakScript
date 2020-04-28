@@ -12,8 +12,21 @@ public:
 	static bool IsGrammarStringSign(char ch);
 	static bool IsGrammarEndSign(char ch);
 	static bool IsSpecialSign(const std::string& value);
+	static bool IsArithmeticLeftBrcket(char ch);
+	static bool IsArithmeticRightBrcket(char ch);
+	static bool IsArithmeticSymbolAdd(char ch);
+	static bool IsArithmeticSymbolSub(char ch);
+	static bool IsArithmeticSymbolMul(char ch);
+	static bool IsArithmeticSymbolDiv(char ch);
+	static bool IsArithmeticSymbolMod(char ch);
 
 public:
+	static int GetArithmeticSymbolLevel(char ch);
+
+public:
+	static bool MatchArithmeticLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchArithmeticRightBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchArithmeticSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, char* symbol);
 	static bool MatchNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool* value);
 	static bool MatchNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, double* number);

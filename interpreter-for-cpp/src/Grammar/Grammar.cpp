@@ -15,9 +15,13 @@ static const std::set<std::string> SET_ASSIGN_SIGN = {"=", ":", ":=", "is", "as"
 static const std::set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
 static const std::set<std::string> SET_BOOL_FALSE_SIGN = {"false", "no"};
 static const std::set<std::string> SET_COMMENT_SIGN = {"//", "#"};
+static const std::set<char> SET_ARITHMETIC_SYMBOL_LEVEL_2 = {'*', '/', '%'};
+static const std::set<char> SET_ARITHMETIC_SYMBOL_LEVEL_1 = {'+', '-'};
 static const std::string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
 static const std::string STRING_COMMENT_BLOCK_END_SIGN = "*/";
 static const std::string STRING_NULL_SIGN = "null";
+static const char CHAR_LEFT_BRACKET = '(';
+static const char CHAR_RIGHT_BRACKET = ')';
 
 bool Grammar::IsTextSpace(char ch) {
 	return (SET_TEXT_SPACE.find(ch) != SET_TEXT_SPACE.end());
@@ -57,6 +61,60 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 	}
 
 	// temp todo...
+	return false;
+}
+int Grammar::GetArithmeticSymbolLevel(char ch) {
+	if (SET_ARITHMETIC_SYMBOL_LEVEL_1.find(ch) != SET_ARITHMETIC_SYMBOL_LEVEL_1.end()) {
+		return 1;
+	}
+	if (SET_ARITHMETIC_SYMBOL_LEVEL_2.find(ch) != SET_ARITHMETIC_SYMBOL_LEVEL_2.end()) {
+		return 2;
+	}
+	return 0;
+}
+
+bool Grammar::IsArithmeticLeftBrcket(char ch) {
+	return ch == CHAR_LEFT_BRACKET;
+}
+bool Grammar::IsArithmeticRightBrcket(char ch) {
+	return ch == CHAR_RIGHT_BRACKET;
+}
+bool Grammar::IsArithmeticSymbolAdd(char ch) {
+	return ch == '+';
+}
+bool Grammar::IsArithmeticSymbolSub(char ch) {
+	return ch == '-';
+}
+bool Grammar::IsArithmeticSymbolMul(char ch) {
+	return ch == '*';
+}
+bool Grammar::IsArithmeticSymbolDiv(char ch) {
+	return ch == '/';
+}
+bool Grammar::IsArithmeticSymbolMod(char ch) {
+	return ch == '%';
+}
+
+bool Grammar::MatchArithmeticLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(CHAR_LEFT_BRACKET, src, size, pos, nextPos);
+}
+bool Grammar::MatchArithmeticRightBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(CHAR_RIGHT_BRACKET, src, size, pos, nextPos);
+}
+
+bool Grammar::MatchArithmeticSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, char* symbol) {
+	for (auto sign : SET_ARITHMETIC_SYMBOL_LEVEL_2) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			*symbol = sign;
+			return true;
+		}
+	}
+	for (auto sign : SET_ARITHMETIC_SYMBOL_LEVEL_1) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			*symbol = sign;
+			return true;
+		}
+	}
 	return false;
 }
 

@@ -1,10 +1,12 @@
 #include "ParseTool.h"
 #include "../Runtime/Sentence/SentenceBlock.h"
+#include "../Runtime/Sentence/SentenceExpressionArithmeticInstance.h"
 #include "../Runtime/Sentence/SentenceExpressionValue.h"
 #include "../Runtime/Sentence/SentenceVar.h"
 #include "../Runtime/Value/ValueTool.h"
 #include "../Runtime/Variable.h"
 #include "Grammar.h"
+#include <stack>
 
 using namespace peak::interpreter;
 
@@ -12,6 +14,7 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseVariableDefine,
 };
 std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceExpressionParseList = {
+	_ParseArithmetic,
 	_ParseString,
 	_ParseNumber,
 	_ParseBool,
@@ -88,6 +91,21 @@ bool ParseTool::JumpCommentBlock(const std::string& src, std::size_t size, std::
 		}
 	}
 	return false;
+}
+
+int ParseTool::CheckAndJumpEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	bool bCheckTail = Jump(src, size, pos, &pos);
+	if (bCheckTail) {
+		if (!Grammar::IsGrammarEndSign(src[pos - 1])) {
+			return -1;
+		}
+	} else {
+		if (!Grammar::MatchEnd(src, size, pos, &pos)) {
+			return 1;
+		}
+	}
+	*nextPos = pos;
+	return 0;
 }
 
 std::shared_ptr<Sentence> ParseTool::ParseSentence(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
@@ -182,6 +200,111 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseBool(const std::string& src
 std::shared_ptr<SentenceExpression> ParseTool::_ParseNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	if (Grammar::MatchNull(src, size, pos, nextPos)) {
 		return std::shared_ptr<SentenceExpression>(new SentenceExpressionValue(std::shared_ptr<Value>(new ValueNull())));
+	}
+	return nullptr;
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmetic(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	std::stack<std::shared_ptr<SentenceExpression>> expressionStack;
+	std::stack<char> symbolStack;
+
+	static const auto calcLoopFunc = [](char symbol, decltype(expressionStack)* stack0, decltype(symbolStack)* stack1) {
+		int level = symbol == 0 ? 0 : Grammar::GetArithmeticSymbolLevel(symbol);
+		while (!stack1->empty()) {
+			int preLevel = Grammar::GetArithmeticSymbolLevel(stack1->top());
+			if (preLevel < level) {
+				break;
+			}
+			if (stack0->size() < 2) {
+				return false;
+			}
+			auto topSymbol = stack1->top();
+			stack1->pop();
+			auto vr = stack0->top();
+			stack0->pop();
+			auto vl = stack0->top();
+			stack0->pop();
+			auto expression = _CreateSentenceExpressionArithmetic(vl, vr, topSymbol);
+			if (!expression) {
+				return false;
+			}
+			stack0->emplace(expression);
+		}
+		return true;
+	};
+
+	while (true) {
+		bool bRet = false;
+		Jump(src, size, pos, &pos);
+		if (Grammar::MatchArithmeticLeftBrcket(src, size, pos, &pos)) {
+			Jump(src, size, pos, &pos);
+			auto priorityExpression = _ParseArithmetic(src, size, pos, &pos);
+			if (!priorityExpression) {
+				return nullptr;
+			}
+			expressionStack.emplace(priorityExpression);
+			bRet = true;
+		} else {
+			auto number = _ParseNumber(src, size, pos, &pos);
+			if (!number) {
+				return nullptr;
+			}
+			expressionStack.emplace(number);
+			bRet = true;
+		}
+
+		if (!bRet) {
+			break;
+		}
+
+		int jumpEndState = CheckAndJumpEnd(src, size, pos, &pos);
+		if (jumpEndState == 0) {
+			--pos;
+			break;
+		} else {
+			if (Grammar::MatchArithmeticRightBrcket(src, size, pos, &pos)) {
+				break;
+			}
+		}
+
+		char symbol = 0;
+		Jump(src, size, pos, &pos);
+		if (Grammar::MatchArithmeticSymbol(src, size, pos, &pos, &symbol)) {
+			bRet = false;
+			if (!calcLoopFunc(symbol, &expressionStack, &symbolStack)) {
+				return nullptr;
+			}
+			symbolStack.emplace(symbol);
+		}
+		if (bRet) {
+			break;
+		}
+	}
+
+	if (!calcLoopFunc(0, &expressionStack, &symbolStack)) {
+		return nullptr;
+	}
+
+	if (expressionStack.size() != 1) {
+		return nullptr;
+	}
+
+	*nextPos = pos;
+
+	return expressionStack.top();
+}
+
+std::shared_ptr<SentenceExpressionMath> ParseTool::_CreateSentenceExpressionArithmetic(std::shared_ptr<SentenceExpression> v0, std::shared_ptr<SentenceExpression> v1, char symbol) {
+	if (Grammar::IsArithmeticSymbolAdd(symbol)) {
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticAdd(v0, v1));
+	} else if (Grammar::IsArithmeticSymbolSub(symbol)) {
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticSub(v0, v1));
+	} else if (Grammar::IsArithmeticSymbolMul(symbol)) {
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticMul(v0, v1));
+	} else if (Grammar::IsArithmeticSymbolDiv(symbol)) {
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticDiv(v0, v1));
+	} else if (Grammar::IsArithmeticSymbolMod(symbol)) {
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticMod(v0, v1));
 	}
 	return nullptr;
 }
