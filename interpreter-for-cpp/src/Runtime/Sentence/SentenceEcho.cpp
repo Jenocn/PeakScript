@@ -1,7 +1,7 @@
 #include "SentenceEcho.h"
 #include "../Value/ValueTool.h"
 #include "SentenceExpression.h"
-#include <iostream>
+#include "../System.h"
 
 using namespace peak::interpreter;
 
@@ -14,7 +14,7 @@ ExecuteResult SentenceEcho::Execute(std::shared_ptr<Space> space) {
 		return ExecuteResult::Failed;
 	}
 	auto value = _expression->GetValue();
-	// temp todo... will change
-	std::cout << ValueTool::ToString(value) << std::endl;
+	System::Echo(ValueTool::ToString(value));
+	
 	return ExecuteResult::Successed;
 }
