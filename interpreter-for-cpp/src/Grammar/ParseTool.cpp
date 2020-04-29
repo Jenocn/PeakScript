@@ -3,6 +3,8 @@
 #include "../Runtime/Sentence/SentenceCondition.h"
 #include "../Runtime/Sentence/SentenceEcho.h"
 #include "../Runtime/Sentence/SentenceExpressionArithmeticInstance.h"
+#include "../Runtime/Sentence/SentenceExpressionLogicInstance.h"
+#include "../Runtime/Sentence/SentenceExpressionRelationalInstance.h"
 #include "../Runtime/Sentence/SentenceExpressionValue.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
 #include "../Runtime/Sentence/SentenceVariableAssign.h"
@@ -437,6 +439,22 @@ std::shared_ptr<SentenceExpressionMath> ParseTool::_CreateSentenceExpressionMath
 		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticAdd(v0, v1));
 	case MathSymbol::Sub:
 		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticSub(v0, v1));
+	case MathSymbol::Less:
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalLess(v0, v1));
+	case MathSymbol::LessEqual:
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalSameOrLess(v0, v1));
+	case MathSymbol::Equal:
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalSame(v0, v1));
+	case MathSymbol::NotEqual:
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalNotSame(v0, v1));
+	case MathSymbol::More:
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalMore(v0, v1));
+	case MathSymbol::MoreEqual:
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalSameOrMore(v0, v1));
+	case MathSymbol::LogicAnd:
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionLogicAnd(v0, v1));
+	case MathSymbol::LogicOr:
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionLogicOr(v0, v1));
 	default:
 		break;
 	}

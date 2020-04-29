@@ -64,3 +64,11 @@ if num21 {
 
 the num25 is false
 echo num25
+
+if (3 + 2 != 5) {
+	echo "3"
+} else {
+	echo "2"
+}
+
+echo "end"
