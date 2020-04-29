@@ -45,10 +45,10 @@ std::string openFile(const std::string& filename) {
 int main(int argc, char** argv) {
 	std::shared_ptr<Space> space{new Space(SpaceType::None)};
 
-	std::string src = std::move(openFile("/Users/jenocn/Project/PeakScript/interpreter-for-cpp/test/test.peak"));
+	auto src = std::move(openFile("/Users/jenocn/Project/PeakScript/interpreter-for-cpp/test/test.peak"));
 	std::cout << src << std::endl;
-	std::cout << "========================" << std::endl;
-
+	std::cout << "–––––––––––––––––––––––––––––––––––––––" << std::endl;
+	
 	auto ret = std::move(ParseTool::Load(src));
 	for (auto sen : ret) {
 		if (!Sentence::IsSuccess(sen->Execute(space))) {

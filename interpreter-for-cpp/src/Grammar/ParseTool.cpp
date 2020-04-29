@@ -120,7 +120,7 @@ bool ParseTool::JumpComment(const std::string& src, std::size_t size, std::size_
 	if (Grammar::MatchComment(src, size, pos, &pos)) {
 		while (pos < size) {
 			if (Grammar::IsTextNewLine(src[pos])) {
-				*nextPos = pos + 1;
+				*nextPos = pos;
 				return true;
 			}
 			++pos;
@@ -387,15 +387,17 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 			break;
 		}
 
-		auto savePos = pos;
-		if (JumpEnd(src, size, pos, &pos)) {
-			pos = savePos;
-			break;
+		auto saveJumpEndPos = pos;
+		bool bJumpEnd = JumpEnd(src, size, pos, &pos);
+
+		if (!bJumpEnd) {
+			Jump(src, size, pos, &pos);
 		}
-		Jump(src, size, pos, &pos);
+
 		if (pos >= size) {
 			break;
 		}
+
 		if (bBracket && Grammar::MatchRightBrcket(src, size, pos, &pos)) {
 			break;
 		}
@@ -407,6 +409,11 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 				return nullptr;
 			}
 			symbolStack.emplace(symbol);
+		} else {
+			if (bJumpEnd) {
+				pos = saveJumpEndPos;
+				break;
+			}
 		}
 		if (bRet) {
 			break;

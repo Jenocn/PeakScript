@@ -1,4 +1,4 @@
-var num = (2) * (1 + (2 - 1)) * (1 + 1)
+var num = 10 + 1
 var num0 = num + 2
 var num1 = "Hello World!"
 set num2 is "Hello Peak!"
@@ -69,6 +69,10 @@ if (3 + 2 != 5) {
 	echo "3"
 } else {
 	echo "2"
+}
+
+if (3 + 2 == 5 and true) {
+	echo "yes"
 }
 
 echo "end"
