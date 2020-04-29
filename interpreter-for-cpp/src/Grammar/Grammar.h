@@ -35,6 +35,11 @@ public:
 	static bool MatchBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchConditionIf(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchConditionElse(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchFor(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchForeach(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchForeachIn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchRightBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchMathSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* symbol);

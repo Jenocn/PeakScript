@@ -38,6 +38,11 @@ static const std::string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
 static const std::string STRING_COMMENT_BLOCK_END_SIGN = "*/";
 static const std::string STRING_NULL_SIGN = "null";
 static const std::string STRING_ECHO_SIGN = "echo";
+static const std::string STRING_FOR_SIGN = "for";
+static const std::string STRING_FOREACH_SIGN = "foreach";
+static const std::string STRING_FOREACH_IN_SIGN = "in";
+static const std::string STRING_WHILE_SIGN = "while";
+static const std::string STRING_LOOP_SIGN = "loop";
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
 
@@ -78,6 +83,24 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 		return true;
 	}
 	if (MatchEcho(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchFor(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchForeach(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchWhile(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchLoop(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchBlockBegin(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchBlockEnd(value, size, 0, &pos)) {
 		return true;
 	}
 
@@ -154,6 +177,22 @@ bool Grammar::MatchConditionElse(const std::string& src, std::size_t size, std::
 		}
 	}
 	return false;
+}
+
+bool Grammar::MatchFor(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_FOR_SIGN, src, size, pos, nextPos);
+}
+bool Grammar::MatchForeach(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_FOREACH_SIGN, src, size, pos, nextPos);
+}
+bool Grammar::MatchForeachIn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_FOREACH_IN_SIGN, src, size, pos, nextPos);
+}
+bool Grammar::MatchWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_WHILE_SIGN, src, size, pos, nextPos);
+}
+bool Grammar::MatchLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_LOOP_SIGN, src, size, pos, nextPos);
 }
 
 bool Grammar::MatchLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

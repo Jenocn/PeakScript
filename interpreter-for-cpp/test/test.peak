@@ -75,4 +75,9 @@ if (3 + 2 == 5 and true) {
 	echo "yes"
 }
 
-echo "end"
+echo "end";;;;;;;
+echo "end2"
+
+loop(i in 3) {
+	echo i
+}

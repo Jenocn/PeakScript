@@ -7,6 +7,7 @@
 #include "../Runtime/Sentence/SentenceExpressionRelationalInstance.h"
 #include "../Runtime/Sentence/SentenceExpressionValue.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
+#include "../Runtime/Sentence/SentenceLoop.h"
 #include "../Runtime/Sentence/SentenceVariableAssign.h"
 #include "../Runtime/Sentence/SentenceVariableDefine.h"
 #include "../Runtime/Value/ValueTool.h"
@@ -19,6 +20,7 @@ using namespace peak::interpreter;
 std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceParseList = {
 	_ParseVariableDefineOrAssign,
 	_ParseCondition,
+	_ParseLoop,
 	_ParseBlock,
 	_ParseEcho,
 };
@@ -234,6 +236,50 @@ std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std
 
 	*nextPos = pos;
 	return std::shared_ptr<Sentence>(new SentenceCondition(expression, sentenceBlock, sentenceElse));
+}
+
+std::shared_ptr<Sentence> ParseTool::_ParseLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchLoop(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	if (!Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	std::string name;
+
+	auto savePos = pos;
+	bool bMatchName = Grammar::MatchName(src, size, pos, &pos, &name);
+	if (bMatchName) {
+		Jump(src, size, pos, &pos);
+	}
+
+	if (Grammar::MatchForeachIn(src, size, pos, &pos)) {
+		Jump(src, size, pos, &pos);
+	} else {
+		if (bMatchName) {
+			pos = savePos;
+			name = "";
+		}
+	}
+
+	auto condition = _ParseExpressionMath(src, size, pos, &pos);
+	if (!condition) {
+		return nullptr;
+	}
+	
+	Jump(src, size, pos, &pos);
+	if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	auto sentenceBlock = _ParseBlock(src, size, pos, &pos);
+	if (!sentenceBlock) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	return std::shared_ptr<Sentence>(new SentenceLoop(name, condition, sentenceBlock));
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
