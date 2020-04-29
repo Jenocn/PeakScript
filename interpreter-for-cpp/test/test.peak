@@ -81,3 +81,12 @@ echo "end2"
 loop (i in 3) {
 	echo "Hi " + i
 }
+
+var num26
+
+num25 = 3
++ 5
+
+num25
+	= 30;
+echo 30
