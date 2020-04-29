@@ -176,7 +176,6 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefineOrAssign(const std::str
 		return nullptr;
 	}
 
-	Jump(src, size, pos, &pos);
 	if (!Grammar::MatchAssign(src, size, pos, &pos)) {
 		return nullptr;
 	}
@@ -389,10 +388,6 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 
 		auto saveJumpEndPos = pos;
 		bool bJumpEnd = JumpEnd(src, size, pos, &pos);
-
-		if (!bJumpEnd) {
-			Jump(src, size, pos, &pos);
-		}
 
 		if (pos >= size) {
 			break;
