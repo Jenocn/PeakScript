@@ -2,14 +2,13 @@
 #include "../Runtime/Sentence/SentenceBlock.h"
 #include "../Runtime/Sentence/SentenceCondition.h"
 #include "../Runtime/Sentence/SentenceEcho.h"
-#include "../Runtime/Sentence/SentenceExpressionArithmeticInstance.h"
-#include "../Runtime/Sentence/SentenceExpressionLogicInstance.h"
-#include "../Runtime/Sentence/SentenceExpressionRelationalInstance.h"
+#include "../Runtime/Value/ValueCalculateInstance.h"
 #include "../Runtime/Sentence/SentenceExpressionValue.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
 #include "../Runtime/Sentence/SentenceLoop.h"
 #include "../Runtime/Sentence/SentenceVariableAssign.h"
 #include "../Runtime/Sentence/SentenceVariableDefine.h"
+#include "../Runtime/Sentence/SentenceExpressionMath.h"
 #include "../Runtime/Value/ValueTool.h"
 #include "../Runtime/Variable.h"
 #include "Grammar.h"
@@ -21,6 +20,7 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseVariableDefineOrAssign,
 	_ParseCondition,
 	_ParseLoop,
+	_ParseFor,
 	_ParseBlock,
 	_ParseEcho,
 };
@@ -268,7 +268,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseLoop(const std::string& src, std::siz
 	if (!condition) {
 		return nullptr;
 	}
-	
+
 	Jump(src, size, pos, &pos);
 	if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
 		return nullptr;
@@ -280,6 +280,11 @@ std::shared_ptr<Sentence> ParseTool::_ParseLoop(const std::string& src, std::siz
 	}
 	*nextPos = pos;
 	return std::shared_ptr<Sentence>(new SentenceLoop(name, condition, sentenceBlock));
+}
+
+std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	// temp todo...
+	return nullptr;
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
@@ -397,10 +402,11 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 			stack0->pop();
 			auto vl = stack0->top();
 			stack0->pop();
-			auto expression = _CreateSentenceExpressionMath(vl, vr, topSymbol);
-			if (!expression) {
+			auto calculate = _CreateCalculate(topSymbol);
+			if (!calculate) {
 				return false;
 			}
+			auto expression = std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionMath(vl, vr, calculate));
 			stack0->emplace(expression);
 		}
 		return true;
@@ -474,35 +480,35 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 	return expressionStack.top();
 }
 
-std::shared_ptr<SentenceExpressionMath> ParseTool::_CreateSentenceExpressionMath(std::shared_ptr<SentenceExpression> v0, std::shared_ptr<SentenceExpression> v1, const std::string& symbol) {
+std::shared_ptr<IValueCalculate> ParseTool::_CreateCalculate(const std::string& symbol) {
 	auto mathSymbol = Grammar::GetMathSymbol(symbol);
 	switch (mathSymbol) {
 	case MathSymbol::Mul:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticMul(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateMul());
 	case MathSymbol::Div:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticDiv(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateDiv());
 	case MathSymbol::Mod:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticMod(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateMod());
 	case MathSymbol::Add:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticAdd(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateAdd());
 	case MathSymbol::Sub:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticSub(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateSub());
 	case MathSymbol::Less:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalLess(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateLess());
 	case MathSymbol::LessEqual:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalSameOrLess(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateSameOrLess());
 	case MathSymbol::Equal:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalSame(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateSame());
 	case MathSymbol::NotEqual:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalNotSame(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateNotSame());
 	case MathSymbol::More:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalMore(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateMore());
 	case MathSymbol::MoreEqual:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionRelationalSameOrMore(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateSameOrMore());
 	case MathSymbol::LogicAnd:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionLogicAnd(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateLogicAnd());
 	case MathSymbol::LogicOr:
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionLogicOr(v0, v1));
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateLogicOr());
 	default:
 		break;
 	}

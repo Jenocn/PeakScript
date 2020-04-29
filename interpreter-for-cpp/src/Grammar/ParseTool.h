@@ -7,7 +7,7 @@ namespace peak::interpreter {
 
 class Sentence;
 class SentenceExpression;
-class SentenceExpressionMath;
+class IValueCalculate;
 
 class ParseTool {
 public:
@@ -30,6 +30,7 @@ private:
 	static std::shared_ptr<Sentence> _ParseVariableDefineOrAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseCondition(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static std::shared_ptr<Sentence> _ParseFor(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
@@ -44,7 +45,7 @@ private:
 	static std::shared_ptr<SentenceExpression> _ParseExpressionMathBracket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool bBracket);
 
 private:
-	static std::shared_ptr<SentenceExpressionMath> _CreateSentenceExpressionMath(std::shared_ptr<SentenceExpression> left, std::shared_ptr<SentenceExpression> right, const std::string& symbol);
+	static std::shared_ptr<IValueCalculate> _CreateCalculate(const std::string& symbol);
 
 private:
 	static std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_t, std::size_t, std::size_t*)>> _sentenceParseList;

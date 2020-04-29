@@ -5,18 +5,18 @@
 namespace peak::interpreter {
 
 class IValueCalculate;
-	
-class SentenceExpressionMath : public SentenceExpression {
+
+class SentenceExpressionAssign : public SentenceExpression {
 public:
-	SentenceExpressionMath(std::shared_ptr<SentenceExpression> left, std::shared_ptr<SentenceExpression> right, std::shared_ptr<IValueCalculate> calculate);
+	SentenceExpressionAssign(const std::string& name, std::shared_ptr<SentenceExpression> expression, std::shared_ptr<IValueCalculate> calculate);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space) final;
 
 private:
 	using SentenceExpression::SetValue;
 
 private:
-	std::shared_ptr<SentenceExpression> _left{nullptr};
-	std::shared_ptr<SentenceExpression> _right{nullptr};
+	std::string _name;
+	std::shared_ptr<SentenceExpression> _expression{nullptr};
 	std::shared_ptr<IValueCalculate> _calculate{nullptr};
 };
 } // namespace peak::interpreter

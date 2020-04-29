@@ -1,15 +1,8 @@
 
-#include "../src/Runtime/Sentence/SentenceBlock.h"
-#include "../src/Runtime/Sentence/SentenceExpression.h"
-#include "../src/Runtime/Sentence/SentenceExpressionArithmeticInstance.h"
-#include "../src/Runtime/Sentence/SentenceExpressionValue.h"
-#include "../src/Runtime/Sentence/SentenceExpressionVariable.h"
-#include "../src/Runtime/Sentence/SentenceVariableDefine.h"
+#include "../src/Grammar/ParseTool.h"
+#include "../src/Runtime/Sentence/Sentence.h"
 #include "../src/Runtime/Value/ValueTool.h"
 #include "../src/Runtime/Variable.h"
-
-#include "../src/Grammar/Grammar.h"
-#include "../src/Grammar/ParseTool.h"
 
 #include <fstream>
 #include <iostream>
@@ -48,7 +41,7 @@ int main(int argc, char** argv) {
 	auto src = std::move(openFile("/Users/jenocn/Project/PeakScript/interpreter-for-cpp/test/test.peak"));
 	std::cout << src << std::endl;
 	std::cout << "–––––––––––––––––––––––––––––––––––––––" << std::endl;
-	
+
 	auto ret = std::move(ParseTool::Load(src));
 	for (auto sen : ret) {
 		if (!Sentence::IsSuccess(sen->Execute(space))) {

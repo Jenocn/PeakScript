@@ -1,12 +1,18 @@
 #include "SentenceExpressionMath.h"
+#include "../Value/IValueCalculate.h"
 
 using namespace peak::interpreter;
 
-SentenceExpressionMath::SentenceExpressionMath(std::shared_ptr<SentenceExpression> left, std::shared_ptr<SentenceExpression> right)
-	: _left(left), _right(right) {
+SentenceExpressionMath::SentenceExpressionMath(std::shared_ptr<SentenceExpression> left,
+											   std::shared_ptr<SentenceExpression> right,
+											   std::shared_ptr<IValueCalculate> calculate)
+	: _left(left), _right(right), _calculate(calculate) {
 }
 
 ExecuteResult SentenceExpressionMath::Execute(std::shared_ptr<Space> space) {
+	if (!_calculate) {
+		return ExecuteResult::Failed;
+	}
 	if (!_left || !IsSuccess(_left->Execute(space))) {
 		return ExecuteResult::Failed;
 	}
@@ -14,7 +20,7 @@ ExecuteResult SentenceExpressionMath::Execute(std::shared_ptr<Space> space) {
 		return ExecuteResult::Failed;
 	}
 
-	auto value = Calculate(_left->GetValue(), _right->GetValue());
+	auto value = _calculate->Calculate(_left->GetValue(), _right->GetValue());
 	if (!value) {
 		return ExecuteResult::Failed;
 	}
