@@ -21,7 +21,7 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseEcho,
 };
 std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceExpressionParseList = {
-	_ParseArithmetic,
+	_ParseExpressionMath,
 	_ParseString,
 	_ParseNumber,
 	_ParseBool,
@@ -200,7 +200,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	bool bBracket = Grammar::MatchArithmeticLeftBrcket(src, size, pos, &pos);
+	bool bBracket = Grammar::MatchLeftBrcket(src, size, pos, &pos);
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 	}
@@ -210,7 +210,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std
 	}
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchArithmeticRightBrcket(src, size, pos, &pos)) {
+		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
 			return nullptr;
 		}
 	}
@@ -326,18 +326,18 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string&
 	return nullptr;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmetic(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	return _ParseArithmeticCheckBracket(src, size, pos, nextPos, false);
+std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMath(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return _ParseExpressionMathBracket(src, size, pos, nextPos, false);
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmeticCheckBracket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool bBracket) {
+std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool bBracket) {
 	std::stack<std::shared_ptr<SentenceExpression>> expressionStack;
-	std::stack<char> symbolStack;
+	std::stack<std::string> symbolStack;
 
-	static const auto calcLoopFunc = [](char symbol, decltype(expressionStack)* stack0, decltype(symbolStack)* stack1) {
-		int level = symbol == 0 ? 0 : Grammar::GetArithmeticSymbolLevel(symbol);
+	static const auto calcLoopFunc = [](const std::string& symbol, decltype(expressionStack)* stack0, decltype(symbolStack)* stack1) {
+		int level = symbol.empty() ? 0 : Grammar::GetMathSymbolLevel(symbol);
 		while (!stack1->empty()) {
-			int preLevel = Grammar::GetArithmeticSymbolLevel(stack1->top());
+			int preLevel = Grammar::GetMathSymbolLevel(stack1->top());
 			if (preLevel < level) {
 				break;
 			}
@@ -350,7 +350,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmeticCheckBracket(cons
 			stack0->pop();
 			auto vl = stack0->top();
 			stack0->pop();
-			auto expression = _CreateSentenceExpressionArithmetic(vl, vr, topSymbol);
+			auto expression = _CreateSentenceExpressionMath(vl, vr, topSymbol);
 			if (!expression) {
 				return false;
 			}
@@ -362,9 +362,9 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmeticCheckBracket(cons
 	while (true) {
 		bool bRet = false;
 		Jump(src, size, pos, &pos);
-		if (Grammar::MatchArithmeticLeftBrcket(src, size, pos, &pos)) {
+		if (Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
 			Jump(src, size, pos, &pos);
-			auto priorityExpression = _ParseArithmeticCheckBracket(src, size, pos, &pos, true);
+			auto priorityExpression = _ParseExpressionMathBracket(src, size, pos, &pos, true);
 			if (!priorityExpression) {
 				return nullptr;
 			}
@@ -394,12 +394,12 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmeticCheckBracket(cons
 		if (pos >= size) {
 			break;
 		}
-		if (bBracket && Grammar::MatchArithmeticRightBrcket(src, size, pos, &pos)) {
+		if (bBracket && Grammar::MatchRightBrcket(src, size, pos, &pos)) {
 			break;
 		}
 
-		char symbol = 0;
-		if (Grammar::MatchArithmeticSymbol(src, size, pos, &pos, &symbol)) {
+		std::string symbol = "";
+		if (Grammar::MatchMathSymbol(src, size, pos, &pos, &symbol)) {
 			bRet = false;
 			if (!calcLoopFunc(symbol, &expressionStack, &symbolStack)) {
 				return nullptr;
@@ -411,7 +411,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmeticCheckBracket(cons
 		}
 	}
 
-	if (!calcLoopFunc(0, &expressionStack, &symbolStack)) {
+	if (!calcLoopFunc("", &expressionStack, &symbolStack)) {
 		return nullptr;
 	}
 
@@ -424,17 +424,22 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArithmeticCheckBracket(cons
 	return expressionStack.top();
 }
 
-std::shared_ptr<SentenceExpressionMath> ParseTool::_CreateSentenceExpressionArithmetic(std::shared_ptr<SentenceExpression> v0, std::shared_ptr<SentenceExpression> v1, char symbol) {
-	if (Grammar::IsArithmeticSymbolAdd(symbol)) {
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticAdd(v0, v1));
-	} else if (Grammar::IsArithmeticSymbolSub(symbol)) {
-		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticSub(v0, v1));
-	} else if (Grammar::IsArithmeticSymbolMul(symbol)) {
+std::shared_ptr<SentenceExpressionMath> ParseTool::_CreateSentenceExpressionMath(std::shared_ptr<SentenceExpression> v0, std::shared_ptr<SentenceExpression> v1, const std::string& symbol) {
+	auto mathSymbol = Grammar::GetMathSymbol(symbol);
+	switch (mathSymbol) {
+	case MathSymbol::Mul:
 		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticMul(v0, v1));
-	} else if (Grammar::IsArithmeticSymbolDiv(symbol)) {
+	case MathSymbol::Div:
 		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticDiv(v0, v1));
-	} else if (Grammar::IsArithmeticSymbolMod(symbol)) {
+	case MathSymbol::Mod:
 		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticMod(v0, v1));
+	case MathSymbol::Add:
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticAdd(v0, v1));
+	case MathSymbol::Sub:
+		return std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionArithmeticSub(v0, v1));
+	default:
+		break;
 	}
+
 	return nullptr;
 }

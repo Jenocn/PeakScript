@@ -1,6 +1,6 @@
 #include "Grammar.h"
 #include <set>
-
+#include <unordered_map>
 using namespace peak::interpreter;
 
 // text
@@ -19,8 +19,21 @@ static const std::set<std::string> SET_CONDITION_ELSE_SIGN = {"else"};
 static const std::set<std::string> SET_BLOCK_BEGIN = {"{", "begin"};
 static const std::set<std::string> SET_BLOCK_END = {"}", "end"};
 static const std::set<std::string> SET_COMMENT_SIGN = {"//", "#"};
-static const std::set<char> SET_ARITHMETIC_SYMBOL_LEVEL_2 = {'*', '/', '%'};
-static const std::set<char> SET_ARITHMETIC_SYMBOL_LEVEL_1 = {'+', '-'};
+static const std::unordered_map<MathSymbol, std::pair<int, std::set<std::string>>> MAP_SET_MATH_SYMBOL = {
+	{MathSymbol::Mul, {100, {"*"}}},
+	{MathSymbol::Div, {100, {"/"}}},
+	{MathSymbol::Mod, {100, {"%"}}},
+	{MathSymbol::Add, {90, {"+"}}},
+	{MathSymbol::Sub, {90, {"-"}}},
+	{MathSymbol::Less, {80, {"<"}}},
+	{MathSymbol::LessEqual, {80, {"<="}}},
+	{MathSymbol::More, {80, {">"}}},
+	{MathSymbol::MoreEqual, {80, {">="}}},
+	{MathSymbol::Equal, {70, {"=="}}},
+	{MathSymbol::NotEqual, {70, {"!="}}},
+	{MathSymbol::LogicAnd, {60, {"&&", "and"}}},
+	{MathSymbol::LogicOr, {60, {"||", "or"}}},
+};
 static const std::string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
 static const std::string STRING_COMMENT_BLOCK_END_SIGN = "*/";
 static const std::string STRING_NULL_SIGN = "null";
@@ -71,36 +84,38 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 	// temp todo...
 	return false;
 }
-int Grammar::GetArithmeticSymbolLevel(char ch) {
-	if (SET_ARITHMETIC_SYMBOL_LEVEL_1.find(ch) != SET_ARITHMETIC_SYMBOL_LEVEL_1.end()) {
-		return 1;
-	}
-	if (SET_ARITHMETIC_SYMBOL_LEVEL_2.find(ch) != SET_ARITHMETIC_SYMBOL_LEVEL_2.end()) {
-		return 2;
+int Grammar::GetMathSymbolLevel(const std::string& value) {
+	std::size_t pos = 0;
+	for (const auto& pair : MAP_SET_MATH_SYMBOL) {
+		const auto& setPair = pair.second;
+		const auto& signSet = setPair.second;
+		for (const auto& sign : signSet) {
+			if (MatchSign(sign, value, value.size(), 0, &pos)) {
+				return setPair.first;
+			}
+		}
 	}
 	return 0;
 }
 
-bool Grammar::IsArithmeticLeftBrcket(char ch) {
+bool Grammar::IsLeftBrcket(char ch) {
 	return ch == CHAR_LEFT_BRACKET;
 }
-bool Grammar::IsArithmeticRightBrcket(char ch) {
+bool Grammar::IsRightBrcket(char ch) {
 	return ch == CHAR_RIGHT_BRACKET;
 }
-bool Grammar::IsArithmeticSymbolAdd(char ch) {
-	return ch == '+';
-}
-bool Grammar::IsArithmeticSymbolSub(char ch) {
-	return ch == '-';
-}
-bool Grammar::IsArithmeticSymbolMul(char ch) {
-	return ch == '*';
-}
-bool Grammar::IsArithmeticSymbolDiv(char ch) {
-	return ch == '/';
-}
-bool Grammar::IsArithmeticSymbolMod(char ch) {
-	return ch == '%';
+MathSymbol Grammar::GetMathSymbol(const std::string& value) {
+	std::size_t pos = 0;
+	for (const auto& pair : MAP_SET_MATH_SYMBOL) {
+		const auto& setPair = pair.second;
+		const auto& signSet = setPair.second;
+		for (const auto& sign : signSet) {
+			if (MatchSign(sign, value, value.size(), 0, &pos)) {
+				return pair.first;
+			}
+		}
+	}
+	return MathSymbol::None;
 }
 
 bool Grammar::MatchEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
@@ -141,24 +156,22 @@ bool Grammar::MatchConditionElse(const std::string& src, std::size_t size, std::
 	return false;
 }
 
-bool Grammar::MatchArithmeticLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Grammar::MatchLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_LEFT_BRACKET, src, size, pos, nextPos);
 }
-bool Grammar::MatchArithmeticRightBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Grammar::MatchRightBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_RIGHT_BRACKET, src, size, pos, nextPos);
 }
 
-bool Grammar::MatchArithmeticSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, char* symbol) {
-	for (auto sign : SET_ARITHMETIC_SYMBOL_LEVEL_2) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			*symbol = sign;
-			return true;
-		}
-	}
-	for (auto sign : SET_ARITHMETIC_SYMBOL_LEVEL_1) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			*symbol = sign;
-			return true;
+bool Grammar::MatchMathSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* symbol) {
+	for (auto& pair : MAP_SET_MATH_SYMBOL) {
+		const auto& setPair = pair.second;
+		const auto& signSet = setPair.second;
+		for (auto& sign : signSet) {
+			if (MatchSign(sign, src, size, pos, nextPos)) {
+				*symbol = sign;
+				return true;
+			}
 		}
 	}
 	return false;
