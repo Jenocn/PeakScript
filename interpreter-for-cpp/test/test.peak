@@ -123,3 +123,10 @@ for (var i=0; i<3; i+=1) {
 for (;;)
 	echo "0"
 */
+
+if true echo yes; else echo no;
+
+loop (i in 3)
+	echo "loop" + i
+
+loop i in 3 echo "loop - " + i

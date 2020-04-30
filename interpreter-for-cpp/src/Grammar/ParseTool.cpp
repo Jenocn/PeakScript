@@ -231,8 +231,8 @@ std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std
 		}
 	}
 	Jump(src, size, pos, &pos);
-	auto sentenceBlock = _ParseBlock(src, size, pos, &pos);
-	if (!sentenceBlock) {
+	auto sentence = ParseSentence(src, size, pos, &pos);
+	if (!sentence) {
 		return nullptr;
 	}
 
@@ -243,12 +243,12 @@ std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std
 		Jump(src, size, pos, &pos);
 		sentenceElse = _ParseCondition(src, size, pos, &pos);
 		if (!sentenceElse) {
-			sentenceElse = _ParseBlock(src, size, pos, &pos);
+			sentenceElse = ParseSentence(src, size, pos, &pos);
 		}
 	}
 
 	*nextPos = pos;
-	return std::shared_ptr<Sentence>(new SentenceCondition(expression, sentenceBlock, sentenceElse));
+	return std::shared_ptr<Sentence>(new SentenceCondition(expression, sentence, sentenceElse));
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
@@ -291,12 +291,12 @@ std::shared_ptr<Sentence> ParseTool::_ParseLoop(const std::string& src, std::siz
 	}
 
 	Jump(src, size, pos, &pos);
-	auto sentenceBlock = _ParseBlock(src, size, pos, &pos);
-	if (!sentenceBlock) {
+	auto sentence = ParseSentence(src, size, pos, &pos);
+	if (!sentence) {
 		return nullptr;
 	}
 	*nextPos = pos;
-	return std::shared_ptr<Sentence>(new SentenceLoop(name, condition, sentenceBlock));
+	return std::shared_ptr<Sentence>(new SentenceLoop(name, condition, sentence));
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
