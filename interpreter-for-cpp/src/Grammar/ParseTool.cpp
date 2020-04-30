@@ -2,8 +2,8 @@
 #include "../Runtime/Sentence/SentenceBlock.h"
 #include "../Runtime/Sentence/SentenceCondition.h"
 #include "../Runtime/Sentence/SentenceEcho.h"
-#include "../Runtime/Sentence/SentenceExpressionAssign.h"
 #include "../Runtime/Sentence/SentenceExpressionMath.h"
+#include "../Runtime/Sentence/SentenceExpressionSelfAssign.h"
 #include "../Runtime/Sentence/SentenceExpressionValue.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
 #include "../Runtime/Sentence/SentenceLoop.h"
@@ -12,7 +12,6 @@
 #include "../Runtime/Value/ValueCalculateInstance.h"
 #include "../Runtime/Value/ValueTool.h"
 #include "../Runtime/Variable.h"
-#include "Grammar.h"
 #include <stack>
 
 using namespace peak::interpreter;
@@ -24,6 +23,7 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseFor,
 	_ParseBlock,
 	_ParseEcho,
+	_ParseExpressionToEnd,
 };
 std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceExpressionParseList = {
 	_ParseExpressionMath,
@@ -33,7 +33,6 @@ std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, 
 	_ParseNumber,
 	_ParseBool,
 	_ParseNull,
-	_ParseExpressionAssign,
 	_ParseVariable,
 };
 
@@ -44,7 +43,7 @@ std::list<std::shared_ptr<Sentence>> ParseTool::Load(const std::string& src) {
 	std::size_t pos = 0;
 	auto size = src.size();
 	while (pos < size) {
-		Jump(src, size, pos, &pos);
+		JumpEnd(src, size, pos, &pos);
 		if (pos >= size) {
 			break;
 		}
@@ -198,6 +197,17 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefineOrAssign(const std::str
 		return std::shared_ptr<Sentence>(new SentenceVariableDefine(name, expression));
 	}
 	return std::shared_ptr<Sentence>(new SentenceVariableAssign(name, expression));
+}
+std::shared_ptr<Sentence> ParseTool::_ParseExpressionToEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	auto expression = _ParseExpressionMath(src, size, pos, &pos);
+	if (!expression) {
+		return nullptr;
+	}
+	if (!JumpEnd(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	return expression;
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
@@ -380,20 +390,16 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string&
 	return nullptr;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	return nullptr;
-}
-
 std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMath(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return _ParseExpressionMathBracket(src, size, pos, nextPos, false);
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool bBracket) {
 	std::stack<std::shared_ptr<SentenceExpression>> expressionStack;
-	std::stack<std::string> symbolStack;
+	std::stack<MathSymbol> symbolStack;
 
-	static const auto calcLoopFunc = [](const std::string& symbol, decltype(expressionStack)* stack0, decltype(symbolStack)* stack1) {
-		int level = symbol.empty() ? 0 : Grammar::GetMathSymbolLevel(symbol);
+	static const auto calcLoopFunc = [](MathSymbol symbol, decltype(expressionStack)* stack0, decltype(symbolStack)* stack1) {
+		int level = Grammar::GetMathSymbolLevel(symbol);
 		while (!stack1->empty()) {
 			int preLevel = Grammar::GetMathSymbolLevel(stack1->top());
 			if (preLevel < level) {
@@ -412,7 +418,12 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 			if (!calculate) {
 				return false;
 			}
-			auto expression = std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionMath(vl, vr, calculate));
+			std::shared_ptr<SentenceExpressionMath> expression{nullptr};
+			if (Grammar::IsVariableSelfAssignSymbol(topSymbol)) {
+				expression = std::shared_ptr<SentenceExpressionSelfAssign>(new SentenceExpressionSelfAssign(vl, vr, calculate));
+			} else {
+				expression = std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionMath(vl, vr, calculate));
+			}
 			stack0->emplace(expression);
 		}
 		return true;
@@ -455,7 +466,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 			break;
 		}
 
-		std::string symbol = "";
+		auto symbol = MathSymbol::None;
 		if (Grammar::MatchMathSymbol(src, size, pos, &pos, &symbol)) {
 			bRet = false;
 			if (!calcLoopFunc(symbol, &expressionStack, &symbolStack)) {
@@ -471,7 +482,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 		}
 	}
 
-	if (!calcLoopFunc("", &expressionStack, &symbolStack)) {
+	if (!calcLoopFunc(MathSymbol::None, &expressionStack, &symbolStack)) {
 		return nullptr;
 	}
 
@@ -484,9 +495,8 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 	return expressionStack.top();
 }
 
-std::shared_ptr<IValueCalculate> ParseTool::_CreateCalculate(const std::string& symbol) {
-	auto mathSymbol = Grammar::GetMathSymbol(symbol);
-	switch (mathSymbol) {
+std::shared_ptr<IValueCalculate> ParseTool::_CreateCalculate(MathSymbol symbol) {
+	switch (symbol) {
 	case MathSymbol::Mul:
 		return std::shared_ptr<IValueCalculate>(new ValueCalculateMul());
 	case MathSymbol::Div:
@@ -513,6 +523,16 @@ std::shared_ptr<IValueCalculate> ParseTool::_CreateCalculate(const std::string& 
 		return std::shared_ptr<IValueCalculate>(new ValueCalculateLogicAnd());
 	case MathSymbol::LogicOr:
 		return std::shared_ptr<IValueCalculate>(new ValueCalculateLogicOr());
+	case MathSymbol::AssignAdd:
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateAdd());
+	case MathSymbol::AssignSub:
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateSub());
+	case MathSymbol::AssignMul:
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateMul());
+	case MathSymbol::AssignDiv:
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateDiv());
+	case MathSymbol::AssignMod:
+		return std::shared_ptr<IValueCalculate>(new ValueCalculateMod());
 	default:
 		break;
 	}

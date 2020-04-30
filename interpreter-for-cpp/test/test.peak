@@ -82,11 +82,22 @@ loop (i in 3) {
 	echo "Hi " + i
 }
 
-var num26
-
 num25 = 3
 + 5
 
 num25
 	= 30;
 echo 30
+
+var num26 = num25 += 30
+echo num26
+
+if (num26 += 2 == 120) {
+	echo yes
+}
+
+var num27 = 10;
+if (1 + num27 += 1 == 12) {
+	echo "yes" + num27
+}
+echo num27 *= 2

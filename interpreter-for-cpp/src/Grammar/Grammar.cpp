@@ -1,4 +1,5 @@
 #include "Grammar.h"
+#include <map>
 #include <set>
 #include <unordered_map>
 using namespace peak::interpreter;
@@ -11,7 +12,7 @@ static const std::set<char> SET_TEXT_NEW_LINE = {'\n'};
 static const std::set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
 static const std::set<char> SET_END_SIGN = {'\n', ';'};
 static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "auto", "set", "the"};
-static const std::set<std::string> SET_ASSIGN_SIGN = {"=", ":", ":=", "is", "as"};
+static const std::set<std::string> SET_ASSIGN_SIGN = {"=", ":", "is", "as"};
 static const std::set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
 static const std::set<std::string> SET_BOOL_FALSE_SIGN = {"false", "no"};
 static const std::set<std::string> SET_CONDITION_IF_SIGN = {"if"};
@@ -19,7 +20,12 @@ static const std::set<std::string> SET_CONDITION_ELSE_SIGN = {"else"};
 static const std::set<std::string> SET_BLOCK_BEGIN = {"{", "begin"};
 static const std::set<std::string> SET_BLOCK_END = {"}", "end"};
 static const std::set<std::string> SET_COMMENT_SIGN = {"//", "#"};
-static const std::unordered_map<MathSymbol, std::pair<int, std::set<std::string>>> MAP_SET_MATH_SYMBOL = {
+static const std::map<MathSymbol, std::pair<int, std::set<std::string>>> MAP_SET_MATH_SYMBOL = {
+	{MathSymbol::AssignMul, {110, {"*="}}},
+	{MathSymbol::AssignDiv, {110, {"/="}}},
+	{MathSymbol::AssignMod, {110, {"%="}}},
+	{MathSymbol::AssignAdd, {110, {"+="}}},
+	{MathSymbol::AssignSub, {110, {"-="}}},
 	{MathSymbol::Mul, {100, {"*"}}},
 	{MathSymbol::Div, {100, {"/"}}},
 	{MathSymbol::Mod, {100, {"%"}}},
@@ -53,7 +59,7 @@ bool Grammar::IsTextNewLine(char ch) {
 	return (SET_TEXT_NEW_LINE.find(ch) != SET_TEXT_NEW_LINE.end());
 }
 bool Grammar::IsTextSpecialChar(char ch) {
-	return (ch >= 0 && ch <= 47) || (ch >= 58 && ch <= 94) || (ch == 96) || (ch >= 123 && ch <= 126);
+	return (ch >= 0 && ch <= 47) || (ch >= 58 && ch <= 94) || (ch == 96) || (ch >= 123 && ch <= 127);
 }
 bool Grammar::IsTextNumber(char ch) {
 	return ch >= '0' && ch <= '9';
@@ -107,16 +113,10 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 	// temp todo...
 	return false;
 }
-int Grammar::GetMathSymbolLevel(const std::string& value) {
-	std::size_t pos = 0;
-	for (const auto& pair : MAP_SET_MATH_SYMBOL) {
-		const auto& setPair = pair.second;
-		const auto& signSet = setPair.second;
-		for (const auto& sign : signSet) {
-			if (MatchSign(sign, value, value.size(), 0, &pos)) {
-				return setPair.first;
-			}
-		}
+int Grammar::GetMathSymbolLevel(MathSymbol value) {
+	auto ite = MAP_SET_MATH_SYMBOL.find(value);
+	if (ite != MAP_SET_MATH_SYMBOL.end()) {
+		return ite->second.first;
 	}
 	return 0;
 }
@@ -127,18 +127,16 @@ bool Grammar::IsLeftBrcket(char ch) {
 bool Grammar::IsRightBrcket(char ch) {
 	return ch == CHAR_RIGHT_BRACKET;
 }
-MathSymbol Grammar::GetMathSymbol(const std::string& value) {
-	std::size_t pos = 0;
-	for (const auto& pair : MAP_SET_MATH_SYMBOL) {
-		const auto& setPair = pair.second;
-		const auto& signSet = setPair.second;
-		for (const auto& sign : signSet) {
-			if (MatchSign(sign, value, value.size(), 0, &pos)) {
-				return pair.first;
-			}
-		}
-	}
-	return MathSymbol::None;
+
+bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
+	static const std::set<MathSymbol> selfAssignSymbol = {
+		MathSymbol::AssignAdd,
+		MathSymbol::AssignDiv,
+		MathSymbol::AssignSub,
+		MathSymbol::AssignMul,
+		MathSymbol::AssignMod,
+	};
+	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
 }
 
 bool Grammar::MatchEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
@@ -202,13 +200,13 @@ bool Grammar::MatchRightBrcket(const std::string& src, std::size_t size, std::si
 	return MatchSign(CHAR_RIGHT_BRACKET, src, size, pos, nextPos);
 }
 
-bool Grammar::MatchMathSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* symbol) {
+bool Grammar::MatchMathSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, MathSymbol* symbol) {
 	for (auto& pair : MAP_SET_MATH_SYMBOL) {
 		const auto& setPair = pair.second;
 		const auto& signSet = setPair.second;
 		for (auto& sign : signSet) {
 			if (MatchSign(sign, src, size, pos, nextPos)) {
-				*symbol = sign;
+				*symbol = pair.first;
 				return true;
 			}
 		}

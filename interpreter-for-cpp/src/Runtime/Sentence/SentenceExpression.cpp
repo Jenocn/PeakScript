@@ -1,6 +1,6 @@
 #include "SentenceExpression.h"
-#include "Sentence.h"
 #include "../Value/Value.h"
+#include "Sentence.h"
 
 using namespace peak::interpreter;
 

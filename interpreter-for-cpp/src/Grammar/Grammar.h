@@ -4,13 +4,26 @@
 
 namespace peak::interpreter {
 
-enum class MathSymbol {
+enum class MathSymbol : char {
 	None,
-	Mul, Div, Mod, // *, /, %
-	Add, Sub, // +, -
-	Less, LessEqual, More, MoreEqual, // <, <=, >, >=
-	Equal, NotEqual, // ==, !=
-	LogicAnd, LogicOr, // &&, ||
+	LessEqual, // <=
+	MoreEqual, // >=
+	Equal, // ==
+	NotEqual, // !=
+	LogicAnd, // &&
+	LogicOr, // ||
+	AssignAdd, // +=
+	AssignSub, // -=
+	AssignMul, // *=
+	AssignDiv, // /=
+	AssignMod, // %=
+	Less, // <
+	More, // >
+	Mul, // *
+	Div, // /
+	Mod, // %
+	Add, // +
+	Sub, // -
 };
 
 class Grammar {
@@ -24,10 +37,10 @@ public:
 	static bool IsSpecialSign(const std::string& value);
 	static bool IsLeftBrcket(char ch);
 	static bool IsRightBrcket(char ch);
+	static bool IsVariableSelfAssignSymbol(MathSymbol value);
 
 public:
-	static int GetMathSymbolLevel(const std::string& value);
-	static MathSymbol GetMathSymbol(const std::string& value);
+	static int GetMathSymbolLevel(MathSymbol value);
 
 public:
 	static bool MatchEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
@@ -42,7 +55,7 @@ public:
 	static bool MatchLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchRightBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static bool MatchMathSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* symbol);
+	static bool MatchMathSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, MathSymbol* symbol);
 	static bool MatchNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool* value);
 	static bool MatchNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, double* number);

@@ -1,6 +1,8 @@
 
 #include "../src/Grammar/ParseTool.h"
 #include "../src/Runtime/Sentence/Sentence.h"
+#include "../src/Runtime/Sentence/SentenceExpression.h"
+#include "../src/Runtime/Sentence/SentenceExpressionVariable.h"
 #include "../src/Runtime/Value/ValueTool.h"
 #include "../src/Runtime/Variable.h"
 
@@ -43,6 +45,8 @@ int main(int argc, char** argv) {
 	std::cout << "–––––––––––––––––––––––––––––––––––––––" << std::endl;
 
 	auto ret = std::move(ParseTool::Load(src));
+	std::cout << ret.size() << std::endl;
+
 	for (auto sen : ret) {
 		if (!Sentence::IsSuccess(sen->Execute(space))) {
 			std::cout << "error" << std::endl;

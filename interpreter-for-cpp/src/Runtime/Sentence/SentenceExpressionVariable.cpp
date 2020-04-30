@@ -15,3 +15,7 @@ ExecuteResult SentenceExpressionVariable::Execute(std::shared_ptr<Space> space) 
 	SetValue(findVariable->GetValue());
 	return ExecuteResult::Successed;
 }
+
+const std::string& SentenceExpressionVariable::GetVariableName() const {
+	return _name;
+}
