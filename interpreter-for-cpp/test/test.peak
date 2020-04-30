@@ -101,3 +101,25 @@ if (1 + num27 += 1 == 12) {
 	echo "yes" + num27
 }
 echo num27 *= 2
+
+if 1 + 1 == 2 begin
+	echo "1 + 1 == 2"
+end
+
+loop 3 {
+	echo "a"
+}
+
+loop i in 3 {
+	echo i
+}
+
+for (var i=0; i<3; i+=1)
+	echo "for " + i
+for (var i=0; i<3; i+=1) {
+	echo "for " + i
+}
+/*
+for (;;)
+	echo "0"
+*/
