@@ -129,4 +129,16 @@ if true echo yes; else echo no;
 loop (i in 3)
 	echo "loop" + i
 
-loop i in 3 echo "loop - " + i
+var num28 = 3
+loop i in num28 + 5 echo "loop - " + i
+
+echo "-----"
+
+while num28 > 0 echo num28 -= 1
+
+echo "-----"
+var num29 = 0
+while (num29 < 10) {
+	echo num29
+	num29 += 1
+}

@@ -10,6 +10,7 @@
 #include "../Runtime/Sentence/SentenceLoop.h"
 #include "../Runtime/Sentence/SentenceVariableAssign.h"
 #include "../Runtime/Sentence/SentenceVariableDefine.h"
+#include "../Runtime/Sentence/SentenceWhile.h"
 #include "../Runtime/Value/ValueCalculateInstance.h"
 #include "../Runtime/Value/ValueTool.h"
 #include "../Runtime/Variable.h"
@@ -22,6 +23,7 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseCondition,
 	_ParseLoop,
 	_ParseFor,
+	_ParseWhile,
 	_ParseBlock,
 	_ParseEcho,
 	_ParseExpressionToEnd,
@@ -341,6 +343,34 @@ std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size
 
 	*nextPos = pos;
 	return std::shared_ptr<Sentence>(new SentenceFor(sentence0, expression0, expression1, content));
+}
+
+std::shared_ptr<Sentence> ParseTool::_ParseWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchWhile(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	bool bBracket = Grammar::MatchLeftBrcket(src, size, pos, &pos);
+	if (bBracket) {
+		Jump(src, size, pos, &pos);
+	}
+	auto expression = _ParseExpression(src, size, pos, &pos);
+	if (!expression) {
+		return nullptr;
+	}
+	if (bBracket) {
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+			return nullptr;
+		}
+	}
+	Jump(src, size, pos, &pos);
+	auto sentence = ParseSentence(src, size, pos, &pos);
+	if (!sentence && !JumpEnd(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	return std::shared_ptr<Sentence>(new SentenceWhile(expression, sentence));
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
