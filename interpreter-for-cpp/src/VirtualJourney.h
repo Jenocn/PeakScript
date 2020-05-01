@@ -1,3 +1,8 @@
+/*
+	PeakScript: https://github.com/Jenocn/PeakScript
+	By Jenocn: https://jenocn.github.io
+*/
+
 #pragma once
 
 #include "Runtime/Sentence/Sentence.h"
