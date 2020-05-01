@@ -11,7 +11,8 @@ static const std::set<char> SET_TEXT_NEW_LINE = {'\n'};
 // grammar
 static const std::set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
 static const std::set<char> SET_END_SIGN = {'\n', ';'};
-static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "auto", "set", "the"};
+static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "the"};
+static const std::set<std::string> SET_VARIABLE_SET_SIGN = {"set"};
 static const std::set<std::string> SET_ASSIGN_SIGN = {"=", ":", "is", "as"};
 static const std::set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
 static const std::set<std::string> SET_BOOL_FALSE_SIGN = {"false", "no"};
@@ -48,6 +49,7 @@ static const std::string STRING_FOR_SIGN = "for";
 static const std::string STRING_FOREACH_SIGN = "foreach";
 static const std::string STRING_FOREACH_IN_SIGN = "in";
 static const std::string STRING_WHILE_SIGN = "while";
+static const std::string STRING_DO_SIGN = "do";
 static const std::string STRING_LOOP_SIGN = "loop";
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
@@ -188,6 +190,9 @@ bool Grammar::MatchForeachIn(const std::string& src, std::size_t size, std::size
 }
 bool Grammar::MatchWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_WHILE_SIGN, src, size, pos, nextPos);
+}
+bool Grammar::MatchDo(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_DO_SIGN, src, size, pos, nextPos);
 }
 bool Grammar::MatchLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_LOOP_SIGN, src, size, pos, nextPos);
@@ -346,6 +351,14 @@ bool Grammar::MatchCommentBlockEnd(const std::string& src, std::size_t size, std
 }
 bool Grammar::MatchVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (const auto& sign : SET_VARIABLE_DEFINE_SIGN) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			return true;
+		}
+	}
+	return false;
+}
+bool Grammar::MatchVariableSet(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (const auto& sign : SET_VARIABLE_SET_SIGN) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {
 			return true;
 		}

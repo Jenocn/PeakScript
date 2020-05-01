@@ -57,6 +57,7 @@ public:
 	static bool MatchForeach(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchForeachIn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchDo(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchRightBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
@@ -70,6 +71,7 @@ public:
 	static bool MatchCommentBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchCommentBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchVariableSet(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchSign(const std::string& sign, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchSign(char sign, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchPair(const std::string& signLeft, const std::string& signRight, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* result);

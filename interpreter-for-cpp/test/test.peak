@@ -2,18 +2,18 @@ var num = 10 + 1
 var num0 = num + 2
 var num1 = "Hello World!"
 set num2 is "Hello Peak!"
-auto num3 as "Hahah"
+set num3 as "Hahah"
 var num4=999.32
 var num5=false;
 # ------------------------------------------
 set num6=true
-auto num7 = yes
+set num7 = yes
 /*
 By Jenocn
 */
 
 // Test
-auto num8 = no
+set num8 = no
 var num9 = `Jenocn`
 var num10 = 'Good'
 var num11 = `aa"您好"a`
@@ -142,3 +142,17 @@ while (num29 < 10) {
 	echo num29
 	num29 += 1
 }
+
+
+var num30 = 3
+do 
+	echo "do while " + num30 -= 1
+while num30 > 0
+
+do {
+	echo "do while2 " + num30 -= 1
+} while(false);
+
+echo num30
+set num30 = "Hello"
+echo num30

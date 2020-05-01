@@ -10,7 +10,6 @@
 #include <memory>
 
 namespace peak::interpreter {
-
 	
 class SentenceBlock : public SentenceReturn {
 public:
