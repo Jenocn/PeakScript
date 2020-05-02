@@ -9,6 +9,7 @@
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
 #include "../Runtime/Sentence/SentenceFor.h"
 #include "../Runtime/Sentence/SentenceLoop.h"
+#include "../Runtime/Sentence/SentenceTryCatchFinally.h"
 #include "../Runtime/Sentence/SentenceVariableAssign.h"
 #include "../Runtime/Sentence/SentenceVariableDefine.h"
 #include "../Runtime/Sentence/SentenceVariableSet.h"
@@ -31,6 +32,7 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseBlock,
 	_ParseEcho,
 	_ParseExpressionToEnd,
+	_ParseTryCatchFinally,
 };
 std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceExpressionParseList = {
 	_ParseExpressionMath,
@@ -288,6 +290,9 @@ std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std
 		sentenceElse = _ParseCondition(src, size, pos, &pos);
 		if (!sentenceElse) {
 			sentenceElse = ParseSentence(src, size, pos, &pos);
+			if (!sentenceElse) {
+				return nullptr;
+			}
 		}
 	}
 
@@ -498,6 +503,38 @@ std::shared_ptr<Sentence> ParseTool::_ParseEcho(const std::string& src, std::siz
 
 	*nextPos = pos;
 	return std::shared_ptr<Sentence>(new SentenceEcho(expression));
+}
+
+std::shared_ptr<Sentence> ParseTool::_ParseTryCatchFinally(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchTry(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	auto sentence = ParseSentence(src, size, pos, &pos);
+	if (!sentence) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+
+	decltype(sentence) catchSentence = nullptr;
+	if (Grammar::MatchCatch(src, size, pos, &pos)) {
+		Jump(src, size, pos, &pos);
+		catchSentence = ParseSentence(src, size, pos, &pos);
+		if (!catchSentence) {
+			return nullptr;
+		}
+		Jump(src, size, pos, &pos);
+	}
+	decltype(sentence) finallySentence = nullptr;
+	if (Grammar::MatchFinally(src, size, pos, &pos)) {
+		Jump(src, size, pos, &pos);
+		finallySentence = ParseSentence(src, size, pos, &pos);
+		if (!finallySentence) {
+			return nullptr;
+		}
+	}
+	*nextPos = pos;
+	return std::shared_ptr<Sentence>(new SentenceTryCatchFinally(sentence, catchSentence, finallySentence));
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

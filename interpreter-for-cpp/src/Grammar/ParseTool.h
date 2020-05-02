@@ -43,6 +43,7 @@ private:
 	static std::shared_ptr<Sentence> _ParseDoWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static std::shared_ptr<Sentence> _ParseTryCatchFinally(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 private:
 	static std::shared_ptr<SentenceExpression> _ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

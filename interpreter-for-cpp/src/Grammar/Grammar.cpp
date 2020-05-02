@@ -51,6 +51,9 @@ static const std::string STRING_FOREACH_IN_SIGN = "in";
 static const std::string STRING_WHILE_SIGN = "while";
 static const std::string STRING_DO_SIGN = "do";
 static const std::string STRING_LOOP_SIGN = "loop";
+static const std::string STRING_TRY_SIGN = "try";
+static const std::string STRING_CATCH_SIGN = "catch";
+static const std::string STRING_FINALLY_SIGN = "finally";
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
 
@@ -139,6 +142,16 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 		MathSymbol::AssignMod,
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
+}
+
+bool Grammar::MatchTry(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_TRY_SIGN, src, size, pos, nextPos);
+}
+bool Grammar::MatchCatch(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_CATCH_SIGN, src, size, pos, nextPos);
+}
+bool Grammar::MatchFinally(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_FINALLY_SIGN, src, size, pos, nextPos);
 }
 
 bool Grammar::MatchEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

@@ -48,6 +48,9 @@ public:
 	static int GetMathSymbolLevel(MathSymbol value);
 
 public:
+	static bool MatchTry(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchCatch(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchFinally(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

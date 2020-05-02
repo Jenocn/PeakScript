@@ -156,3 +156,14 @@ do {
 echo num30
 set num30 = "Hello"
 echo num30
+
+try {
+	echo "try"
+	num99 = 20
+} catch {
+	echo "catch"
+} finally {
+	echo "finally"
+}
+
+echo "22"
