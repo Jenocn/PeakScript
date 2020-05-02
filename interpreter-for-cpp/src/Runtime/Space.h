@@ -15,7 +15,6 @@ class Variable;
 
 enum class SpaceType {
 	None,
-	ValueFunction,
 	Condition,
 	Loop,
 };
