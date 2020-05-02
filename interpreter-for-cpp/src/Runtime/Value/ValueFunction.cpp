@@ -1,33 +1,33 @@
-#include "Method.h"
-#include "Sentence/Sentence.h"
-#include "Sentence/SentenceBlock.h"
-#include "Value/ValueTool.h"
-#include "Variable.h"
+#include "ValueFunction.h"
+#include "../Sentence/Sentence.h"
+#include "../Sentence/SentenceReturn.h"
+#include "../Variable.h"
+#include "ValueTool.h"
 
 using namespace peak::interpreter;
 
-Method::Method(const std::string& name)
+ValueFunction::ValueFunction(const std::string& name)
 	: _name(name) {
 }
 
-const std::string& Method::GetName() const {
+const std::string& ValueFunction::GetName() const {
 	return _name;
 }
 
-void Method::SetSentenceBody(std::shared_ptr<Sentence> sentence) {
+void ValueFunction::SetSentenceBody(std::shared_ptr<Sentence> sentence) {
 	_sentence = sentence;
 }
-void Method::SetParameters(const std::vector<std::string>& args) {
+void ValueFunction::SetParameters(const std::vector<std::string>& args) {
 	_parameters = args;
 }
 
-std::shared_ptr<Value> Method::Execute(std::shared_ptr<Space> space) {
+std::shared_ptr<Value> ValueFunction::Execute(std::shared_ptr<Space> space) {
 
 	auto size = _parameters.size();
 	if (size > _args.size()) {
 		return nullptr;
 	}
-	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Method, space));
+	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::ValueFunction, space));
 	for (std::size_t i = 0; i < size; ++i) {
 		const auto& paramName = _parameters[i];
 		auto paramValue = _args[i];
@@ -50,15 +50,15 @@ std::shared_ptr<Value> Method::Execute(std::shared_ptr<Space> space) {
 	return std::shared_ptr<Value>(new ValueNull());
 }
 
-std::shared_ptr<Value> Method::Execute(std::shared_ptr<Space> space, const std::vector<std::shared_ptr<Value>>& args) {
+std::shared_ptr<Value> ValueFunction::Execute(std::shared_ptr<Space> space, const std::vector<std::shared_ptr<Value>>& args) {
 	_args = args;
 	return Execute(space);
 }
 
-void Method::_PushParameter(const std::string& arg) {
+void ValueFunction::_PushParameter(const std::string& arg) {
 	_parameters.emplace_back(arg);
 }
 
-void Method::_PushArg(std::shared_ptr<Value> arg) {
+void ValueFunction::_PushArg(std::shared_ptr<Value> arg) {
 	_args.emplace_back(arg);
 }

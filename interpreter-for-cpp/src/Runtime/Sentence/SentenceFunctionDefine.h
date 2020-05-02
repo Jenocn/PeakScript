@@ -9,9 +9,9 @@
 #include <vector>
 
 namespace peak::interpreter {
-class SentenceMethodDefine : public Sentence {
+class SentenceFunctionDefine : public Sentence {
 public:
-	SentenceMethodDefine(const std::string& name);
+	SentenceFunctionDefine(const std::string& name);
 	void PushParam(const std::string& name);
 	void SetSentence(std::shared_ptr<Sentence> sentence);
 

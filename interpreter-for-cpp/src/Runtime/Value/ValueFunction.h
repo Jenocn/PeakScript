@@ -5,18 +5,18 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
+#include "Value.h"
 #include <vector>
+#include <string>
 
 namespace peak::interpreter {
+
 class Sentence;
-class Value;
 class Space;
-class SentenceExpression;
-class Method {
+
+class ValueFunction : public TypeValue<ValueFunction> {
 public:
-	Method(const std::string& name);
+	ValueFunction(const std::string& name);
 	const std::string& GetName() const;
 
 	void SetSentenceBody(std::shared_ptr<Sentence> sentence);

@@ -10,9 +10,9 @@
 
 namespace peak::interpreter {
 
-class SentenceMethodCall : public SentenceExpression {
+class SentenceFunctionCall : public SentenceExpression {
 public:
-	SentenceMethodCall(const std::string& name);
+	SentenceFunctionCall(const std::string& name);
 
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 
