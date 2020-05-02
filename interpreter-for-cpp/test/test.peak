@@ -167,3 +167,10 @@ try {
 }
 
 echo "22"
+
+loop (i in 10) {
+	if (i == 3) {
+		continue;
+	}
+	echo i
+}

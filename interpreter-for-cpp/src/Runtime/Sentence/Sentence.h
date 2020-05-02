@@ -15,6 +15,8 @@ enum class ExecuteResult {
 	Successed,
 	Failed,
 	Return,
+	Continue,
+	Break,
 };
 class Sentence {
 public:

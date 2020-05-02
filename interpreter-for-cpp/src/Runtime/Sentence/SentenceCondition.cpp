@@ -27,6 +27,12 @@ ExecuteResult SentenceCondition::Execute(std::shared_ptr<Space> space) {
 			SetReturnValue(std::static_pointer_cast<SentenceReturn>(tempSentence)->GetReturnValue());
 			return ExecuteResult::Return;
 		}
+		if (executeRet == ExecuteResult::Continue) {
+			return ExecuteResult::Continue;
+		}
+		if (executeRet == ExecuteResult::Break) {
+			return ExecuteResult::Break;
+		}
 	}
 
 	return ExecuteResult::Successed;

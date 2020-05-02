@@ -16,6 +16,12 @@ ExecuteResult SentenceBlock::Execute(std::shared_ptr<Space> space) {
 			SetReturnValue(std::static_pointer_cast<SentenceReturn>(sentence)->GetReturnValue());
 			return ExecuteResult::Return;
 		}
+		if (executeRet == ExecuteResult::Break) {
+			return ExecuteResult::Break;
+		}
+		if (executeRet == ExecuteResult::Continue) {
+			return ExecuteResult::Continue;
+		}
 	}
 	return ExecuteResult::Successed;
 }

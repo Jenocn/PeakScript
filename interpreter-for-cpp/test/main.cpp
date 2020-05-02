@@ -40,7 +40,7 @@ std::string openFile(const std::string& filename) {
 int main(int argc, char** argv) {
 	std::shared_ptr<Space> space{new Space(SpaceType::None)};
 
-	auto src = std::move(openFile("/Users/jenocn/Project/PeakScript/interpreter-for-cpp/test/test.peak"));
+	auto src = std::move(openFile("/Users/jenocn/Project/PeakScript/interpreter-for-cpp/test/test2.peak"));
 	std::cout << src << std::endl << std::endl;
 
 	auto ret = std::move(ParseTool::Load(src));

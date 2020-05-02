@@ -54,6 +54,8 @@ static const std::string STRING_LOOP_SIGN = "loop";
 static const std::string STRING_TRY_SIGN = "try";
 static const std::string STRING_CATCH_SIGN = "catch";
 static const std::string STRING_FINALLY_SIGN = "finally";
+static const std::string STRING_BREAK_SIGN = "break";
+static const std::string STRING_CONTINUE_SIGN = "continue";
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
 
@@ -114,6 +116,24 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 	if (MatchBlockEnd(value, size, 0, &pos)) {
 		return true;
 	}
+	if (MatchTry(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchCatch(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchFinally(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchBreak(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchContinue(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchDo(value, size, 0, &pos)) {
+		return true;
+	}
 
 	// temp todo...
 	return false;
@@ -143,7 +163,12 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
 }
-
+bool Grammar::MatchBreak(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_BREAK_SIGN, src, size, pos, nextPos);
+}
+bool Grammar::MatchContinue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_CONTINUE_SIGN, src, size, pos, nextPos);
+}
 bool Grammar::MatchTry(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_TRY_SIGN, src, size, pos, nextPos);
 }

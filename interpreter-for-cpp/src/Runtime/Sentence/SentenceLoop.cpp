@@ -30,6 +30,9 @@ ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
 			if (!IsSuccess(ret)) {
 				return ExecuteResult::Failed;
 			}
+			if (ret == ExecuteResult::Break) {
+				break;
+			}
 		}
 	} else {
 		auto indexVariable = std::shared_ptr<Variable>(new Variable(_indexParam));
@@ -39,6 +42,9 @@ ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
 			auto ret = _sentence->Execute(tempSpace);
 			if (!IsSuccess(ret)) {
 				return ExecuteResult::Failed;
+			}
+			if (ret == ExecuteResult::Break) {
+				break;
 			}
 		}
 	}

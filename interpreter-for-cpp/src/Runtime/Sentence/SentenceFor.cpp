@@ -30,8 +30,12 @@ ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
 		}
 		if (_content) {
 			auto contentSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, tempSpace));
-			if (!IsSuccess(_content->Execute(contentSpace))) {
+			auto ret = _content->Execute(contentSpace);
+			if (!IsSuccess(ret)) {
 				return ExecuteResult::Failed;
+			}
+			if (ret == ExecuteResult::Break) {
+				break;
 			}
 		}
 		if (_expression1) {

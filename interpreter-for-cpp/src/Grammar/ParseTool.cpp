@@ -9,6 +9,7 @@
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
 #include "../Runtime/Sentence/SentenceFor.h"
 #include "../Runtime/Sentence/SentenceLoop.h"
+#include "../Runtime/Sentence/SentenceLoopControl.h"
 #include "../Runtime/Sentence/SentenceTryCatchFinally.h"
 #include "../Runtime/Sentence/SentenceVariableAssign.h"
 #include "../Runtime/Sentence/SentenceVariableDefine.h"
@@ -31,8 +32,9 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseDoWhile,
 	_ParseBlock,
 	_ParseEcho,
-	_ParseExpressionToEnd,
+	_ParseLoopControl,
 	_ParseTryCatchFinally,
+	_ParseExpressionToEnd,
 };
 std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceExpressionParseList = {
 	_ParseExpressionMath,
@@ -535,6 +537,26 @@ std::shared_ptr<Sentence> ParseTool::_ParseTryCatchFinally(const std::string& sr
 	}
 	*nextPos = pos;
 	return std::shared_ptr<Sentence>(new SentenceTryCatchFinally(sentence, catchSentence, finallySentence));
+}
+
+std::shared_ptr<Sentence> ParseTool::_ParseLoopControl(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	std::shared_ptr<Sentence> sentence = nullptr;
+	do {
+		if (Grammar::MatchContinue(src, size, pos, &pos)) {
+			sentence = std::shared_ptr<Sentence>(new SentenceLoopControlContinue());
+			break;
+		}
+		if (Grammar::MatchBreak(src, size, pos, &pos)) {
+			sentence = std::shared_ptr<Sentence>(new SentenceLoopControlBreak());
+			break;
+		}
+		return nullptr;
+	} while (false);
+	if (!JumpEnd(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	return sentence;
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

@@ -1,7 +1,7 @@
 ## todo
 
-1. try, catch, finally
-2. break, continue
+<!-- 1. try, catch, finally -->
+<!-- 2. break, continue -->
 3. funtion, return
 4. const, static
 5. enum

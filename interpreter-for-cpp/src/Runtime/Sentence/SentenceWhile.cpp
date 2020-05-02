@@ -20,8 +20,12 @@ ExecuteResult SentenceWhile::Execute(std::shared_ptr<Space> space) {
 				break;
 			}
 			auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
-			if (!IsSuccess(_sentence->Execute(tempSpace))) {
+			auto ret = _sentence->Execute(tempSpace);
+			if (!IsSuccess(ret)) {
 				return ExecuteResult::Failed;
+			}
+			if (ret == ExecuteResult::Break) {
+				break;
 			}
 		}
 	} else {
