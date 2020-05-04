@@ -17,6 +17,7 @@ enum class SpaceType {
 	None,
 	Condition,
 	Loop,
+	Function,
 };
 
 class Space {

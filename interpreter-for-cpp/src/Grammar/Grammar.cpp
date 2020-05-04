@@ -5,12 +5,12 @@
 using namespace peak::interpreter;
 
 // text
-static const std::set<char> SET_TEXT_SPACE = {' ', '\n', '\t'};
-static const std::set<char> SET_TEXT_NEW_LINE = {'\n'};
+static const std::set<char> SET_TEXT_SPACE = {' ', '\n', '\r', '\t'};
+static const std::set<char> SET_TEXT_NEW_LINE = {'\n', '\r'};
 
 // grammar
 static const std::set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
-static const std::set<char> SET_END_SIGN = {'\n', ';'};
+static const std::set<char> SET_END_SIGN = {'\n', '\r', ';'};
 static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "the"};
 static const std::set<std::string> SET_VARIABLE_SET_SIGN = {"set"};
 static const std::set<std::string> SET_ASSIGN_SIGN = {"=", ":", "is", "as"};
@@ -56,8 +56,10 @@ static const std::string STRING_CATCH_SIGN = "catch";
 static const std::string STRING_FINALLY_SIGN = "finally";
 static const std::string STRING_BREAK_SIGN = "break";
 static const std::string STRING_CONTINUE_SIGN = "continue";
+static const std::string STRING_FUNCTION_SIGN = "function";
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
+static const char CHAR_SPLIT_SYMBOL = ',';
 
 bool Grammar::IsTextSpace(char ch) {
 	return (SET_TEXT_SPACE.find(ch) != SET_TEXT_SPACE.end());
@@ -134,6 +136,12 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 	if (MatchDo(value, size, 0, &pos)) {
 		return true;
 	}
+	if (MatchConditionIf(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchConditionElse(value, size, 0, &pos)) {
+		return true;
+	}
 
 	// temp todo...
 	return false;
@@ -162,6 +170,12 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 		MathSymbol::AssignMod,
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
+}
+bool Grammar::MatchSplitSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(CHAR_SPLIT_SYMBOL, src, size, pos, nextPos);
+}
+bool Grammar::MatchFunction(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_FUNCTION_SIGN, src, size, pos, nextPos);
 }
 bool Grammar::MatchBreak(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_BREAK_SIGN, src, size, pos, nextPos);

@@ -14,6 +14,9 @@ bool ValueTool::IsNumber(std::shared_ptr<Value> value) {
 bool ValueTool::IsString(std::shared_ptr<Value> value) {
 	return value && (value->GetType() == ValueString::Type());
 }
+bool ValueTool::IsFunction(std::shared_ptr<Value> value) {
+	return value && (value->GetType() == ValueFunction::Type());
+}
 std::string ValueTool::ToString(std::shared_ptr<Value> value) {
 	if (IsNull(value)) {
 		return "null";

@@ -174,3 +174,15 @@ loop (i in 10) {
 	}
 	echo i
 }
+
+function func1() {
+	echo "func1";
+}
+
+func2(arg0, arg1) {
+	echo "call";
+	echo arg0;
+	echo arg1;
+}
+
+func2(3, 5);

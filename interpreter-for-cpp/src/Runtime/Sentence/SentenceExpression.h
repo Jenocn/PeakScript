@@ -17,6 +17,7 @@ enum class ExpressionType : char {
 	SelfAssign,
 	Value,
 	Variable,
+	Function,
 };
 
 class SentenceExpression : public Sentence {
