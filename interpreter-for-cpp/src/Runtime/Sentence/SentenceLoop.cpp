@@ -35,10 +35,14 @@ ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
 			}
 		}
 	} else {
-		auto indexVariable = std::shared_ptr<Variable>(new Variable(_indexParam));
-		tempSpace->AddVariable(indexVariable);
+		auto indexVariable = std::shared_ptr<Variable>(new Variable(_indexParam, VariableAttribute::None));
+		if (!tempSpace->AddVariable(indexVariable)) {
+			return ExecuteResult::Failed;
+		}
 		for (int i = 0; i < count; ++i) {
-			indexVariable->SetValue(std::shared_ptr<ValueNumber>(new ValueNumber(i)));
+			if (!indexVariable->SetValue(std::shared_ptr<ValueNumber>(new ValueNumber(i)))) {
+				return ExecuteResult::Failed;
+			}
 			auto ret = _sentence->Execute(tempSpace);
 			if (!IsSuccess(ret)) {
 				return ExecuteResult::Failed;

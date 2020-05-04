@@ -234,10 +234,15 @@ std::shared_ptr<Sentence> ParseTool::_ParseFunctionDefine(const std::string& src
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseVariableDefineOrAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	bool bConst = Grammar::MatchConst(src, size, pos, &pos);
+	if (bConst && !Jump(src, size, pos, &pos)) {
+		return nullptr;
+	}
 	bool bDefine = Grammar::MatchVariableDefine(src, size, pos, &pos);
 	if (bDefine && !Jump(src, size, pos, &pos)) {
 		return nullptr;
 	}
+	bDefine |= bConst;
 
 	std::string name;
 	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
@@ -247,11 +252,16 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefineOrAssign(const std::str
 	auto beginPos = pos;
 	Jump(src, size, pos, &pos);
 
+	auto attribute = bConst ? VariableAttribute::Const : VariableAttribute::None;
+
 	if (!Grammar::MatchAssign(src, size, pos, &pos)) {
 		pos = beginPos;
+		if (bConst) {
+			return nullptr;
+		}
 		if (bDefine && JumpEnd(src, size, pos, &pos)) {
 			*nextPos = pos;
-			return std::shared_ptr<Sentence>(new SentenceVariableDefine(name, nullptr));
+			return std::shared_ptr<Sentence>(new SentenceVariableDefine(name, attribute, nullptr));
 		}
 		return nullptr;
 	}
@@ -267,7 +277,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefineOrAssign(const std::str
 
 	*nextPos = pos;
 	if (bDefine) {
-		return std::shared_ptr<Sentence>(new SentenceVariableDefine(name, expression));
+		return std::shared_ptr<Sentence>(new SentenceVariableDefine(name, attribute, expression));
 	}
 	return std::shared_ptr<Sentence>(new SentenceVariableAssign(name, expression));
 }

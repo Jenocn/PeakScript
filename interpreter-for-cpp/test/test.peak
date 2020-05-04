@@ -198,3 +198,25 @@ echo num31;
 echo "------";
 
 echo sum(sum(1, 2), sum(3, 4));
+
+abc() {
+	echo "yes";
+}
+
+abc();
+
+{
+	sum(a, b) {
+		echo a + b;
+	}
+	sum(3, 5);
+}
+
+echo "------------------------";
+
+const var c0 = 0;
+const c1 = 1;
+
+echo c0;
+echo c1;
+c0 = 1;

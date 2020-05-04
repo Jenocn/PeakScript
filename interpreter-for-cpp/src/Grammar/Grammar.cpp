@@ -12,7 +12,6 @@ static const std::set<char> SET_TEXT_NEW_LINE = {'\n', '\r'};
 static const std::set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
 static const std::set<char> SET_END_SIGN = {'\n', '\r', ';'};
 static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "the"};
-static const std::set<std::string> SET_VARIABLE_SET_SIGN = {"set"};
 static const std::set<std::string> SET_ASSIGN_SIGN = {"=", ":", "is", "as"};
 static const std::set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
 static const std::set<std::string> SET_BOOL_FALSE_SIGN = {"false", "no"};
@@ -58,6 +57,8 @@ static const std::string STRING_BREAK_SIGN = "break";
 static const std::string STRING_CONTINUE_SIGN = "continue";
 static const std::string STRING_FUNCTION_SIGN = "function";
 static const std::string STRING_RETURN_SIGN = "return";
+static const std::string STRING_SET_SIGN = "set";
+static const std::string STRING_CONST_SIGN = "const";
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
 static const char CHAR_SPLIT_SYMBOL = ',';
@@ -174,6 +175,9 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 		MathSymbol::AssignMod,
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
+}
+bool Grammar::MatchConst(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_CONST_SIGN, src, size, pos, nextPos);
 }
 bool Grammar::MatchReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_RETURN_SIGN, src, size, pos, nextPos);
@@ -417,12 +421,7 @@ bool Grammar::MatchVariableDefine(const std::string& src, std::size_t size, std:
 	return false;
 }
 bool Grammar::MatchVariableSet(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	for (const auto& sign : SET_VARIABLE_SET_SIGN) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			return true;
-		}
-	}
-	return false;
+	return MatchSign(STRING_SET_SIGN, src, size, pos, nextPos);
 }
 bool Grammar::MatchSign(const std::string& sign, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	auto signSize = sign.size();

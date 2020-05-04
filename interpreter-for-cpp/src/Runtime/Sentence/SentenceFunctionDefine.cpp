@@ -8,7 +8,7 @@ using namespace peak::interpreter;
 
 SentenceFunctionDefine::SentenceFunctionDefine(const std::string& name, const std::vector<std::string>& params, std::shared_ptr<Sentence> content)
 	: _params(params), _content(content) {
-	_variable = std::shared_ptr<Variable>(new Variable(name));
+	_variable = std::shared_ptr<Variable>(new Variable(name, VariableAttribute::None));
 }
 ExecuteResult SentenceFunctionDefine::Execute(std::shared_ptr<Space> space) {
 	if (!_content) {
@@ -17,7 +17,7 @@ ExecuteResult SentenceFunctionDefine::Execute(std::shared_ptr<Space> space) {
 	if (!space->AddVariable(_variable)) {
 		return ExecuteResult::Failed;
 	}
-	_variable->SetValue(std::shared_ptr<ValueFunction>(new ValueFunction(_params, [this](std::shared_ptr<Space> space) -> std::shared_ptr<Value> {
+	auto func = std::shared_ptr<ValueFunction>(new ValueFunction(_params, [this](std::shared_ptr<Space> space) -> std::shared_ptr<Value> {
 		auto result = _content->Execute(space);
 		if (!IsSuccess(result)) {
 			return nullptr;
@@ -26,6 +26,9 @@ ExecuteResult SentenceFunctionDefine::Execute(std::shared_ptr<Space> space) {
 			return std::static_pointer_cast<SentenceReturn>(_content)->GetReturnValue();
 		}
 		return std::shared_ptr<Value>(new ValueNull());
-	})));
+	}));
+	if (!_variable->SetValue(func)) {
+		return ExecuteResult::Failed;
+	}
 	return ExecuteResult::Successed;
 }

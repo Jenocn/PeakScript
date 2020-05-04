@@ -19,7 +19,9 @@ ExecuteResult SentenceExpressionSelfAssign::Execute(std::shared_ptr<Space> space
 		return ExecuteResult::Failed;
 	}
 
-	variable->SetValue(GetValue());
+	if (!variable->SetValue(GetValue())) {
+		return ExecuteResult::Failed;
+	}
 
 	return ExecuteResult::Successed;
 }

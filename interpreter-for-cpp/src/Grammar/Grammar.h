@@ -48,6 +48,7 @@ public:
 	static int GetMathSymbolLevel(MathSymbol value);
 
 public:
+	static bool MatchConst(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchSplitSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchFunction(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

@@ -18,11 +18,11 @@ std::shared_ptr<Value> ValueFunction::Call(const std::vector<std::shared_ptr<Val
 			if (i >= paramSize) {
 				break;
 			}
-			auto tempVariable = std::shared_ptr<Variable>(new Variable(_params[i]));
-			tempVariable->SetValue(args[i]);
+			auto tempVariable = std::shared_ptr<Variable>(new Variable(_params[i], VariableAttribute::None));
 			if (!tempSpace->AddVariable(tempVariable)) {
 				return nullptr;
 			}
+			tempVariable->SetValue(args[i]);
 		}
 		return _func(tempSpace);
 	}

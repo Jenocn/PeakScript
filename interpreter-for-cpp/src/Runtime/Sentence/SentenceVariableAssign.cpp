@@ -17,6 +17,8 @@ ExecuteResult SentenceVariableAssign::Execute(std::shared_ptr<Space> space) {
 	if (!findVariable) {
 		return ExecuteResult::Failed;
 	}
-	findVariable->SetValue(_expression->GetValue());
+	if (!findVariable->SetValue(_expression->GetValue())) {
+		return ExecuteResult::Failed;
+	}
 	return ExecuteResult::Successed;
 }

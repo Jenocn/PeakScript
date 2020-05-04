@@ -11,14 +11,16 @@ SentenceVariableSet::SentenceVariableSet(const std::string& name, std::shared_pt
 ExecuteResult SentenceVariableSet::Execute(std::shared_ptr<Space> space) {
 	auto variable = space->FindVariable(_name);
 	if (!variable) {
-		variable = std::shared_ptr<Variable>(new Variable(_name));
+		variable = std::shared_ptr<Variable>(new Variable(_name, VariableAttribute::None));
 		space->AddVariable(variable);
 	}
 	if (_expression) {
 		if (!IsSuccess(_expression->Execute(space))) {
 			return ExecuteResult::Failed;
 		}
-		variable->SetValue(_expression->GetValue());
+		if (!variable->SetValue(_expression->GetValue())) {
+			return ExecuteResult::Failed;
+		}
 	}
 	return ExecuteResult::Successed;
 }

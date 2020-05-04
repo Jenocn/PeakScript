@@ -3,16 +3,28 @@
 
 using namespace peak::interpreter;
 
-Variable::Variable(const std::string& name) : _name(name) {
-	_value = std::shared_ptr<Value>(new ValueNull());
+Variable::Variable(const std::string& name, VariableAttribute attribute, std::shared_ptr<Value> value)
+	: _name(name), _attribute(attribute) {
+	if (value) {
+		_value = value;
+	} else {
+		_value = std::shared_ptr<Value>(new ValueNull());
+	}
 }
 
 const std::string& Variable::GetName() const {
 	return _name;
 }
 
-void Variable::SetValue(std::shared_ptr<Value> value) {
-	_value = value;
+bool Variable::SetValue(std::shared_ptr<Value> value) {
+	switch (_attribute) {
+	case VariableAttribute::None:
+		_value = value;
+		return true;
+	case VariableAttribute::Const:
+		return false;
+	}
+	return true;
 }
 std::shared_ptr<Value> Variable::GetValue() const {
 	return _value;

@@ -5,19 +5,21 @@
 
 #pragma once
 
+#include "../Variable.h"
 #include "Sentence.h"
 
 namespace peak::interpreter {
 
-class Variable;
 class SentenceExpression;
 
 class SentenceVariableDefine : public Sentence {
 public:
-	SentenceVariableDefine(const std::string& name, std::shared_ptr<SentenceExpression> expression = nullptr);
+	SentenceVariableDefine(const std::string& name, VariableAttribute attribute, std::shared_ptr<SentenceExpression> expression = nullptr);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 
 private:
+	std::string _name;
+	VariableAttribute _attribute{VariableAttribute::None};
 	std::shared_ptr<Variable> _variable{nullptr};
 	std::shared_ptr<SentenceExpression> _expression{nullptr};
 };
