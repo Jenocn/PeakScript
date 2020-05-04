@@ -40,6 +40,10 @@ static const std::map<MathSymbol, std::pair<int, std::set<std::string>>> MAP_SET
 	{MathSymbol::LogicAnd, {60, {"&&", "and"}}},
 	{MathSymbol::LogicOr, {60, {"||", "or"}}},
 };
+static const std::unordered_map<DoubleSymbol, std::string> SET_DOUBLE_SYMBOL = {
+	{DoubleSymbol::AddAdd, "++"},
+	{DoubleSymbol::SubSub, "--"},
+};
 static const std::string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
 static const std::string STRING_COMMENT_BLOCK_END_SIGN = "*/";
 static const std::string STRING_NULL_SIGN = "null";
@@ -175,6 +179,15 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 		MathSymbol::AssignMod,
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
+}
+bool Grammar::MatchDoubleSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, DoubleSymbol* symbol) {
+	for (auto& pair : SET_DOUBLE_SYMBOL) {
+		if (MatchSign(pair.second, src, size, pos, nextPos)) {
+			*symbol = pair.first;
+			return true;
+		}
+	}
+	return false;
 }
 bool Grammar::MatchConst(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_CONST_SIGN, src, size, pos, nextPos);

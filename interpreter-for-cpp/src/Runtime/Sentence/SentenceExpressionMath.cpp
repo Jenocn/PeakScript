@@ -5,7 +5,7 @@ using namespace peak::interpreter;
 
 SentenceExpressionMath::SentenceExpressionMath(std::shared_ptr<SentenceExpression> left,
 											   std::shared_ptr<SentenceExpression> right,
-											   std::shared_ptr<IValueCalculate> calculate)
+											   IValueCalculate* calculate)
 	: _left(left), _right(right), _calculate(calculate) {
 }
 

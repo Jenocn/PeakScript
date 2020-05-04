@@ -3,6 +3,7 @@
 #include "../Runtime/Sentence/SentenceCondition.h"
 #include "../Runtime/Sentence/SentenceDoWhile.h"
 #include "../Runtime/Sentence/SentenceEcho.h"
+#include "../Runtime/Sentence/SentenceExpressionDouble.h"
 #include "../Runtime/Sentence/SentenceExpressionFunctionCall.h"
 #include "../Runtime/Sentence/SentenceExpressionMath.h"
 #include "../Runtime/Sentence/SentenceExpressionSelfAssign.h"
@@ -51,6 +52,7 @@ std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, 
 	_ParseBool,
 	_ParseNull,
 	_ParseFunctioCall,
+	_ParseDoubleExpression,
 	_ParseVariable,
 };
 
@@ -705,6 +707,25 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseFunctioCall(const std::stri
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionFunctionCall(name, args));
 }
 
+std::shared_ptr<SentenceExpression> ParseTool::_ParseDoubleExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	DoubleSymbol symbol;
+	bool bDouble = Grammar::MatchDoubleSymbol(src, size, pos, &pos, &symbol);
+	bool bLast = !bDouble;
+	auto variableSentence = _ParseVariable(src, size, pos, &pos);
+	if (!variableSentence) {
+		return nullptr;
+	}
+	if (!bDouble && !Grammar::MatchDoubleSymbol(src, size, pos, &pos, &symbol)) {
+		return nullptr;
+	}
+	auto calculate = _GetCalculate(symbol);
+	if (!calculate) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	return std::shared_ptr<SentenceExpression>(new SentenceExpressionDouble(variableSentence, calculate, bLast));
+}
+
 std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMath(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return _ParseExpressionMathBracket(src, size, pos, nextPos, false);
 }
@@ -729,7 +750,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 			stack0->pop();
 			auto vl = stack0->top();
 			stack0->pop();
-			auto calculate = _CreateCalculate(topSymbol);
+			auto calculate = _GetCalculate(topSymbol);
 			if (!calculate) {
 				return false;
 			}
@@ -810,47 +831,59 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 	return expressionStack.top();
 }
 
-std::shared_ptr<IValueCalculate> ParseTool::_CreateCalculate(MathSymbol symbol) {
+IValueCalculate* ParseTool::_GetCalculate(MathSymbol symbol) {
 	switch (symbol) {
 	case MathSymbol::Mul:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateMul());
+		return ValueCalculateMul::GetInstance();
 	case MathSymbol::Div:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateDiv());
+		return ValueCalculateDiv::GetInstance();
 	case MathSymbol::Mod:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateMod());
+		return ValueCalculateMod::GetInstance();
 	case MathSymbol::Add:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateAdd());
+		return ValueCalculateAdd::GetInstance();
 	case MathSymbol::Sub:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateSub());
+		return ValueCalculateSub::GetInstance();
 	case MathSymbol::Less:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateLess());
+		return ValueCalculateLess::GetInstance();
 	case MathSymbol::LessEqual:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateSameOrLess());
+		return ValueCalculateSameOrLess::GetInstance();
 	case MathSymbol::Equal:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateSame());
+		return ValueCalculateSame::GetInstance();
 	case MathSymbol::NotEqual:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateNotSame());
+		return ValueCalculateNotSame::GetInstance();
 	case MathSymbol::More:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateMore());
+		return ValueCalculateMore::GetInstance();
 	case MathSymbol::MoreEqual:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateSameOrMore());
+		return ValueCalculateSameOrMore::GetInstance();
 	case MathSymbol::LogicAnd:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateLogicAnd());
+		return ValueCalculateLogicAnd::GetInstance();
 	case MathSymbol::LogicOr:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateLogicOr());
+		return ValueCalculateLogicOr::GetInstance();
 	case MathSymbol::AssignAdd:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateAdd());
+		return ValueCalculateAdd::GetInstance();
 	case MathSymbol::AssignSub:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateSub());
+		return ValueCalculateSub::GetInstance();
 	case MathSymbol::AssignMul:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateMul());
+		return ValueCalculateMul::GetInstance();
 	case MathSymbol::AssignDiv:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateDiv());
+		return ValueCalculateDiv::GetInstance();
 	case MathSymbol::AssignMod:
-		return std::shared_ptr<IValueCalculate>(new ValueCalculateMod());
+		return ValueCalculateMod::GetInstance();
 	default:
 		break;
 	}
 
+	return nullptr;
+}
+
+IValueCalculate* ParseTool::_GetCalculate(DoubleSymbol symbol) {
+	switch (symbol) {
+	case DoubleSymbol::AddAdd:
+		return ValueCalculateAdd::GetInstance();
+	case DoubleSymbol::SubSub:
+		return ValueCalculateSub::GetInstance();
+	default:
+		break;
+	}
 	return nullptr;
 }

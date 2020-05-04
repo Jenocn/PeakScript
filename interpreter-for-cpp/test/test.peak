@@ -220,3 +220,24 @@ const c1 = 1;
 echo c0;
 echo c1;
 c0 = 1;
+
+echo "------------------------";
+
+for (var i = 0; i<10; ++i) {
+	echo i;
+}
+
+echo "------------------------";
+
+var num32 = 0;
+
+echo ++num32;
+echo num32++;
+
+loop(++num32) {
+	echo "num32";
+}
+
+echo num32;
+
+echo num32++ + ++num32;
