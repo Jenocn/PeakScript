@@ -252,6 +252,16 @@ echo "------------------------";
 
 var array0 = [1, 2, 3, 4, 5];
 echo array0;
-echo [2, 3, null, [1, 2], false, "Hello"]
+echo [2, 3, null, [1, 2], false, "Hello"];
 
-
+loop(i in 5) {
+	echo array0[i];
+}
+echo "------------------------";
+var array1 = [2, 3, null, [1, 2], false, "Hello"];
+echo array1;
+loop(i in 6) {
+	echo array1[i];
+}
+echo "------------------------";
+echo array1[3][1];

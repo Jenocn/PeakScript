@@ -9,6 +9,7 @@
 #include "../Runtime/Sentence/SentenceExpressionSelfAssign.h"
 #include "../Runtime/Sentence/SentenceExpressionValue.h"
 #include "../Runtime/Sentence/SentenceExpressionValueArray.h"
+#include "../Runtime/Sentence/SentenceExpressionValueArrayItem.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
 #include "../Runtime/Sentence/SentenceFor.h"
 #include "../Runtime/Sentence/SentenceFunctionDefine.h"
@@ -53,6 +54,7 @@ std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, 
 	_ParseBool,
 	_ParseNull,
 	_ParseArray,
+	_ParseArrayItem,
 	_ParseFunctioCall,
 	_ParseDoubleExpression,
 	_ParseVariable,
@@ -691,6 +693,35 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArray(const std::string& sr
 	}
 	*nextPos = pos;
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionValueArray(temp));
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	std::string name;
+	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+		return nullptr;
+	}
+	std::vector<std::shared_ptr<SentenceExpression>> indexExpressionVec;
+	while (true) {
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchArrayBegin(src, size, pos, &pos)) {
+			break;
+		}
+		Jump(src, size, pos, &pos);
+		auto indexExpression = _ParseExpression(src, size, pos, &pos);
+		if (!indexExpression) {
+			return nullptr;
+		}
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchArrayEnd(src, size, pos, &pos)) {
+			return nullptr;
+		}
+		indexExpressionVec.emplace_back(indexExpression);
+	}
+	if (indexExpressionVec.empty()) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	return std::shared_ptr<SentenceExpression>(new SentenceExpressionValueArrayItem(name, indexExpressionVec));
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
