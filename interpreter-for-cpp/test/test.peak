@@ -186,3 +186,15 @@ func2(arg0, arg1) {
 }
 
 func2(3, 5);
+
+sum(a, b) {
+	return a + b;
+}
+
+sum(1, 2);
+var num31 = sum(3, 5);
+echo num31;
+
+echo "------";
+
+echo sum(sum(1, 2), sum(3, 4));

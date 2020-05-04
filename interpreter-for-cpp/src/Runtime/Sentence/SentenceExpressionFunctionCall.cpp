@@ -29,5 +29,6 @@ ExecuteResult SentenceExpressionFunctionCall::Execute(std::shared_ptr<Space> spa
 	if (!result) {
 		return ExecuteResult::Failed;
 	}
+	SetValue(result);
 	return ExecuteResult::Successed;
 }

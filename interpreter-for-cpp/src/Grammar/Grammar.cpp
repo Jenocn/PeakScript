@@ -57,6 +57,7 @@ static const std::string STRING_FINALLY_SIGN = "finally";
 static const std::string STRING_BREAK_SIGN = "break";
 static const std::string STRING_CONTINUE_SIGN = "continue";
 static const std::string STRING_FUNCTION_SIGN = "function";
+static const std::string STRING_RETURN_SIGN = "return";
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
 static const char CHAR_SPLIT_SYMBOL = ',';
@@ -142,6 +143,9 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 	if (MatchConditionElse(value, size, 0, &pos)) {
 		return true;
 	}
+	if (MatchReturn(value, size, 0, &pos)) {
+		return true;
+	}
 
 	// temp todo...
 	return false;
@@ -170,6 +174,9 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 		MathSymbol::AssignMod,
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
+}
+bool Grammar::MatchReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_RETURN_SIGN, src, size, pos, nextPos);
 }
 bool Grammar::MatchSplitSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_SPLIT_SYMBOL, src, size, pos, nextPos);

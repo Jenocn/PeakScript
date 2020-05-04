@@ -12,6 +12,7 @@
 #include "../Runtime/Sentence/SentenceFunctionDefine.h"
 #include "../Runtime/Sentence/SentenceLoop.h"
 #include "../Runtime/Sentence/SentenceLoopControl.h"
+#include "../Runtime/Sentence/SentenceReturn.h"
 #include "../Runtime/Sentence/SentenceTryCatchFinally.h"
 #include "../Runtime/Sentence/SentenceVariableAssign.h"
 #include "../Runtime/Sentence/SentenceVariableDefine.h"
@@ -37,6 +38,7 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseBlock,
 	_ParseEcho,
 	_ParseLoopControl,
+	_ParseReturn,
 	_ParseTryCatchFinally,
 	_ParseExpressionToEnd,
 };
@@ -176,6 +178,26 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpression(const std::strin
 	return nullptr;
 }
 
+std::shared_ptr<Sentence> ParseTool::_ParseReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchReturn(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	if (!Jump(src, size, pos, &pos)) {
+		return nullptr;
+	}
+
+	auto expression = _ParseExpression(src, size, pos, &pos);
+	if (!expression) {
+		return nullptr;
+	}
+
+	if (!JumpEnd(src, size, pos, &pos)) {
+		return nullptr;
+	}
+
+	*nextPos = pos;
+	return std::shared_ptr<Sentence>(new SentenceReturn(expression));
+}
 std::shared_ptr<Sentence> ParseTool::_ParseFunctionDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	if (Grammar::MatchFunction(src, size, pos, &pos)) {
 		Jump(src, size, pos, &pos);
