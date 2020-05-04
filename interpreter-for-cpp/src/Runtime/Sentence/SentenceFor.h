@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "Sentence.h"
+#include "SentenceReturn.h"
 
 namespace peak::interpreter {
 class SentenceExpression;
-class SentenceFor : public Sentence {
+class SentenceFor : public SentenceReturn {
 public:
 	SentenceFor(std::shared_ptr<Sentence> sentence0,
 				std::shared_ptr<SentenceExpression> expression0,

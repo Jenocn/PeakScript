@@ -7,13 +7,13 @@ SentenceReturn::SentenceReturn() {
 }
 
 SentenceReturn::SentenceReturn(std::shared_ptr<SentenceExpression> expression)
-	: _expression(expression) {
+	: _returnExpression(expression) {
 }
 ExecuteResult SentenceReturn::Execute(std::shared_ptr<Space> space) {
-	if (!_expression || !IsSuccess(_expression->Execute(space))) {
+	if (!_returnExpression || !IsSuccess(_returnExpression->Execute(space))) {
 		return ExecuteResult::Failed;
 	}
-	SetReturnValue(_expression->GetValue());
+	SetReturnValue(_returnExpression->GetValue());
 	return ExecuteResult::Return;
 }
 

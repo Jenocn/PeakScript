@@ -37,6 +37,10 @@ ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
 			if (ret == ExecuteResult::Break) {
 				break;
 			}
+			if (ret == ExecuteResult::Return) {
+				SetReturnValue(std::static_pointer_cast<SentenceReturn>(_content)->GetReturnValue());
+				return ExecuteResult::Return;
+			}
 		}
 		if (_expression1) {
 			if (!IsSuccess(_expression1->Execute(tempSpace))) {

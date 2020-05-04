@@ -12,6 +12,7 @@
 #include "../Runtime/Sentence/SentenceExpressionValueArrayItem.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
 #include "../Runtime/Sentence/SentenceFor.h"
+#include "../Runtime/Sentence/SentenceForeach.h"
 #include "../Runtime/Sentence/SentenceFunctionDefine.h"
 #include "../Runtime/Sentence/SentenceLoop.h"
 #include "../Runtime/Sentence/SentenceLoopControl.h"
@@ -35,6 +36,7 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseFunctionDefine,
 	_ParseCondition,
 	_ParseLoop,
+	_ParseForeach,
 	_ParseFor,
 	_ParseWhile,
 	_ParseDoWhile,
@@ -470,6 +472,51 @@ std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size
 
 	*nextPos = pos;
 	return std::shared_ptr<Sentence>(new SentenceFor(sentence0, expression0, expression1, content));
+}
+
+std::shared_ptr<Sentence> ParseTool::_ParseForeach(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchForeach(src, size, pos, &pos)) {
+		if (!Grammar::MatchFor(src, size, pos, &pos)) {
+			return nullptr;
+		}
+	}
+	Jump(src, size, pos, &pos);
+
+	bool bBracket = Grammar::MatchLeftBrcket(src, size, pos, &pos);
+	if (bBracket) {
+		Jump(src, size, pos, &pos);
+	}
+
+	if (Grammar::MatchVariableDefine(src, size, pos, &pos)) {
+		Jump(src, size, pos, &pos);
+	}
+	std::string name;
+	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	if (!Grammar::MatchForeachIn(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	auto expression = _ParseExpression(src, size, pos, &pos);
+	if (!expression) {
+		return nullptr;
+	}
+
+	if (bBracket) {
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+			return nullptr;
+		}
+	}
+	Jump(src, size, pos, &pos);
+	auto sentence = ParseSentence(src, size, pos, &pos);
+	if (!sentence) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	return std::shared_ptr<Sentence>(new SentenceForeach(name, expression, sentence));
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

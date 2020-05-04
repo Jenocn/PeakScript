@@ -76,7 +76,7 @@ bool Grammar::IsTextNewLine(char ch) {
 	return (SET_TEXT_NEW_LINE.find(ch) != SET_TEXT_NEW_LINE.end());
 }
 bool Grammar::IsTextSpecialChar(char ch) {
-	return (ch >= 0 && ch <= 47) || (ch >= 58 && ch <= 94) || (ch == 96) || (ch >= 123 && ch <= 127);
+	return (ch >= 0 && ch <= 47) || (ch >= 58 && ch <= 64) || (ch >= 91 && ch <= 94) || (ch == 96) || (ch >= 123 && ch <= 127);
 }
 bool Grammar::IsTextNumber(char ch) {
 	return ch >= '0' && ch <= '9';

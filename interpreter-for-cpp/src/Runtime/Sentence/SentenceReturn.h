@@ -23,7 +23,7 @@ protected:
 	void SetReturnValue(std::shared_ptr<Value> value);
 
 private:
-	std::shared_ptr<SentenceExpression> _expression{nullptr};
+	std::shared_ptr<SentenceExpression> _returnExpression{nullptr};
 	std::shared_ptr<Value> _returnValue{nullptr};
 };
 } // namespace peak::interpreter

@@ -265,3 +265,22 @@ loop(i in 6) {
 }
 echo "------------------------";
 echo array1[3][1];
+
+echo "------------------------2";
+foreach (var item in array1) {
+	echo item;
+}
+foreach (var item in array1[3]) {
+	echo item;
+}
+echo "------------------------";
+
+FuncTest() {
+	var ret = "";
+	foreach (var item in array1) {
+		ret += item;
+	}
+	return ret;
+}
+echo FuncTest();
+

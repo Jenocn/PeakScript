@@ -50,6 +50,10 @@ ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
 			if (ret == ExecuteResult::Break) {
 				break;
 			}
+			if (ret == ExecuteResult::Return) {
+				SetReturnValue(std::static_pointer_cast<SentenceReturn>(_sentence)->GetReturnValue());
+				return ExecuteResult::Return;
+			}
 		}
 	}
 	return ExecuteResult::Successed;

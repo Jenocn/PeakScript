@@ -5,11 +5,11 @@
 
 #pragma once
 
-#include "Sentence.h"
+#include "SentenceReturn.h"
 
 namespace peak::interpreter {
 class SentenceExpression;
-class SentenceLoop : public Sentence {
+class SentenceLoop : public SentenceReturn {
 public:
 	SentenceLoop(const std::string& indexParam, std::shared_ptr<SentenceExpression> condition, std::shared_ptr<Sentence> sentence);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
