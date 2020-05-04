@@ -16,6 +16,7 @@ class ValueFunction : public TypeValue<ValueFunction> {
 public:
 	ValueFunction(const std::vector<std::string>& params, std::function<std::shared_ptr<Value>(std::shared_ptr<Space> space)> func);
 	std::shared_ptr<Value> Call(const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> space);
+	virtual std::string ToString() const;
 
 private:
 	const std::vector<std::string>& _params;

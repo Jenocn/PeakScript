@@ -13,6 +13,7 @@ class ValueString : public TypeValue<ValueString> {
 public:
 	ValueString(const std::string& value);
 	const std::string& GetValue() const;
+	virtual std::string ToString() const;
 
 private:
 	std::string _value;

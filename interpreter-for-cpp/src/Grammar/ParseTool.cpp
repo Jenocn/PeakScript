@@ -8,6 +8,7 @@
 #include "../Runtime/Sentence/SentenceExpressionMath.h"
 #include "../Runtime/Sentence/SentenceExpressionSelfAssign.h"
 #include "../Runtime/Sentence/SentenceExpressionValue.h"
+#include "../Runtime/Sentence/SentenceExpressionValueArray.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
 #include "../Runtime/Sentence/SentenceFor.h"
 #include "../Runtime/Sentence/SentenceFunctionDefine.h"
@@ -51,6 +52,7 @@ std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, 
 	_ParseNumber,
 	_ParseBool,
 	_ParseNull,
+	_ParseArray,
 	_ParseFunctioCall,
 	_ParseDoubleExpression,
 	_ParseVariable,
@@ -667,6 +669,28 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseNull(const std::string& src
 		return std::shared_ptr<SentenceExpression>(new SentenceExpressionValue(std::shared_ptr<Value>(new ValueNull())));
 	}
 	return nullptr;
+}
+std::shared_ptr<SentenceExpression> ParseTool::_ParseArray(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchArrayBegin(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	std::vector<std::shared_ptr<SentenceExpression>> temp;
+	while (true) {
+		auto expression = _ParseExpression(src, size, pos, &pos);
+		if (!expression) {
+			return nullptr;
+		}
+		temp.emplace_back(expression);
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchSplitSymbol(src, size, pos, &pos)) {
+			break;
+		}
+	}
+	if (!Grammar::MatchArrayEnd(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	return std::shared_ptr<SentenceExpression>(new SentenceExpressionValueArray(temp));
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

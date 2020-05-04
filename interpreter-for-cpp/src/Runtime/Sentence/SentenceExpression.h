@@ -23,6 +23,8 @@ enum class ExpressionType : char {
 
 class SentenceExpression : public Sentence {
 public:
+	SentenceExpression();
+	SentenceExpression(std::shared_ptr<Value> value);
 	std::shared_ptr<Value> GetValue() const;
 	virtual ExpressionType GetExpressionType() const = 0;
 

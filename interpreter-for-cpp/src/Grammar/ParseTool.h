@@ -53,6 +53,7 @@ private:
 	static std::shared_ptr<SentenceExpression> _ParseNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static std::shared_ptr<SentenceExpression> _ParseArray(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseFunctioCall(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseDoubleExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

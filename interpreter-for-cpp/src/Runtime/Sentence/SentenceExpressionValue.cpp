@@ -4,13 +4,12 @@
 using namespace peak::interpreter;
 
 SentenceExpressionValue::SentenceExpressionValue(std::shared_ptr<Value> value)
-	: _value(value) {
+	: SentenceExpression(value) {
 }
 
 ExecuteResult SentenceExpressionValue::Execute(std::shared_ptr<Space> space) {
-	if (!_value) {
+	if (!GetValue()) {
 		return ExecuteResult::Failed;
 	}
-	SetValue(_value);
 	return ExecuteResult::Successed;
 }

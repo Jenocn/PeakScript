@@ -9,3 +9,7 @@ ValueBool::ValueBool(bool value)
 bool ValueBool::GetValue() const {
 	return _value;
 }
+
+std::string ValueBool::ToString() const {
+	return _value ? "true" : "false";
+}

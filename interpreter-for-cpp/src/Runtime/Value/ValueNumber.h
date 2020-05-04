@@ -12,6 +12,7 @@ class ValueNumber : public TypeValue<ValueNumber> {
 public:
 	ValueNumber(double value);
 	double GetValue() const;
+	virtual std::string ToString() const;
 
 private:
 	double _value{0};

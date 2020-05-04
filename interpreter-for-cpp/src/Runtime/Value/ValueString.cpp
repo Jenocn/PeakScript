@@ -8,3 +8,6 @@ ValueString::ValueString(const std::string& value)
 const std::string& ValueString::GetValue() const {
 	return _value;
 }
+std::string ValueString::ToString() const {
+	return _value;
+}

@@ -241,3 +241,17 @@ loop(++num32) {
 echo num32;
 
 echo num32++ + ++num32;
+
+var num33 = 10;
+
+echo --num33;
+
+echo num33--;
+
+echo "------------------------";
+
+var array0 = [1, 2, 3, 4, 5];
+echo array0;
+echo [2, 3, null, [1, 2], false, "Hello"]
+
+

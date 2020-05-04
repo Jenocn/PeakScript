@@ -9,5 +9,8 @@
 
 namespace peak::interpreter {
 class ValueNull : public TypeValue<ValueNull> {
+public:
+	static const std::shared_ptr<ValueNull> DEFAULT_VALUE;
+	virtual std::string ToString() const;
 };
 } // namespace peak::interpreter

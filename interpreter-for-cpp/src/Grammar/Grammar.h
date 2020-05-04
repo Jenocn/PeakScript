@@ -53,6 +53,8 @@ public:
 	static int GetMathSymbolLevel(MathSymbol value);
 
 public:
+	static bool MatchArrayBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchArrayEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchDoubleSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, DoubleSymbol* symbol);
 	static bool MatchConst(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

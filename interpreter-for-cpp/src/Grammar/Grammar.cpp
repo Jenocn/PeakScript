@@ -66,6 +66,8 @@ static const std::string STRING_CONST_SIGN = "const";
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
 static const char CHAR_SPLIT_SYMBOL = ',';
+static const char CHAR_ARRAY_BEGIN = '[';
+static const char CHAR_ARRAY_END = ']';
 
 bool Grammar::IsTextSpace(char ch) {
 	return (SET_TEXT_SPACE.find(ch) != SET_TEXT_SPACE.end());
@@ -179,6 +181,12 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 		MathSymbol::AssignMod,
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
+}
+bool Grammar::MatchArrayBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(CHAR_ARRAY_BEGIN, src, size, pos, nextPos);
+}
+bool Grammar::MatchArrayEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(CHAR_ARRAY_END, src, size, pos, nextPos);
 }
 bool Grammar::MatchDoubleSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, DoubleSymbol* symbol) {
 	for (auto& pair : SET_DOUBLE_SYMBOL) {

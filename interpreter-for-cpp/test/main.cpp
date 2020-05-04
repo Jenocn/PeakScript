@@ -41,7 +41,8 @@ int main(int argc, char** argv) {
 	std::shared_ptr<Space> space{new Space(SpaceType::None)};
 
 	auto src = std::move(openFile("/Users/jenocn/Project/PeakScript/interpreter-for-cpp/test/test.peak"));
-	std::cout << src << std::endl << std::endl;
+	std::cout << src << std::endl
+			  << std::endl;
 
 	auto ret = std::move(ParseTool::Load(src));
 

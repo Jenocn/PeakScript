@@ -6,15 +6,18 @@
 #pragma once
 
 #include "Value.h"
+#include <vector>
 
 namespace peak::interpreter {
-class ValueBool : public TypeValue<ValueBool> {
+class ValueArray : public TypeValue<ValueArray> {
 public:
-	ValueBool(bool value);
-	bool GetValue() const;
+	ValueArray();
+	ValueArray(const std::vector<std::shared_ptr<Value>>& value);
 	virtual std::string ToString() const;
 
+	std::vector<std::shared_ptr<Value>>& GetArray();
+
 private:
-	bool _value{false};
+	std::vector<std::shared_ptr<Value>> _value;
 };
 } // namespace peak::interpreter

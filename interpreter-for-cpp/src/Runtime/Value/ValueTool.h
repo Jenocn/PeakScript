@@ -5,9 +5,10 @@
 
 #pragma once
 
-#include "ValueFunction.h"
 #include "Value.h"
+#include "ValueArray.h"
 #include "ValueBool.h"
+#include "ValueFunction.h"
 #include "ValueNull.h"
 #include "ValueNumber.h"
 #include "ValueString.h"
@@ -23,6 +24,7 @@ public:
 	static bool IsNumber(std::shared_ptr<Value> value);
 	static bool IsString(std::shared_ptr<Value> value);
 	static bool IsFunction(std::shared_ptr<Value> value);
+	static bool IsArray(std::shared_ptr<Value> value);
 	static std::string ToString(std::shared_ptr<Value> value);
 	static bool ToLogic(std::shared_ptr<Value> value);
 	static bool Equal(std::shared_ptr<Value> a, std::shared_ptr<Value> b);

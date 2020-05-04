@@ -28,3 +28,16 @@ std::shared_ptr<Value> ValueFunction::Call(const std::vector<std::shared_ptr<Val
 	}
 	return nullptr;
 }
+
+std::string ValueFunction::ToString() const {
+	std::string ret = "function (";
+	auto paramSize = _params.size();
+	for (auto i = 0u; i < paramSize; ++i) {
+		ret += _params[i];
+		if (i != paramSize - 1) {
+			ret += ", ";
+		}
+	}
+	ret += ")";
+	return ret;
+}
