@@ -6,12 +6,7 @@ using namespace peak;
 
 int main(int argc, char** argv) {
 	for (int i = 1; i < argc; ++i) {
-		std::cout << argv[i] << std::endl;
-		const auto& src = VirtualTool::OpenFile(argv[i]);
-		if (src.empty()) {
-			continue;
-		}
-		auto journey = VirtualMachine::Load(src);
+		auto journey = VirtualMachine::LoadFile(argv[i]);
 		if (journey) {
 			journey->Execute();
 		}

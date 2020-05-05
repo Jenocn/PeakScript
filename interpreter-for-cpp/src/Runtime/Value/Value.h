@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <string>
+#include <functional>
 
 namespace peak::interpreter {
 class Value {

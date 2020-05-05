@@ -355,7 +355,7 @@ bool Grammar::MatchNumber(const std::string& src, std::size_t size, std::size_t 
 		return false;
 	}
 
-	auto checkSize = 1;
+	std::size_t checkSize = 1;
 	std::size_t p = 0;
 	if (bPoint) {
 		if (src[pos - 1] == '.') {
