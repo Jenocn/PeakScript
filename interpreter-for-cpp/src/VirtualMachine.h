@@ -11,6 +11,6 @@ namespace peak {
 
 class VirtualMachine {
 public:
-	std::shared_ptr<VirtualJourney> Load(const std::string& src, std::shared_ptr<interpreter::Space> parent = nullptr);
+	static std::shared_ptr<VirtualJourney> Load(const std::string& src, std::shared_ptr<interpreter::Space> parent = nullptr);
 };
 } // namespace peak

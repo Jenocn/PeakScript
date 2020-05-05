@@ -7,3 +7,5 @@
 **/*.vscode
 **/*.pdb
 **/.DS_Store
+**/*.dSYM/
+**/*.dSYM
