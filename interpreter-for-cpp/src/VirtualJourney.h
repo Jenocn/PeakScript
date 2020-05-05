@@ -5,23 +5,31 @@
 
 #pragma once
 
-#include "Runtime/Sentence/Sentence.h"
 #include "Runtime/Space.h"
+#include "Runtime/Value/ValueTool.h"
+#include "Runtime/Variable.h"
+#include <list>
+#include <memory>
+#include <string>
 
 namespace peak {
 
-using peak::interpreter::Sentence;
-using peak::interpreter::Space;
+namespace interpreter {
+class Sentence;
+} // namespace interpreter
 
 class VirtualJourney {
 public:
-	VirtualJourney();
-	VirtualJourney(std::shared_ptr<Space> parent);
+	VirtualJourney(const std::list<std::shared_ptr<interpreter::Sentence>>& sentenceList, std::shared_ptr<interpreter::Space> parent = nullptr);
 
 	bool Execute();
 
+public:
+	std::shared_ptr<interpreter::Variable> FindVariable(const std::string& name);
+	bool AddVariable(std::shared_ptr<interpreter::Variable> variable);
+
 private:
-	std::shared_ptr<Space> _space{nullptr};
-	std::shared_ptr<Sentence> _sentence{nullptr};
+	std::shared_ptr<interpreter::Space> _space{nullptr};
+	std::list<std::shared_ptr<interpreter::Sentence>> _sentenceList{nullptr};
 };
 } // namespace peak

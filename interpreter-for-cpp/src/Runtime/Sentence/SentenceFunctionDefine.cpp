@@ -17,7 +17,7 @@ ExecuteResult SentenceFunctionDefine::Execute(std::shared_ptr<Space> space) {
 	if (!space->AddVariable(_variable)) {
 		return ExecuteResult::Failed;
 	}
-	auto func = std::shared_ptr<ValueFunction>(new ValueFunction(_params, [this](std::shared_ptr<Space> space) -> std::shared_ptr<Value> {
+	auto func = std::shared_ptr<ValueFunction>(new ValueFunction(_params, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> space) -> std::shared_ptr<Value> {
 		auto result = _content->Execute(space);
 		if (!IsSuccess(result)) {
 			return nullptr;

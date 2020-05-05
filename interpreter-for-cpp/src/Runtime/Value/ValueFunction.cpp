@@ -6,7 +6,7 @@
 
 using namespace peak::interpreter;
 
-ValueFunction::ValueFunction(const std::vector<std::string>& params, std::function<std::shared_ptr<Value>(std::shared_ptr<Space> space)> func)
+ValueFunction::ValueFunction(const std::vector<std::string>& params, std::function<std::shared_ptr<Value>(const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> space)> func)
 	: _params(params), _func(func) {
 }
 
@@ -24,7 +24,7 @@ std::shared_ptr<Value> ValueFunction::Call(const std::vector<std::shared_ptr<Val
 			}
 			tempVariable->SetValue(args[i]);
 		}
-		return _func(tempSpace);
+		return _func(args, tempSpace);
 	}
 	return nullptr;
 }

@@ -62,10 +62,9 @@ std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, 
 	_ParseVariable,
 };
 
-std::list<std::shared_ptr<Sentence>> ParseTool::Load(const std::string& src) {
-
-	std::list<std::shared_ptr<Sentence>> ret;
-
+std::shared_ptr<ParseData> ParseTool::Load(const std::string& src) {
+	auto retData = std::shared_ptr<ParseData>(new ParseData());
+	retData->bSuccess = false;
 	std::size_t pos = 0;
 	auto size = src.size();
 	while (pos < size) {
@@ -77,10 +76,10 @@ std::list<std::shared_ptr<Sentence>> ParseTool::Load(const std::string& src) {
 		if (!parseSentence) {
 			break;
 		}
-		ret.emplace_back(parseSentence);
+		retData->sentenceList.emplace_back(parseSentence);
 	}
-
-	return ret;
+	retData->bSuccess = true;
+	return retData;
 }
 
 bool ParseTool::Jump(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

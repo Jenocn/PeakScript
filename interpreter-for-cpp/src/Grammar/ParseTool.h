@@ -15,9 +15,14 @@ class Sentence;
 class SentenceExpression;
 class IValueCalculate;
 
+struct ParseData {
+	bool bSuccess{false};
+	std::list<std::shared_ptr<Sentence>> sentenceList;
+};
+
 class ParseTool {
 public:
-	static std::list<std::shared_ptr<Sentence>> Load(const std::string& src);
+	static std::shared_ptr<ParseData> Load(const std::string& src);
 
 private:
 	static bool Jump(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
