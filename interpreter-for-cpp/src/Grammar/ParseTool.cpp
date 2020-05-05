@@ -1,4 +1,5 @@
 #include "ParseTool.h"
+#include "../Runtime/Sentence/SentenceArrayItemAssign.h"
 #include "../Runtime/Sentence/SentenceBlock.h"
 #include "../Runtime/Sentence/SentenceCondition.h"
 #include "../Runtime/Sentence/SentenceDoWhile.h"
@@ -31,6 +32,7 @@
 using namespace peak::interpreter;
 
 std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceParseList = {
+	_ParseArrayItemAssign,
 	_ParseVariableDefineOrAssign,
 	_ParseVariableSet,
 	_ParseFunctionDefine,
@@ -287,6 +289,47 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefineOrAssign(const std::str
 		return std::shared_ptr<Sentence>(new SentenceVariableDefine(name, attribute, expression));
 	}
 	return std::shared_ptr<Sentence>(new SentenceVariableAssign(name, expression));
+}
+std::shared_ptr<Sentence> ParseTool::_ParseArrayItemAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	std::string name;
+	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+		return nullptr;
+	}
+	std::vector<std::shared_ptr<SentenceExpression>> indexExpressionVec;
+	while (true) {
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchArrayBegin(src, size, pos, &pos)) {
+			break;
+		}
+		Jump(src, size, pos, &pos);
+		auto indexExpression = _ParseExpression(src, size, pos, &pos);
+		if (!indexExpression) {
+			return nullptr;
+		}
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchArrayEnd(src, size, pos, &pos)) {
+			return nullptr;
+		}
+		indexExpressionVec.emplace_back(indexExpression);
+	}
+	if (indexExpressionVec.empty()) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	if (!Grammar::MatchAssign(src, size, pos, &pos)) {
+		return nullptr;
+	}
+
+	Jump(src, size, pos, &pos);
+	auto expression = _ParseExpression(src, size, pos, &pos);
+	if (!expression) {
+		return nullptr;
+	}
+	if (!JumpEnd(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	return std::shared_ptr<Sentence>(new SentenceArrayItemAssign(name, indexExpressionVec, expression));
 }
 std::shared_ptr<Sentence> ParseTool::_ParseVariableSet(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	if (!Grammar::MatchVariableSet(src, size, pos, &pos)) {
