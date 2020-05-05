@@ -40,9 +40,9 @@ std::shared_ptr<Value> ValueCalculateDiv::Calculate(std::shared_ptr<Value> left,
 }
 std::shared_ptr<Value> ValueCalculateMod::Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right) const {
 	if (ValueTool::IsNumber(left) && ValueTool::IsNumber(right)) {
-		return std::shared_ptr<Value>(new ValueNumber(
-			(long long)std::static_pointer_cast<ValueNumber>(left)->GetValue() %
-			(long long)std::static_pointer_cast<ValueNumber>(right)->GetValue()));
+		return std::shared_ptr<Value>(new ValueNumber(static_cast<double>(
+			static_cast<long long>(std::static_pointer_cast<ValueNumber>(left)->GetValue()) %
+			static_cast<long long>(std::static_pointer_cast<ValueNumber>(right)->GetValue()))));
 	}
 	return nullptr;
 }

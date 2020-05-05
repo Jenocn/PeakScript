@@ -31,7 +31,7 @@ class ValueCalculateMod : public ValueCalculateSingleton<ValueCalculateMod> {
 public:
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right) const;
 };
-// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
 class ValueCalculateSame : public ValueCalculateSingleton<ValueCalculateSame> {
 public:
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right) const;
@@ -56,7 +56,7 @@ class ValueCalculateSameOrLess : public ValueCalculateSingleton<ValueCalculateSa
 public:
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right) const;
 };
-// –––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+
 class ValueCalculateLogicAnd : public ValueCalculateSingleton<ValueCalculateLogicAnd> {
 public:
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right) const;

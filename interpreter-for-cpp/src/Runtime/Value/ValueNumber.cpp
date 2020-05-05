@@ -11,6 +11,7 @@ double ValueNumber::GetValue() const {
 }
 std::string ValueNumber::ToString() const {
 	char ch[24];
-	sprintf(ch, "%0.15lg", _value);
+	snprintf(ch, sizeof(ch), "%0.15lg", _value);
+	// sprintf(ch, "%0.15lg", _value);
 	return ch;
 }
