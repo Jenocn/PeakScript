@@ -63,7 +63,7 @@ PeakScript使用的是动态数据类型,目前有6种,分别是number,bool,stri
 例如:  
 `var i = 0;` `arr[i];` `arr[1 + 1];`  
   
-## `function`类型    
+#### `function`类型    
 表示一个函数    
   
 ## 算术表达式    
