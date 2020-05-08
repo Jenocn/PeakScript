@@ -12,6 +12,10 @@ Variable::Variable(const std::string& name, VariableAttribute attribute, std::sh
 	}
 }
 
+VariableAttribute Variable::GetAttribute() const {
+	return _attribute;
+}
+
 const std::string& Variable::GetName() const {
 	return _name;
 }

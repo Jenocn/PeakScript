@@ -21,6 +21,7 @@ class Variable {
 public:
 	Variable(const std::string& name, VariableAttribute attribute, std::shared_ptr<Value> value = nullptr);
 
+	VariableAttribute GetAttribute() const;
 	const std::string& GetName() const;
 
 	bool SetValue(std::shared_ptr<Value> value);

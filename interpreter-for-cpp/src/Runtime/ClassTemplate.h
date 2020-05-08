@@ -24,6 +24,8 @@ public:
 
 	std::shared_ptr<Space> GetSpaceOfThis() const;
 
+	std::shared_ptr<ClassTemplate> Clone() const;
+
 private:
 	std::string _name;
 	std::shared_ptr<ClassTemplate> _parent{nullptr};

@@ -5,6 +5,7 @@
 #include "../Runtime/Sentence/SentenceCondition.h"
 #include "../Runtime/Sentence/SentenceDoWhile.h"
 #include "../Runtime/Sentence/SentenceEcho.h"
+#include "../Runtime/Sentence/SentenceExpressionClassNew.h"
 #include "../Runtime/Sentence/SentenceExpressionDouble.h"
 #include "../Runtime/Sentence/SentenceExpressionFunctionCall.h"
 #include "../Runtime/Sentence/SentenceExpressionMath.h"
@@ -61,6 +62,7 @@ std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, 
 	_ParseNull,
 	_ParseArray,
 	_ParseArrayItem,
+	_ParseClassNew,
 	_ParseFunctioCall,
 	_ParseDoubleExpression,
 	_ParseVariable,
@@ -927,6 +929,40 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseDoubleExpression(const std:
 	}
 	*nextPos = pos;
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionDouble(variableSentence, calculate, bLast));
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::_ParseClassNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchClassNew(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	std::string className;
+	if (!Grammar::MatchName(src, size, pos, &pos, &className)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	bool bBracket = Grammar::MatchLeftBrcket(src, size, pos, &pos);
+	std::vector<std::shared_ptr<SentenceExpression>> args;
+	if (bBracket) {
+		Jump(src, size, pos, &pos);
+		while (true) {
+			auto argExpression = _ParseExpression(src, size, pos, &pos);
+			if (!argExpression) {
+				break;
+			}
+			args.emplace_back(argExpression);
+			Jump(src, size, pos, &pos);
+			if (!Grammar::MatchSplitSymbol(src, size, pos, &pos)) {
+				break;
+			}
+			Jump(src, size, pos, &pos);
+		}
+		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+			return nullptr;
+		}
+	}
+	*nextPos = pos;
+	return std::shared_ptr<SentenceExpression>(new SentenceExpressionClassNew(className, args));
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMath(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

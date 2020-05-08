@@ -37,12 +37,15 @@ public:
 
 	SpaceType GetSpaceType() const;
 
+	std::shared_ptr<Space> Clone() const;
+
 public:
 	void AddSpaceOfUsing(std::shared_ptr<Space> space);
 
 private:
 	SpaceType _spaceType{SpaceType::None};
 	std::shared_ptr<Space> _parent{nullptr};
+	
 	std::list<std::shared_ptr<Space>> _spaceOfUsing;
 
 	std::unordered_map<std::string, std::shared_ptr<Variable>> _variables;

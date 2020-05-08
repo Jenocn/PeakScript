@@ -69,8 +69,7 @@ static const std::string STRING_RETURN_SIGN = "return";
 static const std::string STRING_SET_SIGN = "set";
 static const std::string STRING_CONST_SIGN = "const";
 static const std::string STRING_CLASS_SIGN = "class";
-static const std::string STRING_PRIVATE_SIGN = "private";
-static const std::string STRING_PUBLIC_SIGN = "public";
+static const std::string STRING_NEW_SIGN = "new";
 
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
@@ -190,6 +189,9 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 		MathSymbol::AssignMod,
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
+}
+bool Grammar::MatchClassNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_NEW_SIGN, src, size, pos, nextPos);
 }
 bool Grammar::MatchClassExtends(const std::string& src, std ::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto& sign : SET_EXTENDS_SIGN) {

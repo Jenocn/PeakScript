@@ -12,10 +12,11 @@ namespace peak::interpreter {
 class ClassTemplate;
 class Variable;
 
-class ValueClassInstance : TypeValue<ValueClassInstance> {
+class ValueClassInstance : public TypeValue<ValueClassInstance> {
 public:
 	ValueClassInstance(std::shared_ptr<ClassTemplate> classTemplate);
 	std::shared_ptr<Variable> FindVariable(const std::string& name) const;
+	bool ExecuteConstruct(const std::vector<std::shared_ptr<Value>>& args);
 
 private:
 	std::shared_ptr<ClassTemplate> _classTemplate{nullptr};

@@ -75,6 +75,22 @@ SpaceType Space::GetSpaceType() const {
 	return _spaceType;
 }
 
+std::shared_ptr<Space> Space::Clone() const {
+	auto space = std::shared_ptr<Space>(new Space(_spaceType, _parent ? _parent->Clone() : nullptr));
+	for (auto v : _spaceOfUsing) {
+		space->AddSpaceOfUsing(v->Clone());
+	}
+	for (auto& pair : _variables) {
+		auto v = pair.second;
+		auto nv = std::shared_ptr<Variable>(new Variable(pair.first, v->GetAttribute(), v->GetValue()));
+		space->AddVariable(nv);
+	}
+	for (auto& pair : _classTemplates) {
+		space->AddClassTemplate(pair.second->Clone());
+	}
+	return space;
+}
+
 void Space::AddSpaceOfUsing(std::shared_ptr<Space> space) {
 	_spaceOfUsing.emplace_back(space);
 }
