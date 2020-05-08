@@ -19,6 +19,9 @@ public:
 	bool ExecuteConstruct(const std::vector<std::shared_ptr<Value>>& args);
 
 private:
+	bool _ExecuteConstruct(std::shared_ptr<ClassTemplate> classTemplate, const std::vector<std::shared_ptr<Value>>& args);
+
+private:
 	std::shared_ptr<ClassTemplate> _classTemplate{nullptr};
 };
 } // namespace peak::interpreter

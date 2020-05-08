@@ -33,3 +33,7 @@ std::shared_ptr<Space> ClassTemplate::GetSpaceOfThis() const {
 std::shared_ptr<ClassTemplate> ClassTemplate::Clone() const {
 	return std::shared_ptr<ClassTemplate>(new ClassTemplate(_name, _parent ? _parent->Clone() : nullptr, _spacePrivate->Clone(), _spacePublic->Clone()));
 }
+
+std::shared_ptr<ClassTemplate> ClassTemplate::GetParent() const {
+	return _parent;
+}

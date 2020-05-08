@@ -26,6 +26,8 @@ public:
 
 	std::shared_ptr<ClassTemplate> Clone() const;
 
+	std::shared_ptr<ClassTemplate> GetParent() const;
+
 private:
 	std::string _name;
 	std::shared_ptr<ClassTemplate> _parent{nullptr};
