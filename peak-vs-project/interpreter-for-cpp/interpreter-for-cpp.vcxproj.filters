@@ -129,6 +129,18 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueBool.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\ClassTemplate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueClassInstance.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionClassNew.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceClassDefine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\interpreter-for-cpp\src\VirtualJourney.h">
@@ -261,6 +273,18 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueArray.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\ClassTemplate.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueClassInstance.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceClassDefine.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionClassNew.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

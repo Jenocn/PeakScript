@@ -148,12 +148,15 @@
   <ItemGroup>
     <ClCompile Include="..\..\interpreter-for-cpp\src\Grammar\Grammar.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Grammar\ParseTool.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\ClassTemplate.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceArrayItemAssign.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceBlock.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceClassDefine.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceCondition.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceDoWhile.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEcho.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionClassNew.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionMath.cpp" />
@@ -179,6 +182,7 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueArray.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueBool.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueCalculateInstance.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueClassInstance.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueFunction.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNull.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNumber.cpp" />
@@ -191,13 +195,16 @@
   <ItemGroup>
     <ClInclude Include="..\..\interpreter-for-cpp\src\Grammar\Grammar.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Grammar\ParseTool.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\ClassTemplate.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Sentence.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceArrayItemAssign.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceBlock.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceClassDefine.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceCondition.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceDoWhile.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEcho.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionClassNew.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionMath.h" />
@@ -224,6 +231,7 @@
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueArray.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueBool.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueCalculateInstance.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueClassInstance.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueFunction.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNull.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNumber.h" />
