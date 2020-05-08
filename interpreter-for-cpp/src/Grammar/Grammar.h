@@ -36,6 +36,11 @@ enum class DoubleSymbol : char {
 	SubSub, // --
 };
 
+enum class ScopeSign : char {
+	Public, // public
+	Private, // private
+};
+
 class Grammar {
 public:
 	static bool IsTextSpace(char ch);
@@ -53,6 +58,11 @@ public:
 	static int GetMathSymbolLevel(MathSymbol value);
 
 public:
+	static bool MatchClassExtends(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchClassBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchClassEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchClass(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchClassMemberScope(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, ScopeSign* sign);
 	static bool MatchArrayBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchArrayEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchDoubleSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, DoubleSymbol* symbol);

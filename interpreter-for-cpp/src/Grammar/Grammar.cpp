@@ -12,7 +12,7 @@ static const std::set<char> SET_TEXT_NEW_LINE = {'\n', '\r'};
 static const std::set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
 static const std::set<char> SET_END_SIGN = {'\n', '\r', ';'};
 static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "the"};
-static const std::set<std::string> SET_ASSIGN_SIGN = {"=", ":", "is", "as"};
+static const std::set<std::string> SET_ASSIGN_SIGN = {"=", "is", "as"};
 static const std::set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
 static const std::set<std::string> SET_BOOL_FALSE_SIGN = {"false", "no"};
 static const std::set<std::string> SET_CONDITION_IF_SIGN = {"if"};
@@ -20,6 +20,7 @@ static const std::set<std::string> SET_CONDITION_ELSE_SIGN = {"else"};
 static const std::set<std::string> SET_BLOCK_BEGIN = {"{", "begin"};
 static const std::set<std::string> SET_BLOCK_END = {"}", "end"};
 static const std::set<std::string> SET_COMMENT_SIGN = {"//", "#"};
+static const std::set<std::string> SET_EXTENDS_SIGN = {":", "extends"};
 static const std::map<MathSymbol, std::pair<int, std::set<std::string>>> MAP_SET_MATH_SYMBOL = {
 	{MathSymbol::AssignMul, {110, {"*="}}},
 	{MathSymbol::AssignDiv, {110, {"/="}}},
@@ -40,9 +41,13 @@ static const std::map<MathSymbol, std::pair<int, std::set<std::string>>> MAP_SET
 	{MathSymbol::LogicAnd, {60, {"&&", "and"}}},
 	{MathSymbol::LogicOr, {60, {"||", "or"}}},
 };
-static const std::unordered_map<DoubleSymbol, std::string> SET_DOUBLE_SYMBOL = {
+static const std::unordered_map<DoubleSymbol, std::string> MAP_DOUBLE_SYMBOL = {
 	{DoubleSymbol::AddAdd, "++"},
 	{DoubleSymbol::SubSub, "--"},
+};
+static const std::unordered_map<ScopeSign, std::string> MAP_SCOPE_SIGN = {
+	{ScopeSign::Private, "private"},
+	{ScopeSign::Public, "public"},
 };
 static const std::string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
 static const std::string STRING_COMMENT_BLOCK_END_SIGN = "*/";
@@ -63,6 +68,10 @@ static const std::string STRING_FUNCTION_SIGN = "function";
 static const std::string STRING_RETURN_SIGN = "return";
 static const std::string STRING_SET_SIGN = "set";
 static const std::string STRING_CONST_SIGN = "const";
+static const std::string STRING_CLASS_SIGN = "class";
+static const std::string STRING_PRIVATE_SIGN = "private";
+static const std::string STRING_PUBLIC_SIGN = "public";
+
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
 static const char CHAR_SPLIT_SYMBOL = ',';
@@ -182,6 +191,32 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
 }
+bool Grammar::MatchClassExtends(const std::string& src, std ::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (auto& sign : SET_EXTENDS_SIGN) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			return true;
+		}
+	}
+	return false;
+}
+bool Grammar::MatchClassBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchBlockBegin(src, size, pos, nextPos);
+}
+bool Grammar::MatchClassEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchBlockEnd(src, size, pos, nextPos);
+}
+bool Grammar::MatchClass(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_CLASS_SIGN, src, size, pos, nextPos);
+}
+bool Grammar::MatchClassMemberScope(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, ScopeSign* sign) {
+	for (auto& pair : MAP_SCOPE_SIGN) {
+		if (MatchSign(pair.second, src, size, pos, nextPos)) {
+			*sign = pair.first;
+			return true;
+		}
+	}
+	return false;
+}
 bool Grammar::MatchArrayBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_ARRAY_BEGIN, src, size, pos, nextPos);
 }
@@ -189,7 +224,7 @@ bool Grammar::MatchArrayEnd(const std::string& src, std::size_t size, std::size_
 	return MatchSign(CHAR_ARRAY_END, src, size, pos, nextPos);
 }
 bool Grammar::MatchDoubleSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, DoubleSymbol* symbol) {
-	for (auto& pair : SET_DOUBLE_SYMBOL) {
+	for (auto& pair : MAP_DOUBLE_SYMBOL) {
 		if (MatchSign(pair.second, src, size, pos, nextPos)) {
 			*symbol = pair.first;
 			return true;

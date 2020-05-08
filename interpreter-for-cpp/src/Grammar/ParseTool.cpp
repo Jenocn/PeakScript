@@ -1,6 +1,7 @@
 #include "ParseTool.h"
 #include "../Runtime/Sentence/SentenceArrayItemAssign.h"
 #include "../Runtime/Sentence/SentenceBlock.h"
+#include "../Runtime/Sentence/SentenceClassDefine.h"
 #include "../Runtime/Sentence/SentenceCondition.h"
 #include "../Runtime/Sentence/SentenceDoWhile.h"
 #include "../Runtime/Sentence/SentenceEcho.h"
@@ -36,6 +37,7 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseVariableDefineOrAssign,
 	_ParseVariableSet,
 	_ParseFunctionDefine,
+	_ParseClassDefine,
 	_ParseCondition,
 	_ParseLoop,
 	_ParseForeach,
@@ -724,6 +726,63 @@ std::shared_ptr<Sentence> ParseTool::_ParseLoopControl(const std::string& src, s
 	}
 	*nextPos = pos;
 	return sentence;
+}
+
+std::shared_ptr<Sentence> ParseTool::_ParseClassDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchClass(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	std::string className;
+	if (!Grammar::MatchName(src, size, pos, &pos, &className)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	std::string parentName;
+	if (Grammar::MatchClassExtends(src, size, pos, &pos)) {
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchName(src, size, pos, &pos, &parentName)) {
+			return nullptr;
+		}
+		Jump(src, size, pos, &pos);
+	}
+
+	if (!Grammar::MatchClassBegin(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	std::list<std::shared_ptr<Sentence>> sentenceOfPrivate;
+	std::list<std::shared_ptr<Sentence>> sentenceOfPublic;
+	while (true) {
+		Jump(src, size, pos, &pos);
+		if (Grammar::MatchClassEnd(src, size, pos, &pos)) {
+			break;
+		}
+
+		auto sign = ScopeSign::Private;
+		if (Grammar::MatchClassMemberScope(src, size, pos, &pos, &sign)) {
+			Jump(src, size, pos, &pos);
+		}
+		std::shared_ptr<Sentence> sentence{nullptr};
+		sentence = _ParseFunctionDefine(src, size, pos, &pos);
+		if (!sentence) {
+			sentence = _ParseVariableDefineOrAssign(src, size, pos, &pos);
+			if (!sentence) {
+				return nullptr;
+			}
+		}
+		switch (sign) {
+		case ScopeSign::Private:
+			sentenceOfPrivate.emplace_back(sentence);
+			break;
+		case ScopeSign::Public:
+			sentenceOfPublic.emplace_back(sentence);
+			break;
+		default:
+			return nullptr;
+		}
+	}
+	*nextPos = pos;
+	return std::shared_ptr<Sentence>(new SentenceClassDefine(className, parentName, sentenceOfPrivate, sentenceOfPublic));
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
