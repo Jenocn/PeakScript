@@ -24,7 +24,7 @@ bool ValueClassInstance::_ExecuteConstruct(std::shared_ptr<ClassTemplate> classT
 	if (!_ExecuteConstruct(classTemplate->GetParent(), args)) {
 		return false;
 	}
-	
+
 	auto variable = classTemplate->FindPublicVariable(classTemplate->GetName());
 	if (variable) {
 		auto value = variable->GetValue();
@@ -38,4 +38,8 @@ bool ValueClassInstance::_ExecuteConstruct(std::shared_ptr<ClassTemplate> classT
 		}
 	}
 	return true;
+}
+
+std::string ValueClassInstance::ToString() const {
+	return "class { instance of " + _classTemplate->GetName() + " }";
 }

@@ -17,6 +17,7 @@ public:
 	ValueClassInstance(std::shared_ptr<ClassTemplate> classTemplate);
 	std::shared_ptr<Variable> FindVariable(const std::string& name) const;
 	bool ExecuteConstruct(const std::vector<std::shared_ptr<Value>>& args);
+	virtual std::string ToString() const;
 
 private:
 	bool _ExecuteConstruct(std::shared_ptr<ClassTemplate> classTemplate, const std::vector<std::shared_ptr<Value>>& args);
