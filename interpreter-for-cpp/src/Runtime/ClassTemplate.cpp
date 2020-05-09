@@ -3,8 +3,8 @@
 
 using namespace peak::interpreter;
 
-ClassTemplate::ClassTemplate(const std::string& name, std::shared_ptr<ClassTemplate> parent, std::shared_ptr<Space> spacePrivate, std::shared_ptr<Space> spacePublic)
-	: _name(name), _parent(parent), _spacePrivate(spacePrivate), _spacePublic(spacePublic) {
+ClassTemplate::ClassTemplate(const std::string& name, std::shared_ptr<ClassTemplate> parent, std::shared_ptr<Space> spacePrivate, std::shared_ptr<Space> spacePublic, std::shared_ptr<Space> spaceStatic)
+	: _name(name), _parent(parent), _spacePrivate(spacePrivate), _spacePublic(spacePublic), _spaceStatic(spaceStatic) {
 }
 
 const std::string& ClassTemplate::GetName() const {
@@ -33,12 +33,14 @@ std::shared_ptr<Space> ClassTemplate::GetPrivateSpace() const {
 std::shared_ptr<Space> ClassTemplate::GetSpaceOfThis() const {
 	return _spaceOfThis;
 }
-
+std::shared_ptr<Space> ClassTemplate::GetStaticSpace() const {
+	return _spaceStatic;
+}
 std::shared_ptr<ClassTemplate> ClassTemplate::CreateInstance() const {
-	auto instance = std::shared_ptr<ClassTemplate>(new ClassTemplate(_name, _parent ? _parent->CreateInstance() : nullptr, _spacePrivate->CopySpace(), _spacePublic->CopySpace()));
+	auto instance = std::shared_ptr<ClassTemplate>(new ClassTemplate(_name, _parent ? _parent->CreateInstance() : nullptr, _spacePrivate->CopySpace(), _spacePublic->CopySpace(), _spaceStatic));
 	instance->_spaceOfThis = std::shared_ptr<Space>(new Space(SpaceType::None));
-	instance->_spaceOfThis->AddSpaceOfUsing(_spacePrivate);
-	instance->_spaceOfThis->AddSpaceOfUsing(_spacePublic);
+	instance->_spaceOfThis->AddSpaceOfUsing(instance->_spacePrivate);
+	instance->_spaceOfThis->AddSpaceOfUsing(instance->_spacePublic);
 	instance->_spaceOfThis->AddClassTemplate(instance);
 	return instance;
 }

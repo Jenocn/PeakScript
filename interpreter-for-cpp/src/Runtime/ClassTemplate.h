@@ -16,7 +16,11 @@ class ValueFunction;
 
 class ClassTemplate {
 public:
-	ClassTemplate(const std::string& name, std::shared_ptr<ClassTemplate> parent, std::shared_ptr<Space> spacePrivate, std::shared_ptr<Space> spacePublic);
+	ClassTemplate(const std::string& name,
+				  std::shared_ptr<ClassTemplate> parent,
+				  std::shared_ptr<Space> spacePrivate,
+				  std::shared_ptr<Space> spacePublic,
+				  std::shared_ptr<Space> spaceStatic);
 
 	const std::string& GetName() const;
 
@@ -26,8 +30,9 @@ public:
 	std::shared_ptr<Space> GetPublicSpace() const;
 	std::shared_ptr<Space> GetPrivateSpace() const;
 	std::shared_ptr<Space> GetSpaceOfThis() const;
+	std::shared_ptr<Space> GetStaticSpace() const;
 	std::shared_ptr<ClassTemplate> GetParent() const;
-	
+
 	std::shared_ptr<ClassTemplate> CreateInstance() const;
 
 private:
@@ -35,6 +40,7 @@ private:
 	std::shared_ptr<ClassTemplate> _parent{nullptr};
 	std::shared_ptr<Space> _spacePrivate{nullptr};
 	std::shared_ptr<Space> _spacePublic{nullptr};
+	std::shared_ptr<Space> _spaceStatic{nullptr};
 	std::shared_ptr<Space> _spaceOfThis{nullptr};
 };
 } // namespace peak::interpreter

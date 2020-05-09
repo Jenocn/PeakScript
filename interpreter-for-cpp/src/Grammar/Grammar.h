@@ -39,6 +39,7 @@ enum class DoubleSymbol : char {
 enum class ScopeSign : char {
 	Public, // public
 	Private, // private
+	Static, // static
 };
 
 class Grammar {

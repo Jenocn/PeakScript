@@ -1,6 +1,7 @@
-#include "SentenceExpressionClassInside.h"
+#include "SentenceClassInsideAssign.h"
 #include "../ClassTemplate.h"
 #include "../Value/ValueTool.h"
+#include "../Variable.h"
 #include "SentenceExpressionClassNew.h"
 #include "SentenceExpressionFunctionCall.h"
 #include "SentenceExpressionValueArrayItem.h"
@@ -8,10 +9,16 @@
 
 using namespace peak::interpreter;
 
-SentenceExpressionClassInside::SentenceExpressionClassInside(const std::list<std::shared_ptr<SentenceExpression>>& insideList)
-	: _insideList(insideList) {
+SentenceClassInsideAssign::SentenceClassInsideAssign(const std::list<std::shared_ptr<SentenceExpression>>& insideList, std::shared_ptr<SentenceExpression> expression)
+	: _insideList(insideList), _sentenceExpression(expression) {
 }
-ExecuteResult SentenceExpressionClassInside::Execute(std::shared_ptr<Space> space) {
+ExecuteResult SentenceClassInsideAssign::Execute(std::shared_ptr<Space> space) {
+	if (!_sentenceExpression) {
+		return ExecuteResult::Failed;
+	}
+	if (!IsSuccess(_sentenceExpression->Execute(space))) {
+		return ExecuteResult::Failed;
+	}
 
 	auto tempSpace = space;
 	auto i = 0u;
@@ -30,6 +37,13 @@ ExecuteResult SentenceExpressionClassInside::Execute(std::shared_ptr<Space> spac
 				staticClass = publicSpace->FindClassTemplate(variableName);
 				if (!staticClass) {
 					return ExecuteResult::Failed;
+				}
+			} else {
+				if (i == size - 1) {
+					if (!findVariable->SetValue(_sentenceExpression->GetValue())) {
+						return ExecuteResult::Failed;
+					}
+					return ExecuteResult::Successed;
 				}
 			}
 		} break;
@@ -55,10 +69,6 @@ ExecuteResult SentenceExpressionClassInside::Execute(std::shared_ptr<Space> spac
 				return ExecuteResult::Failed;
 			}
 			auto value = sen->GetValue();
-			if (i == size - 1) {
-				SetValue(value);
-				break;
-			}
 
 			if (!ValueTool::IsClassInstance(value)) {
 				return ExecuteResult::Failed;
@@ -72,5 +82,5 @@ ExecuteResult SentenceExpressionClassInside::Execute(std::shared_ptr<Space> spac
 		++i;
 	}
 
-	return ExecuteResult::Successed;
+	return ExecuteResult::Failed;
 }
