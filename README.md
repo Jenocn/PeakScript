@@ -1,6 +1,6 @@
 # PeakScript  
   
-PeakScript是一个脚本语言,在第一次加载脚本时创建一组运行时的对象,之后的调用不会多次进行代码解析,从而运行效率非常好,和大多数脚本语言一样,使用动态类型,支持`number`,`bool`,`string`,`null`,`array`,`function`几种类型,支持代码块`{}`,支持常见的`if - else if - else`和`for`,`foreach`,`while`,`do - while`循环,此外还增加了一个`loop`指定次数的循环,支持`break`,`continue`,`return`控制语句,支持`function`函数,支持`try - catch - finally`, 支持常见的算术表达式和关系表达式,支持自增自减运算符  
+PeakScript是一个脚本语言,在第一次加载脚本时创建一组运行时的对象,之后的调用不会多次进行代码解析,从而运行效率非常好,和大多数脚本语言一样,使用动态类型,支持`number`,`bool`,`string`,`null`,`array`几种类型,支持面向对象,支持代码块`{}`,支持常见的`if - else if - else`和`for`,`foreach`,`while`,`do - while`循环,此外还增加了一个`loop`指定次数的循环,支持`break`,`continue`,`return`控制语句,支持`function`函数,支持`try - catch - finally`, 支持常见的算术表达式和关系表达式,支持自增自减运算符  
   
 ---  
   
@@ -35,7 +35,7 @@ set value = "Hello World"; // value已经存在,则直接赋值
 例如:`num = 99;`  
   
 ## 数据类型     
-PeakScript使用的是动态数据类型,目前有6种,分别是number,bool,string,null,array,function    
+PeakScript使用的是动态数据类型,number,bool,string,null,array    
 #### `number`类型    
 常见的小数,整数和负数    
   
@@ -61,10 +61,7 @@ PeakScript使用的是动态数据类型,目前有6种,分别是number,bool,stri
 `arr[0]`,`arr[4][0]`  
 数组下标可以是任何返回整数的表达式  
 例如:  
-`var i = 0;` `arr[i];` `arr[1 + 1];`  
-  
-#### `function`类型    
-表示一个函数    
+`var i = 0;` `arr[i];` `arr[1 + 1];`   
   
 ## 算术表达式    
 常规的`+`,`-`,`*`,`/`,`%`,`(`,`)`  
@@ -185,7 +182,35 @@ sum(a, b) {
 }  
 var ret = sum(1, 2); // 返回3  
 ```  
-  
+
+## 面向对象  
+`class`,`struct`两种声明方式,区别仅仅是默认的作用域不同,`class`默认为`private`作用域,`struct`默认为`public`作用域  
+类成员的作用域有两种`private`私有和`public`公有  
+
+例如声明一个类:
+```
+class Student {
+	private var _age = 0; // 声明私有成员变量
+	private var _name = "";
+	
+	public Student() {
+		// 构造函数
+	}
+	public SetAge(age) {// 成员函数  
+		_age = age;
+	}
+	public EchoAge() {
+		echo _age;
+	}
+}
+```
+
+支持继承,冒号`:`或者`extends`为继承  
+```
+class StudentEx : Student {
+}
+```
+
 ## 异常处理      
 ```  
 try {  
