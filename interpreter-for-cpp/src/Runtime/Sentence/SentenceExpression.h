@@ -21,6 +21,7 @@ enum class ExpressionType : char {
 	DoubleSymbol,
 	ClassNew,
 	ClassInside,
+	ArrayItem,
 };
 
 class SentenceExpression : public Sentence {

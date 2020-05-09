@@ -5,14 +5,17 @@
 
 #pragma once
 
-#include "SentenceExpressionValue.h"
+#include "SentenceExpression.h"
 #include <vector>
 
 namespace peak::interpreter {
-class SentenceExpressionValueArrayItem : public SentenceExpressionValue {
+class SentenceExpressionValueArrayItem : public SentenceExpression {
 public:
 	SentenceExpressionValueArrayItem(const std::string& name, const std::vector<std::shared_ptr<SentenceExpression>>& indexExpression);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
+	virtual ExpressionType GetExpressionType() const { return ExpressionType::ArrayItem; }
+
+	const std::string& GetArrayName() const;
 
 private:
 	std::string _name;

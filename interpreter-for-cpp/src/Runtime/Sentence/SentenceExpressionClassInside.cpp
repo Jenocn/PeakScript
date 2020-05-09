@@ -2,6 +2,7 @@
 #include "../Value/ValueTool.h"
 #include "SentenceExpressionClassNew.h"
 #include "SentenceExpressionFunctionCall.h"
+#include "SentenceExpressionValueArrayItem.h"
 #include "SentenceExpressionVariable.h"
 
 using namespace peak::interpreter;
@@ -27,6 +28,11 @@ ExecuteResult SentenceExpressionClassInside::Execute(std::shared_ptr<Space> spac
 			break;
 		case ExpressionType::Function:
 			if (!publicSpace->FindVariable(std::static_pointer_cast<SentenceExpressionFunctionCall>(sen)->GetFunctionName())) {
+				return ExecuteResult::Failed;
+			}
+			break;
+		case ExpressionType::ArrayItem:
+			if (!publicSpace->FindVariable(std::static_pointer_cast<SentenceExpressionValueArrayItem>(sen)->GetArrayName())) {
 				return ExecuteResult::Failed;
 			}
 			break;

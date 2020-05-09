@@ -5,7 +5,7 @@
 using namespace peak::interpreter;
 
 SentenceExpressionValueArrayItem::SentenceExpressionValueArrayItem(const std::string& name, const std::vector<std::shared_ptr<SentenceExpression>>& indexExpressionVec)
-	: SentenceExpressionValue(ValueNull::DEFAULT_VALUE), _name(name), _indexExpressionVec(indexExpressionVec) {
+	: _name(name), _indexExpressionVec(indexExpressionVec) {
 }
 
 ExecuteResult SentenceExpressionValueArrayItem::Execute(std::shared_ptr<Space> space) {
@@ -45,4 +45,8 @@ ExecuteResult SentenceExpressionValueArrayItem::Execute(std::shared_ptr<Space> s
 
 	SetValue(retValue);
 	return ExecuteResult::Successed;
+}
+
+const std::string& SentenceExpressionValueArrayItem::GetArrayName() const {
+	return _name;
 }
