@@ -167,11 +167,20 @@ bool ParseTool::JumpComment(const std::string& src, std::size_t size, std::size_
 }
 
 bool ParseTool::JumpCommentBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	int findBegin = 0;
 	if (Grammar::MatchCommentBlockBegin(src, size, pos, &pos)) {
 		while (pos < size) {
+			if (Grammar::MatchCommentBlockBegin(src, size, pos, &pos)) {
+				++findBegin;
+				continue;
+			}
 			if (Grammar::MatchCommentBlockEnd(src, size, pos, &pos)) {
-				*nextPos = pos;
-				return true;
+				if (findBegin == 0) {
+					*nextPos = pos;
+					return true;
+				}
+				--findBegin;
+				continue;
 			}
 			++pos;
 		}
