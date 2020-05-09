@@ -32,3 +32,7 @@ ExecuteResult SentenceExpressionFunctionCall::Execute(std::shared_ptr<Space> spa
 	SetValue(result);
 	return ExecuteResult::Successed;
 }
+
+const std::string& SentenceExpressionFunctionCall::GetFunctionName() const {
+	return _name;
+}

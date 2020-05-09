@@ -17,6 +17,8 @@ public:
 
 	virtual ExpressionType GetExpressionType() const { return ExpressionType::Function; }
 
+	const std::string& GetFunctionName() const;
+
 private:
 	std::string _name;
 	std::vector<std::shared_ptr<SentenceExpression>> _args;

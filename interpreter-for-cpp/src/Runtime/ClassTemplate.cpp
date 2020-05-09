@@ -5,9 +5,6 @@ using namespace peak::interpreter;
 
 ClassTemplate::ClassTemplate(const std::string& name, std::shared_ptr<ClassTemplate> parent, std::shared_ptr<Space> spacePrivate, std::shared_ptr<Space> spacePublic)
 	: _name(name), _parent(parent), _spacePrivate(spacePrivate), _spacePublic(spacePublic) {
-	_spaceOfThis = std::shared_ptr<Space>(new Space(SpaceType::None));
-	_spaceOfThis->AddSpaceOfUsing(_spacePrivate);
-	_spaceOfThis->AddSpaceOfUsing(_spacePublic);
 }
 
 const std::string& ClassTemplate::GetName() const {
@@ -26,12 +23,24 @@ std::shared_ptr<Variable> ClassTemplate::FindPrivateVariable(const std::string& 
 	return _spacePrivate->FindVariable(name);
 }
 
+std::shared_ptr<Space> ClassTemplate::GetPublicSpace() const {
+	return _spacePublic;
+}
+std::shared_ptr<Space> ClassTemplate::GetPrivateSpace() const {
+	return _spacePrivate;
+}
+
 std::shared_ptr<Space> ClassTemplate::GetSpaceOfThis() const {
 	return _spaceOfThis;
 }
 
-std::shared_ptr<ClassTemplate> ClassTemplate::Clone() const {
-	return std::shared_ptr<ClassTemplate>(new ClassTemplate(_name, _parent ? _parent->Clone() : nullptr, _spacePrivate->Clone(), _spacePublic->Clone()));
+std::shared_ptr<ClassTemplate> ClassTemplate::CreateInstance() const {
+	auto instance = std::shared_ptr<ClassTemplate>(new ClassTemplate(_name, _parent ? _parent->CreateInstance() : nullptr, _spacePrivate->CopySpace(), _spacePublic->CopySpace()));
+	instance->_spaceOfThis = std::shared_ptr<Space>(new Space(SpaceType::None));
+	instance->_spaceOfThis->AddSpaceOfUsing(_spacePrivate);
+	instance->_spaceOfThis->AddSpaceOfUsing(_spacePublic);
+	instance->_spaceOfThis->AddClassTemplate(instance);
+	return instance;
 }
 
 std::shared_ptr<ClassTemplate> ClassTemplate::GetParent() const {

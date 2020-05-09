@@ -37,7 +37,7 @@ public:
 
 	SpaceType GetSpaceType() const;
 
-	std::shared_ptr<Space> Clone() const;
+	std::shared_ptr<Space> CopySpace() const;
 
 public:
 	void AddSpaceOfUsing(std::shared_ptr<Space> space);

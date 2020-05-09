@@ -1,12 +1,13 @@
 #include "ValueClassInstance.h"
 #include "../ClassTemplate.h"
+#include "../Space.h"
 #include "../Variable.h"
 #include "ValueTool.h"
 
 using namespace peak::interpreter;
 
 ValueClassInstance::ValueClassInstance(std::shared_ptr<ClassTemplate> classTemplate)
-	: _classTemplate(classTemplate->Clone()) {
+	: _classTemplate(classTemplate->CreateInstance()) {
 }
 std::shared_ptr<Variable> ValueClassInstance::FindVariable(const std::string& name) const {
 	return _classTemplate->FindPublicVariable(name);
@@ -42,4 +43,11 @@ bool ValueClassInstance::_ExecuteConstruct(std::shared_ptr<ClassTemplate> classT
 
 std::string ValueClassInstance::ToString() const {
 	return "class { instance of " + _classTemplate->GetName() + " }";
+}
+
+std::shared_ptr<Space> ValueClassInstance::GetPublicSpace() const {
+	return _classTemplate->GetPublicSpace();
+}
+std::shared_ptr<Space> ValueClassInstance::GetSpaceOfThis() const {
+	return _classTemplate->GetSpaceOfThis();
 }

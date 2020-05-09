@@ -11,6 +11,7 @@ namespace peak::interpreter {
 
 class ClassTemplate;
 class Variable;
+class Space;
 
 class ValueClassInstance : public TypeValue<ValueClassInstance> {
 public:
@@ -18,6 +19,8 @@ public:
 	std::shared_ptr<Variable> FindVariable(const std::string& name) const;
 	bool ExecuteConstruct(const std::vector<std::shared_ptr<Value>>& args);
 	virtual std::string ToString() const;
+	std::shared_ptr<Space> GetPublicSpace() const;
+	std::shared_ptr<Space> GetSpaceOfThis() const;
 
 private:
 	bool _ExecuteConstruct(std::shared_ptr<ClassTemplate> classTemplate, const std::vector<std::shared_ptr<Value>>& args);

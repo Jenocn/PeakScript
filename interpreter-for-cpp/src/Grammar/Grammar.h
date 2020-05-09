@@ -58,10 +58,12 @@ public:
 	static int GetMathSymbolLevel(MathSymbol value);
 
 public:
+	static bool MatchClassInsideSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchClassNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchClassExtends(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchClassBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchClassEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchClassStruct(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchClass(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchClassMemberScope(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, ScopeSign* sign);
 	static bool MatchArrayBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

@@ -69,6 +69,7 @@ static const std::string STRING_RETURN_SIGN = "return";
 static const std::string STRING_SET_SIGN = "set";
 static const std::string STRING_CONST_SIGN = "const";
 static const std::string STRING_CLASS_SIGN = "class";
+static const std::string STRING_STRUCT_SIGN = "struct";
 static const std::string STRING_NEW_SIGN = "new";
 
 static const char CHAR_LEFT_BRACKET = '(';
@@ -76,6 +77,7 @@ static const char CHAR_RIGHT_BRACKET = ')';
 static const char CHAR_SPLIT_SYMBOL = ',';
 static const char CHAR_ARRAY_BEGIN = '[';
 static const char CHAR_ARRAY_END = ']';
+static const char CHAR_CLASS_INSIDE_SYMBOL = '.';
 
 bool Grammar::IsTextSpace(char ch) {
 	return (SET_TEXT_SPACE.find(ch) != SET_TEXT_SPACE.end());
@@ -190,6 +192,10 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
 }
+bool Grammar::MatchClassInsideSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(CHAR_CLASS_INSIDE_SYMBOL, src, size, pos, nextPos);
+}
+
 bool Grammar::MatchClassNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_NEW_SIGN, src, size, pos, nextPos);
 }
@@ -206,6 +212,9 @@ bool Grammar::MatchClassBegin(const std::string& src, std::size_t size, std::siz
 }
 bool Grammar::MatchClassEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchBlockEnd(src, size, pos, nextPos);
+}
+bool Grammar::MatchClassStruct(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_STRUCT_SIGN, src, size, pos, nextPos);
 }
 bool Grammar::MatchClass(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_CLASS_SIGN, src, size, pos, nextPos);
