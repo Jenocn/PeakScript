@@ -141,6 +141,9 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceClassDefine.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionClassInside.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\interpreter-for-cpp\src\VirtualJourney.h">
@@ -285,6 +288,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionClassNew.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionClassInside.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

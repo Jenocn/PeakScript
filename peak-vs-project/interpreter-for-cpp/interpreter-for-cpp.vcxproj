@@ -35,7 +35,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -48,7 +48,7 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -156,6 +156,7 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceDoWhile.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEcho.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionClassInside.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionClassNew.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceDoWhile.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEcho.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionClassInside.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionClassNew.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.h" />
