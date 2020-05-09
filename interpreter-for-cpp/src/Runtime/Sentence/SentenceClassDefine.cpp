@@ -20,7 +20,7 @@ ExecuteResult SentenceClassDefine::Execute(std::shared_ptr<Space> space) {
 	}
 
 	auto spaceOfPrivate = std::shared_ptr<Space>(new Space(SpaceType::None));
-	auto spaceOfPublic = std::shared_ptr<Space>(new Space(SpaceType::None));
+	auto spaceOfPublic = std::shared_ptr<Space>(new Space(SpaceType::None, parentClassTemplate ? parentClassTemplate->GetPublicSpace() : nullptr));
 
 	for (auto sentence : _sentenceOfPrivate) {
 		if (!IsSuccess(sentence->Execute(spaceOfPrivate))) {
