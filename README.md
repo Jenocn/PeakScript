@@ -205,6 +205,13 @@ class Student {
 }
 ```
 
+实例化和调用成员
+```
+var stu = new Student();
+stu.SetAge(20);
+stu.EchoAge();
+```
+
 支持继承,冒号`:`或者`extends`为继承  
 ```
 class StudentEx : Student {

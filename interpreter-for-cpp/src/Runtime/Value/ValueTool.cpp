@@ -20,9 +20,6 @@ bool ValueTool::IsFunction(std::shared_ptr<Value> value) {
 bool ValueTool::IsArray(std::shared_ptr<Value> value) {
 	return value && (value->GetType() == ValueArray::Type());
 }
-bool ValueTool::IsClassInstance(std::shared_ptr<Value> value) {
-	return value && (value->GetType() == ValueClassInstance::Type());
-}
 
 std::string ValueTool::ToString(std::shared_ptr<Value> value) {
 	if (!value) {

@@ -54,8 +54,6 @@ private:
 	static std::shared_ptr<Sentence> _ParseEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseTryCatchFinally(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseLoopControl(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static std::shared_ptr<Sentence> _ParseClassDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static std::shared_ptr<Sentence> _ParseClassInsideAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 private:
 	static std::shared_ptr<SentenceExpression> _ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
@@ -67,8 +65,6 @@ private:
 	static std::shared_ptr<SentenceExpression> _ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseFunctioCall(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseDoubleExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static std::shared_ptr<SentenceExpression> _ParseClassNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static std::shared_ptr<SentenceExpression> _ParseClassInside(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 	static std::shared_ptr<SentenceExpression> _ParseExpressionMath(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseExpressionMathBracket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool bBracket);
@@ -81,6 +77,5 @@ private:
 	static std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_t, std::size_t, std::size_t*)>> _sentenceParseList;
 	static std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> _sentenceExpressionParseList;
 	static std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> _sentenceValueParseList;
-	static std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> _sentenceClassInsideParseList;
 };
 } // namespace peak::interpreter

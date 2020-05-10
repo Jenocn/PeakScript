@@ -48,6 +48,7 @@ static const std::unordered_map<DoubleSymbol, std::string> MAP_DOUBLE_SYMBOL = {
 static const std::unordered_map<ScopeSign, std::string> MAP_SCOPE_SIGN = {
 	{ScopeSign::Private, "private"},
 	{ScopeSign::Public, "public"},
+	{ScopeSign::Static, "static"},
 };
 static const std::string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
 static const std::string STRING_COMMENT_BLOCK_END_SIGN = "*/";
