@@ -19,8 +19,6 @@ enum class ExpressionType : char {
 	Variable,
 	Function,
 	DoubleSymbol,
-	ClassNew,
-	ClassInside,
 	ArrayItem,
 };
 
