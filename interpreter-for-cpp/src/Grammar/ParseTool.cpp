@@ -49,9 +49,6 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseTryCatchFinally,
 	_ParseExpressionToEnd,
 };
-std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceExpressionParseList = {
-	_ParseExpressionMath,
-};
 std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceValueParseList = {
 	_ParseString,
 	_ParseNumber,
@@ -187,10 +184,14 @@ std::shared_ptr<Sentence> ParseTool::ParseSentence(const std::string& src, std::
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	for (auto func : _sentenceExpressionParseList) {
-		auto parseData = func(src, size, pos, nextPos);
-		if (parseData) {
-			return parseData;
+	return _ParseExpressionMath(src, size, pos, nextPos);
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (auto func : _sentenceValueParseList) {
+		auto value = func(src, size, pos, &pos);
+		if (value) {
+			return value;
 		}
 	}
 	return nullptr;
@@ -379,7 +380,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableSet(const std::string& src, s
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseExpressionToEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	auto expression = _ParseExpressionMath(src, size, pos, &pos);
+	auto expression = _ParseExpression(src, size, pos, &pos);
 	if (!expression) {
 		return nullptr;
 	}
@@ -460,7 +461,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseLoop(const std::string& src, std::siz
 		}
 	}
 
-	auto condition = _ParseExpressionMath(src, size, pos, &pos);
+	auto condition = _ParseExpression(src, size, pos, &pos);
 	if (!condition) {
 		return nullptr;
 	}
@@ -932,13 +933,11 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 			expressionStack.emplace(priorityExpression);
 			bRet = true;
 		} else {
-			for (auto func : _sentenceValueParseList) {
-				auto value = func(src, size, pos, &pos);
-				if (value) {
-					expressionStack.emplace(value);
-					bRet = true;
-					break;
-				}
+			auto value = _ParseExpressionValue(src, size, pos, &pos);
+			if (value) {
+				expressionStack.emplace(value);
+				bRet = true;
+				break;
 			}
 		}
 
