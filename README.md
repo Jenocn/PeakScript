@@ -197,7 +197,26 @@ try {
 ## 注释    
 单行注释: `//`或`#`  
 多行注释:`/*`与`*/`之间  
-  
-## echo命令    
+
+## 内置函数   
+#### echo命令    
 用于打印变量的值或者函数的说明    
-  
+例如:
+`echo "Hello World"; // Hello World`  
+
+#### print函数  
+同`echo`但print作为一个函数存在,支持多个参数,多参数为无缝拼接  
+例如:  
+`print("Hello"); // Hello`  
+`print(1, 2, 3); // 123`  
+
+#### type函数  
+返回当前参数数值类型的字符串  
+例如:
+`type(""); // 返回 string`  
+`type(0); // 返回 number`  
+`type(true); // 返回 bool`  
+`type(null); // 返回 null`  
+`type([1]); // 返回 array`  
+`type(print); // 返回 function`  
+
