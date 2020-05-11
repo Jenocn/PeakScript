@@ -8,7 +8,6 @@
 #include "../Runtime/Sentence/SentenceExpressionFunctionCall.h"
 #include "../Runtime/Sentence/SentenceExpressionMath.h"
 #include "../Runtime/Sentence/SentenceExpressionSelfAssign.h"
-#include "../Runtime/Sentence/SentenceExpressionValue.h"
 #include "../Runtime/Sentence/SentenceExpressionValueArray.h"
 #include "../Runtime/Sentence/SentenceExpressionValueArrayItem.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
@@ -743,7 +742,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseString(const std::string& s
 	std::string temp;
 	if (Grammar::MatchPair(sign, sign, src, size, pos, &pos, &temp)) {
 		*nextPos = pos;
-		return std::shared_ptr<SentenceExpression>(new SentenceExpressionValue(std::shared_ptr<Value>(new ValueString(temp))));
+		return std::shared_ptr<SentenceExpression>(new SentenceExpression(std::shared_ptr<Value>(new ValueString(temp))));
 	}
 	return nullptr;
 }
@@ -751,7 +750,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseString(const std::string& s
 std::shared_ptr<SentenceExpression> ParseTool::_ParseNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	double temp{0};
 	if (Grammar::MatchNumber(src, size, pos, nextPos, &temp)) {
-		return std::shared_ptr<SentenceExpression>(new SentenceExpressionValue(std::shared_ptr<Value>(new ValueNumber(temp))));
+		return std::shared_ptr<SentenceExpression>(new SentenceExpression(std::shared_ptr<Value>(new ValueNumber(temp))));
 	}
 	return nullptr;
 }
@@ -759,14 +758,14 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseNumber(const std::string& s
 std::shared_ptr<SentenceExpression> ParseTool::_ParseBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	bool temp{false};
 	if (Grammar::MatchBool(src, size, pos, nextPos, &temp)) {
-		return std::shared_ptr<SentenceExpression>(new SentenceExpressionValue(std::shared_ptr<Value>(new ValueBool(temp))));
+		return std::shared_ptr<SentenceExpression>(new SentenceExpression(std::shared_ptr<Value>(new ValueBool(temp))));
 	}
 	return nullptr;
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	if (Grammar::MatchNull(src, size, pos, nextPos)) {
-		return std::shared_ptr<SentenceExpression>(new SentenceExpressionValue(std::shared_ptr<Value>(new ValueNull())));
+		return std::shared_ptr<SentenceExpression>(new SentenceExpression(std::shared_ptr<Value>(new ValueNull())));
 	}
 	return nullptr;
 }

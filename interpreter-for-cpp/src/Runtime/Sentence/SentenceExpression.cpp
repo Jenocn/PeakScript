@@ -18,3 +18,10 @@ std::shared_ptr<Value> SentenceExpression::GetValue() const {
 void SentenceExpression::SetValue(std::shared_ptr<Value> value) {
 	_value = value;
 }
+
+ExecuteResult SentenceExpression::Execute(std::shared_ptr<Space> space) {
+	if (!_value) {
+		return ExecuteResult::Failed;
+	}
+	return ExecuteResult::Successed;
+}

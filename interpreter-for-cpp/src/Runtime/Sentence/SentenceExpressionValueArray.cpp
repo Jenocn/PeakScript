@@ -4,7 +4,7 @@
 using namespace peak::interpreter;
 
 SentenceExpressionValueArray::SentenceExpressionValueArray(const std::vector<std::shared_ptr<SentenceExpression>>& valueExpressionArray)
-	: SentenceExpressionValue(std::shared_ptr<Value>(new ValueArray())), _expressionArray(valueExpressionArray) {
+	: SentenceExpression(std::shared_ptr<Value>(new ValueArray())), _expressionArray(valueExpressionArray) {
 }
 ExecuteResult SentenceExpressionValueArray::Execute(std::shared_ptr<Space> space) {
 	if (_expressionArray.empty()) {

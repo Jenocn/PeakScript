@@ -5,14 +5,14 @@
 
 #pragma once
 
-#include "SentenceExpressionValue.h"
+#include "SentenceExpression.h"
 #include <vector>
 
 namespace peak::interpreter {
 
 class Value;
 
-class SentenceExpressionValueArray : public SentenceExpressionValue {
+class SentenceExpressionValueArray : public SentenceExpression {
 public:
 	SentenceExpressionValueArray(const std::vector<std::shared_ptr<SentenceExpression>>& valueExpressionArray);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);

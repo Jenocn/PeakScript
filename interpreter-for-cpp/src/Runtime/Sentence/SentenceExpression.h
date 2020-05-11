@@ -15,7 +15,6 @@ enum class ExpressionType : char {
 	None,
 	Math,
 	SelfAssign,
-	Value,
 	Variable,
 	Function,
 	DoubleSymbol,
@@ -27,7 +26,8 @@ public:
 	SentenceExpression();
 	SentenceExpression(std::shared_ptr<Value> value);
 	std::shared_ptr<Value> GetValue() const;
-	virtual ExpressionType GetExpressionType() const = 0;
+	virtual ExpressionType GetExpressionType() const { return ExpressionType::None; }
+	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 
 protected:
 	void SetValue(std::shared_ptr<Value> value);
