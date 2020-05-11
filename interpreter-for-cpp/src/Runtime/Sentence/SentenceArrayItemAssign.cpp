@@ -45,9 +45,9 @@ ExecuteResult SentenceArrayItemAssign::Execute(std::shared_ptr<Space> space) {
 		if (index >= arr.size()) {
 			return ExecuteResult::Failed;
 		}
-		retValue = arr[index];
+		retValue = arr[index]->GetValue();
 		if (i == expressionVecSize - 1) {
-			arr[index] = assignValue;
+			arr[index]->SetValue(assignValue);
 			break;
 		}
 	}

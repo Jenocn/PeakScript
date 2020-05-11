@@ -10,15 +10,15 @@ ExecuteResult SentenceExpressionValueArray::Execute(std::shared_ptr<Space> space
 	if (_expressionArray.empty()) {
 		return ExecuteResult::Successed;
 	}
-	auto& arr = std::static_pointer_cast<ValueArray>(GetValue())->GetArray();
-	arr.reserve(_expressionArray.size());
+	auto valueArray = std::static_pointer_cast<ValueArray>(GetValue());
+	valueArray->Reserve(_expressionArray.size());
 	for (auto i = 0u; i < _expressionArray.size(); ++i) {
 		auto expression = _expressionArray[i];
 		if (!IsSuccess(expression->Execute(space))) {
 			return ExecuteResult::Failed;
 		}
 		auto value = expression->GetValue();
-		arr.emplace_back(value);
+		valueArray->EmplaceBack(value);
 	}
 	return ExecuteResult::Successed;
 }

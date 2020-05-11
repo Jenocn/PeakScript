@@ -1,21 +1,25 @@
 #include "SentenceExpressionVariable.h"
 #include "../Variable.h"
+#include "Analysis/IExpressionVariableAnalysis.h"
 
 using namespace peak::interpreter;
 
-SentenceExpressionVariable::SentenceExpressionVariable(const std::string& name)
-	: _name(name) {
+SentenceExpressionVariable::SentenceExpressionVariable(std::shared_ptr<IExpressionVariableAnalysis> variableAnalysis)
+	: _analysis(variableAnalysis) {
 }
 
 ExecuteResult SentenceExpressionVariable::Execute(std::shared_ptr<Space> space) {
-	auto findVariable = space->FindVariable(_name);
-	if (!findVariable) {
+	if (!_analysis) {
 		return ExecuteResult::Failed;
 	}
-	SetValue(findVariable->GetValue());
+	_variable = _analysis->Execute(space);
+	if (!_variable) {
+		return ExecuteResult::Failed;
+	}
+	SetValue(_variable->GetValue());
 	return ExecuteResult::Successed;
 }
 
-const std::string& SentenceExpressionVariable::GetVariableName() const {
-	return _name;
+std::shared_ptr<Variable> SentenceExpressionVariable::GetVariable() const {
+	return _variable;
 }

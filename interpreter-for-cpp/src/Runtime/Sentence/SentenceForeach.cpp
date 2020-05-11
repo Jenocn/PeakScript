@@ -29,7 +29,7 @@ ExecuteResult SentenceForeach::Execute(std::shared_ptr<Space> space) {
 		return ExecuteResult::Failed;
 	}
 	for (auto item : arr) {
-		itemVariable->SetValue(item);
+		itemVariable->SetValue(item->GetValue());
 		auto contentSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, tempSpace));
 		auto ret = _sentence->Execute(contentSpace);
 		if (!IsSuccess(ret)) {

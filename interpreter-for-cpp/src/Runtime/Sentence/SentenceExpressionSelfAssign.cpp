@@ -14,7 +14,7 @@ ExecuteResult SentenceExpressionSelfAssign::Execute(std::shared_ptr<Space> space
 	}
 
 	auto temp = std::static_pointer_cast<SentenceExpressionVariable>(_left);
-	auto variable = space->FindVariable(temp->GetVariableName());
+	auto variable = temp->GetVariable();
 	if (!variable) {
 		return ExecuteResult::Failed;
 	}

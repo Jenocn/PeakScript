@@ -81,3 +81,12 @@ bool ValueTool::More(std::shared_ptr<Value> a, std::shared_ptr<Value> b) {
 	}
 	return false;
 }
+
+bool ValueTool::IsInteger(std::shared_ptr<Value> value) {
+	if (!IsNumber(value)) {
+		return false;
+	}
+	auto d = std::static_pointer_cast<ValueNumber>(value)->GetValue();
+	auto ll = static_cast<long long>(d);
+	return (static_cast<double>(ll) == d);
+}

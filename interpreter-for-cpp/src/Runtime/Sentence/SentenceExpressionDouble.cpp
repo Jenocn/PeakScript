@@ -20,7 +20,7 @@ ExecuteResult SentenceExpressionDouble::Execute(std::shared_ptr<Space> space) {
 	if (!IsSuccess(_variableExpresison->Execute(space))) {
 		return ExecuteResult::Failed;
 	}
-	auto variable = space->FindVariable(std::static_pointer_cast<SentenceExpressionVariable>(_variableExpresison)->GetVariableName());
+	auto variable = std::static_pointer_cast<SentenceExpressionVariable>(_variableExpresison)->GetVariable();
 	if (!variable) {
 		return ExecuteResult::Failed;
 	}

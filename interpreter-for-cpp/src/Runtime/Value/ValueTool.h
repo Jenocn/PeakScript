@@ -29,5 +29,7 @@ public:
 	static bool ToLogic(std::shared_ptr<Value> value);
 	static bool Equal(std::shared_ptr<Value> a, std::shared_ptr<Value> b);
 	static bool More(std::shared_ptr<Value> a, std::shared_ptr<Value> b);
+
+	static bool IsInteger(std::shared_ptr<Value> value);
 };
 } // namespace peak::interpreter

@@ -1,4 +1,5 @@
 #include "ParseTool.h"
+#include "../Runtime/Sentence/Analysis/ExpressionVariableAnalysisInstance.h"
 #include "../Runtime/Sentence/SentenceArrayItemAssign.h"
 #include "../Runtime/Sentence/SentenceBlock.h"
 #include "../Runtime/Sentence/SentenceCondition.h"
@@ -824,7 +825,8 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string
 std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	std::string name;
 	if (Grammar::MatchName(src, size, pos, nextPos, &name)) {
-		return std::shared_ptr<SentenceExpression>(new SentenceExpressionVariable(name));
+		auto analysis = std::shared_ptr<IExpressionVariableAnalysis>(new ExpressionVariableAnalysisName(name));
+		return std::shared_ptr<SentenceExpression>(new SentenceExpressionVariable(analysis));
 	}
 	return nullptr;
 }

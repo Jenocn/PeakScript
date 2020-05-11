@@ -40,7 +40,7 @@ ExecuteResult SentenceExpressionValueArrayItem::Execute(std::shared_ptr<Space> s
 		if (index >= arr.size()) {
 			return ExecuteResult::Failed;
 		}
-		retValue = arr[index];
+		retValue = arr[index]->GetValue();
 	}
 
 	SetValue(retValue);
