@@ -189,7 +189,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpression(const std::strin
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto func : _sentenceValueParseList) {
-		auto value = func(src, size, pos, &pos);
+		auto value = func(src, size, pos, nextPos);
 		if (value) {
 			return value;
 		}
@@ -937,7 +937,6 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 			if (value) {
 				expressionStack.emplace(value);
 				bRet = true;
-				break;
 			}
 		}
 
