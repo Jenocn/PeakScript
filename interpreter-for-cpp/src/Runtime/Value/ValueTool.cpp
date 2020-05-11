@@ -1,6 +1,16 @@
 #include "ValueTool.h"
+#include <unordered_map>
 
 using namespace peak::interpreter;
+
+static const std::unordered_map<int, std::string> TypeStringMap = {
+	{ValueNull::Type(), "null"},
+	{ValueBool::Type(), "bool"},
+	{ValueArray::Type(), "array"},
+	{ValueString::Type(), "string"},
+	{ValueNumber::Type(), "number"},
+	{ValueFunction::Type(), "function"},
+};
 
 bool ValueTool::IsNull(std::shared_ptr<Value> value) {
 	return !value || (value->GetType() == ValueNull::Type());
@@ -26,6 +36,17 @@ std::string ValueTool::ToString(std::shared_ptr<Value> value) {
 		return ValueNull::DEFAULT_VALUE->ToString();
 	}
 	return value->ToString();
+}
+
+std::string ValueTool::ToTypeString(std::shared_ptr<Value> value) {
+	if (!value) {
+		return ToTypeString(ValueNull::DEFAULT_VALUE);
+	}
+	auto ite = TypeStringMap.find(value->GetType());
+	if (ite != TypeStringMap.end()) {
+		return ite->second;
+	}
+	return "";
 }
 
 bool ValueTool::ToLogic(std::shared_ptr<Value> value) {

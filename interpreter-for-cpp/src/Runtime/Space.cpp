@@ -1,6 +1,7 @@
 #include "Space.h"
 #include "Value/Value.h"
 #include "Variable.h"
+#include "System.h"
 
 using namespace peak::interpreter;
 
@@ -40,7 +41,7 @@ std::shared_ptr<Variable> Space::FindVariable(const std::string& name) const {
 			return find;
 		}
 	}
-	return nullptr;
+	return System::FindVariable(name);
 }
 
 SpaceType Space::GetSpaceType() const {
