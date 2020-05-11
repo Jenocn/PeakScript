@@ -10,6 +10,9 @@
 namespace peak::interpreter {
 class ValueBool : public TypeValue<ValueBool> {
 public:
+	static const std::shared_ptr<ValueBool> TRUE;
+	static const std::shared_ptr<ValueBool> FALSE;
+
 	ValueBool(bool value);
 	bool GetValue() const;
 	virtual std::string ToString() const;
