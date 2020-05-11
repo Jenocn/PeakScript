@@ -34,14 +34,10 @@ ExecuteResult SentenceArrayItemAssign::Execute(std::shared_ptr<Space> space) {
 			return ExecuteResult::Failed;
 		}
 		auto indexValue = expression->GetValue();
-		if (!ValueTool::IsNumber(indexValue)) {
+		if (!ValueTool::IsInteger(indexValue)) {
 			return ExecuteResult::Failed;
 		}
-		auto indexDouble = std::static_pointer_cast<ValueNumber>(indexValue)->GetValue();
-		auto index = static_cast<std::size_t>(indexDouble);
-		if (static_cast<double>(index) != indexDouble) {
-			return ExecuteResult::Failed;
-		}
+		auto index = static_cast<std::size_t>(std::static_pointer_cast<ValueNumber>(indexValue)->GetValue());
 		if (index >= arr.size()) {
 			return ExecuteResult::Failed;
 		}

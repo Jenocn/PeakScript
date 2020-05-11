@@ -12,7 +12,6 @@
 #include "ValueNull.h"
 #include "ValueNumber.h"
 #include "ValueString.h"
-#include <memory>
 
 namespace peak::interpreter {
 class Value;

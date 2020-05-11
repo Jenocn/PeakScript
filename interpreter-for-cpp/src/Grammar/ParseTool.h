@@ -6,8 +6,6 @@
 #pragma once
 
 #include "Grammar.h"
-#include <functional>
-#include <list>
 
 namespace peak::interpreter {
 
@@ -41,7 +39,7 @@ private:
 	static std::shared_ptr<SentenceExpression> _ParseExpressionMathBracket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool bBracket);
 	static std::shared_ptr<SentenceExpression> _ParseExpressionValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
-private:
+private: // Sentence
 	static std::shared_ptr<Sentence> _ParseReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseFunctionDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseVariableDefineOrAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
@@ -59,7 +57,7 @@ private:
 	static std::shared_ptr<Sentence> _ParseTryCatchFinally(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseLoopControl(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
-private:
+private: // Expression Value
 	static std::shared_ptr<SentenceExpression> _ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

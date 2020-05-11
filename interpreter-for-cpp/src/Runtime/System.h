@@ -5,10 +5,7 @@
 
 #pragma once
 
-#include <functional>
-#include <memory>
-#include <string>
-#include <unordered_map>
+#include "../Base/CommonInclude.h"
 
 namespace peak::interpreter {
 

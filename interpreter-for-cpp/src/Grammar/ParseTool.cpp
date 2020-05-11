@@ -26,8 +26,6 @@
 #include "../Runtime/Value/ValueCalculateInstance.h"
 #include "../Runtime/Value/ValueTool.h"
 #include "../Runtime/Variable.h"
-#include <stack>
-#include <vector>
 
 using namespace peak::interpreter;
 

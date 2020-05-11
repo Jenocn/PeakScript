@@ -2,7 +2,6 @@
 #include "Space.h"
 #include "Value/ValueTool.h"
 #include "Variable.h"
-#include <iostream>
 
 using namespace peak::interpreter;
 

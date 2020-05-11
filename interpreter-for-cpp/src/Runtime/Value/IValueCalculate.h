@@ -5,11 +5,9 @@
 
 #pragma once
 
-#include <memory>
+#include "Value.h"
 
 namespace peak::interpreter {
-
-class Value;
 
 class IValueCalculate {
 public:

@@ -2,7 +2,6 @@
 #include "../Space.h"
 #include "../Variable.h"
 #include "ValueTool.h"
-#include <vector>
 
 using namespace peak::interpreter;
 

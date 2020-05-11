@@ -5,10 +5,7 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
-#include <unordered_map>
-#include <list>
+#include "../Base/CommonInclude.h"
 
 namespace peak::interpreter {
 
@@ -39,7 +36,7 @@ public:
 private:
 	SpaceType _spaceType{SpaceType::None};
 	std::shared_ptr<Space> _parent{nullptr};
-	
+
 	std::list<std::shared_ptr<Space>> _spaceOfUsing;
 
 	std::unordered_map<std::string, std::shared_ptr<Variable>> _variables;

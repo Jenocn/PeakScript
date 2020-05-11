@@ -5,11 +5,7 @@
 
 #pragma once
 
-#include <algorithm>
-#include <functional>
-#include <memory>
-#include <string>
-#include <vector>
+#include "../../Base/CommonInclude.h"
 
 namespace peak::interpreter {
 class Value {

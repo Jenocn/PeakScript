@@ -5,8 +5,7 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
+#include "../Base/CommonInclude.h"
 
 namespace peak::interpreter {
 

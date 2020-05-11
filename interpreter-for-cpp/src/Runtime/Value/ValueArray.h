@@ -6,7 +6,6 @@
 #pragma once
 
 #include "Value.h"
-#include <vector>
 
 namespace peak::interpreter {
 

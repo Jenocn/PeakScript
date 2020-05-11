@@ -5,9 +5,7 @@
 
 #pragma once
 
-#include <fstream>
-#include <iostream>
-#include <string>
+#include "Base/CommonInclude.h"
 
 namespace peak {
 

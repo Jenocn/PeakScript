@@ -6,8 +6,6 @@
 #pragma once
 
 #include "SentenceReturn.h"
-#include <list>
-#include <memory>
 
 namespace peak::interpreter {
 	

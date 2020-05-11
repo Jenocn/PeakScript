@@ -6,7 +6,6 @@
 #pragma once
 
 #include "SentenceExpression.h"
-#include <vector>
 
 namespace peak::interpreter {
 

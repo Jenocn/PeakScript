@@ -1,7 +1,5 @@
 #include "Grammar.h"
-#include <map>
-#include <set>
-#include <unordered_map>
+
 using namespace peak::interpreter;
 
 // text
@@ -162,6 +160,22 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 		return true;
 	}
 	if (MatchReturn(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchClass(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchClassExtends(value, size, 0, &pos)) {
+		return true;
+	}
+	ScopeSign scopeSign;
+	if (MatchClassMemberScope(value, size, 0, &pos, &scopeSign)) {
+		return true;
+	}
+	if (MatchClassNew(value, size, 0, &pos)) {
+		return true;
+	}
+	if (MatchClassStruct(value, size, 0, &pos)) {
 		return true;
 	}
 

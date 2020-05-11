@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <string>
+#include "../Base/CommonInclude.h"
 
 namespace peak::interpreter {
 
@@ -37,9 +37,9 @@ enum class DoubleSymbol : char {
 };
 
 enum class ScopeSign : char {
-	Public, // public
+	Public,	 // public
 	Private, // private
-	Static, // static
+	Static,	 // static
 };
 
 class Grammar {
