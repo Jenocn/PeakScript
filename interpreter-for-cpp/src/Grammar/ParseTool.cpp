@@ -776,9 +776,10 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArray(const std::string& sr
 	}
 	std::vector<std::shared_ptr<SentenceExpression>> temp;
 	while (true) {
+		Jump(src, size, pos, &pos);
 		auto expression = _ParseExpression(src, size, pos, &pos);
 		if (!expression) {
-			return nullptr;
+			break;
 		}
 		temp.emplace_back(expression);
 		Jump(src, size, pos, &pos);
