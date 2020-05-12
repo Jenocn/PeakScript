@@ -10,14 +10,12 @@
 namespace peak::interpreter {
 class SentenceExpressionValueArrayItem : public SentenceExpression {
 public:
-	SentenceExpressionValueArrayItem(const std::string& name, const std::vector<std::shared_ptr<SentenceExpression>>& indexExpression);
+	SentenceExpressionValueArrayItem(std::shared_ptr<SentenceExpression> expressionValue, const std::vector<std::shared_ptr<SentenceExpression>>& indexExpression);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 	virtual ExpressionType GetExpressionType() const { return ExpressionType::ArrayItem; }
 
-	const std::string& GetArrayName() const;
-
 private:
-	std::string _name;
+	std::shared_ptr<SentenceExpression> _sentenceExpression{nullptr};
 	std::vector<std::shared_ptr<SentenceExpression>> _indexExpressionVec;
 };
 } // namespace peak::interpreter

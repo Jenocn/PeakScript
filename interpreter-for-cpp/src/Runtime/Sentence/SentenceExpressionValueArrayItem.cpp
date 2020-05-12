@@ -4,19 +4,18 @@
 
 using namespace peak::interpreter;
 
-SentenceExpressionValueArrayItem::SentenceExpressionValueArrayItem(const std::string& name, const std::vector<std::shared_ptr<SentenceExpression>>& indexExpressionVec)
-	: _name(name), _indexExpressionVec(indexExpressionVec) {
+SentenceExpressionValueArrayItem::SentenceExpressionValueArrayItem(std::shared_ptr<SentenceExpression> sentenceExpression, const std::vector<std::shared_ptr<SentenceExpression>>& indexExpressionVec)
+	: _sentenceExpression(sentenceExpression), _indexExpressionVec(indexExpressionVec) {
 }
 
 ExecuteResult SentenceExpressionValueArrayItem::Execute(std::shared_ptr<Space> space) {
 	if (_indexExpressionVec.empty()) {
 		return ExecuteResult::Failed;
 	}
-	auto variable = space->FindVariable(_name);
-	if (!variable) {
+	if (!IsSuccess(_sentenceExpression->Execute(space))) {
 		return ExecuteResult::Failed;
 	}
-	auto retValue = variable->GetValue();
+	auto retValue = _sentenceExpression->GetValue();
 
 	auto expressionVecSize = _indexExpressionVec.size();
 	for (auto i = 0u; i < expressionVecSize; ++i) {
@@ -43,6 +42,3 @@ ExecuteResult SentenceExpressionValueArrayItem::Execute(std::shared_ptr<Space> s
 	return ExecuteResult::Successed;
 }
 
-const std::string& SentenceExpressionValueArrayItem::GetArrayName() const {
-	return _name;
-}

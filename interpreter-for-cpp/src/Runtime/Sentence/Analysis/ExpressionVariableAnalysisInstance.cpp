@@ -13,20 +13,24 @@ void ExpressionVariableAnalysisName::SetName(const std::string& name) {
 	_name = name;
 }
 
-ExpressionVariableAnalysisArrayItem::ExpressionVariableAnalysisArrayItem(std::shared_ptr<Value> valueArray, std::shared_ptr<SentenceExpression> indexExpression)
-: _valueArray(valueArray), _indexExpression(indexExpression) {
+ExpressionVariableAnalysisArrayItem::ExpressionVariableAnalysisArrayItem(std::shared_ptr<SentenceExpression> valueExpression, std::shared_ptr<SentenceExpression> indexExpression)
+	: _valueExpression(valueExpression), _indexExpression(indexExpression) {
 }
 std::shared_ptr<Variable> ExpressionVariableAnalysisArrayItem::Execute(std::shared_ptr<Space> space) {
+	if (!Sentence::IsSuccess(_valueExpression->Execute(space))) {
+		return nullptr;
+	}
 	if (!Sentence::IsSuccess(_indexExpression->Execute(space))) {
 		return nullptr;
 	}
+	auto valueArray = _valueExpression->GetValue();
 	auto indexValue = _indexExpression->GetValue();
-	if (ValueTool::IsArray(_valueArray)) {
+	if (ValueTool::IsArray(valueArray)) {
 		if (!ValueTool::IsInteger(indexValue)) {
 			return nullptr;
 		}
 		auto index = static_cast<std::size_t>(std::static_pointer_cast<ValueNumber>(indexValue)->GetValue());
-		auto& arr = std::static_pointer_cast<ValueArray>(_valueArray)->GetArray();
+		auto& arr = std::static_pointer_cast<ValueArray>(valueArray)->GetArray();
 		if (index < arr.size()) {
 			return arr[index];
 		}

@@ -52,10 +52,16 @@ std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, 
 	_ParseNumber,
 	_ParseBool,
 	_ParseNull,
-	_ParseArray,
 	_ParseArrayItem,
+	_ParseArray,
 	_ParseFunctioCall,
 	_ParseDoubleExpression,
+	_ParseVariable,
+};
+
+std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::__sentenceArrayItemParseList = {
+	_ParseArray,
+	_ParseFunctioCall,
 	_ParseVariable,
 };
 
@@ -187,6 +193,16 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpression(const std::strin
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto func : _sentenceValueParseList) {
+		auto value = func(src, size, pos, nextPos);
+		if (value) {
+			return value;
+		}
+	}
+	return nullptr;
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::__ParseExpressionValueForArrayValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (auto func : __sentenceArrayItemParseList) {
 		auto value = func(src, size, pos, nextPos);
 		if (value) {
 			return value;
@@ -794,10 +810,12 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArray(const std::string& sr
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	std::string name;
-	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+
+	auto valueExpression = __ParseExpressionValueForArrayValue(src, size, pos, &pos);
+	if (!valueExpression) {
 		return nullptr;
 	}
+	Jump(src, size, pos, &pos);
 	std::vector<std::shared_ptr<SentenceExpression>> indexExpressionVec;
 	while (true) {
 		Jump(src, size, pos, &pos);
@@ -819,7 +837,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string
 		return nullptr;
 	}
 	*nextPos = pos;
-	return std::shared_ptr<SentenceExpression>(new SentenceExpressionValueArrayItem(name, indexExpressionVec));
+	return std::shared_ptr<SentenceExpression>(new SentenceExpressionValueArrayItem(valueExpression, indexExpressionVec));
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

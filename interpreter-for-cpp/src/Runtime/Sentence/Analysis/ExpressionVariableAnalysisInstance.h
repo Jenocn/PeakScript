@@ -13,11 +13,11 @@ private:
 
 class ExpressionVariableAnalysisArrayItem : public IExpressionVariableAnalysis {
 public:
-	ExpressionVariableAnalysisArrayItem(std::shared_ptr<Value> valueArray, std::shared_ptr<SentenceExpression> indexExpression);
+	ExpressionVariableAnalysisArrayItem(std::shared_ptr<SentenceExpression> valueExpression, std::shared_ptr<SentenceExpression> indexExpression);
 	virtual std::shared_ptr<Variable> Execute(std::shared_ptr<Space> space);
 
 private:
-	std::shared_ptr<Value> _valueArray{nullptr};
+	std::shared_ptr<SentenceExpression> _valueExpression{nullptr};
 	std::shared_ptr<SentenceExpression> _indexExpression{nullptr};
 };
 } // namespace peak::interpreter
