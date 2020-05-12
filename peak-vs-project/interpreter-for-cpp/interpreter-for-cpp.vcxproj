@@ -18,6 +18,93 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Grammar\Grammar.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Grammar\ParseTool.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Analysis\ExpressionVariableAnalysisInstance.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceBlock.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceCondition.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceDoWhile.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEcho.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionMath.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionSelfAssign.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValueArray.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionVariable.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFor.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceForeach.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFunctionDefine.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoop.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoopControl.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceReturn.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceTryCatchFinally.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableAssign.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableDefine.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableSet.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceWhile.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Space.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\System.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\Value.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueArray.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueBool.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueCalculateInstance.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueFunction.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNull.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNumber.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueString.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueTool.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Variable.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\VirtualJourney.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\VirtualMachine.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Base\CommonInclude.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Grammar\Grammar.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Grammar\ParseTool.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Analysis\ExpressionVariableAnalysisInstance.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Analysis\IExpressionVariableAnalysis.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Sentence.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceBlock.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceCondition.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceDoWhile.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEcho.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionMath.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionSelfAssign.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValueArray.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionVariable.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFor.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceForeach.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFunctionDefine.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoop.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoopControl.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceReturn.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceTryCatchFinally.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableAssign.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableDefine.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableSet.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceWhile.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Space.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\System.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\IValueCalculate.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\Value.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueArray.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueBool.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueCalculateInstance.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueFunction.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNull.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNumber.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueString.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueTool.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Variable.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\VirtualJourney.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\VirtualMachine.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\VirtualTool.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{C9FFA0B5-99DD-49E0-BF56-B43604CCF321}</ProjectGuid>
@@ -145,95 +232,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Grammar\Grammar.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Grammar\ParseTool.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceArrayItemAssign.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceBlock.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceCondition.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceDoWhile.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEcho.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionMath.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionSelfAssign.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValue.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValueArray.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValueArrayItem.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionVariable.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFor.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceForeach.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFunctionDefine.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoop.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoopControl.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceReturn.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceTryCatchFinally.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableAssign.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableDefine.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableSet.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceWhile.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Space.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\System.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\Value.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueArray.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueBool.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueCalculateInstance.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueFunction.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNull.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNumber.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueString.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueTool.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Variable.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\VirtualJourney.cpp" />
-    <ClCompile Include="..\..\interpreter-for-cpp\src\VirtualMachine.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Grammar\Grammar.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Grammar\ParseTool.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Sentence.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceArrayItemAssign.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceBlock.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceCondition.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceDoWhile.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEcho.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionMath.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionSelfAssign.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValue.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValueArray.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValueArrayItem.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionVariable.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFor.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceForeach.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFunctionDefine.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoop.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoopControl.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceReturn.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceTryCatchFinally.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableAssign.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableDefine.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableSet.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceWhile.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Space.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\System.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\IValueCalculate.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\Value.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueArray.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueBool.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueCalculateInstance.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueFunction.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNull.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNumber.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueString.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueTool.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Variable.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\VirtualJourney.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\VirtualMachine.h" />
-    <ClInclude Include="..\..\interpreter-for-cpp\src\VirtualTool.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
