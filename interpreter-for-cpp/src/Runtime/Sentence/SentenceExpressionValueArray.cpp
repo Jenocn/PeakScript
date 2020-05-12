@@ -4,13 +4,14 @@
 using namespace peak::interpreter;
 
 SentenceExpressionValueArray::SentenceExpressionValueArray(const std::vector<std::shared_ptr<SentenceExpression>>& valueExpressionArray)
-	: SentenceExpression(std::shared_ptr<Value>(new ValueArray())), _expressionArray(valueExpressionArray) {
+	: _expressionArray(valueExpressionArray) {
 }
 ExecuteResult SentenceExpressionValueArray::Execute(std::shared_ptr<Space> space) {
 	if (_expressionArray.empty()) {
 		return ExecuteResult::Successed;
 	}
-	auto valueArray = std::static_pointer_cast<ValueArray>(GetValue());
+
+	auto valueArray = std::shared_ptr<ValueArray>(new ValueArray());
 	valueArray->Reserve(_expressionArray.size());
 	for (auto i = 0u; i < _expressionArray.size(); ++i) {
 		auto expression = _expressionArray[i];
@@ -20,5 +21,6 @@ ExecuteResult SentenceExpressionValueArray::Execute(std::shared_ptr<Space> space
 		auto value = expression->GetValue();
 		valueArray->EmplaceBack(value);
 	}
+	SetValue(valueArray);
 	return ExecuteResult::Successed;
 }
