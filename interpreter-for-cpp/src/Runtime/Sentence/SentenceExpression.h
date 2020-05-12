@@ -18,7 +18,6 @@ enum class ExpressionType : char {
 	Variable,
 	Function,
 	DoubleSymbol,
-	ArrayItem,
 };
 
 class SentenceExpression : public Sentence {

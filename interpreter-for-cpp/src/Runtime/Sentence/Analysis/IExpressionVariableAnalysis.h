@@ -8,6 +8,9 @@
 #include "../SentenceExpression.h"
 
 namespace peak::interpreter {
+
+class Variable;
+
 class IExpressionVariableAnalysis {
 public:
 	virtual std::shared_ptr<Variable> Execute(std::shared_ptr<Space> space) = 0;

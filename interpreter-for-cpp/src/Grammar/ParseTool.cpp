@@ -10,7 +10,6 @@
 #include "../Runtime/Sentence/SentenceExpressionMath.h"
 #include "../Runtime/Sentence/SentenceExpressionSelfAssign.h"
 #include "../Runtime/Sentence/SentenceExpressionValueArray.h"
-#include "../Runtime/Sentence/SentenceExpressionValueArrayItem.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
 #include "../Runtime/Sentence/SentenceFor.h"
 #include "../Runtime/Sentence/SentenceForeach.h"
@@ -29,7 +28,7 @@
 
 using namespace peak::interpreter;
 
-std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceParseList = {
+ParseTool::SentenceParseList ParseTool::_sentenceParseList = {
 	_ParseArrayItemAssign,
 	_ParseVariableDefineOrAssign,
 	_ParseVariableSet,
@@ -47,7 +46,7 @@ std::list<std::function<std::shared_ptr<Sentence>(const std::string&, std::size_
 	_ParseTryCatchFinally,
 	_ParseExpressionToEnd,
 };
-std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::_sentenceValueParseList = {
+ParseTool::ExpressionParseList ParseTool::_sentenceValueParseList = {
 	_ParseString,
 	_ParseNumber,
 	_ParseBool,
@@ -56,13 +55,18 @@ std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, 
 	_ParseArray,
 	_ParseFunctioCall,
 	_ParseDoubleExpression,
-	_ParseVariable,
+	_ParseVariableName,
 };
 
-std::list<std::function<std::shared_ptr<SentenceExpression>(const std::string&, std::size_t, std::size_t, std::size_t*)>> ParseTool::__sentenceArrayItemParseList = {
+ParseTool::ExpressionParseList ParseTool::_sentenceVariableParseList = {
+	_ParseArrayItem,
+	_ParseVariableName,
+};
+
+ParseTool::ExpressionParseList ParseTool::__sentenceArrayItemParseList = {
 	_ParseArray,
 	_ParseFunctioCall,
-	_ParseVariable,
+	_ParseVariableName,
 };
 
 std::shared_ptr<ParseData> ParseTool::Load(const std::string& src) {
@@ -193,6 +197,16 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpression(const std::strin
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto func : _sentenceValueParseList) {
+		auto value = func(src, size, pos, nextPos);
+		if (value) {
+			return value;
+		}
+	}
+	return nullptr;
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (auto func : _sentenceVariableParseList) {
 		auto value = func(src, size, pos, nextPos);
 		if (value) {
 			return value;
@@ -837,10 +851,12 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string
 		return nullptr;
 	}
 	*nextPos = pos;
-	return std::shared_ptr<SentenceExpression>(new SentenceExpressionValueArrayItem(valueExpression, indexExpressionVec));
+
+	auto analysis = std::shared_ptr<IExpressionVariableAnalysis>(new ExpressionVariableAnalysisArrayItem(valueExpression, indexExpressionVec));
+	return std::shared_ptr<SentenceExpression>(new SentenceExpressionVariable(analysis));
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> ParseTool::_ParseVariableName(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	std::string name;
 	if (Grammar::MatchName(src, size, pos, nextPos, &name)) {
 		auto analysis = std::shared_ptr<IExpressionVariableAnalysis>(new ExpressionVariableAnalysisName(name));
