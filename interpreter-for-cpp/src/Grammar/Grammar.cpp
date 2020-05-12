@@ -101,86 +101,90 @@ bool Grammar::IsGrammarEndSign(char ch) {
 bool Grammar::IsSpecialSign(const std::string& value) {
 	std::size_t pos = 0;
 	std::size_t size = value.size();
-	if (MatchVariableDefine(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchAssign(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchNull(value, size, 0, &pos)) {
-		return true;
-	}
-	bool bBoolValue = false;
-	if (MatchBool(value, size, 0, &pos, &bBoolValue)) {
-		return true;
-	}
-	if (MatchEcho(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchFor(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchForeach(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchWhile(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchLoop(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchBlockBegin(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchBlockEnd(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchTry(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchCatch(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchFinally(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchBreak(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchContinue(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchDo(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchConditionIf(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchConditionElse(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchReturn(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchClass(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchClassExtends(value, size, 0, &pos)) {
-		return true;
-	}
-	ScopeSign scopeSign;
-	if (MatchClassMemberScope(value, size, 0, &pos, &scopeSign)) {
-		return true;
-	}
-	if (MatchClassNew(value, size, 0, &pos)) {
-		return true;
-	}
-	if (MatchClassStruct(value, size, 0, &pos)) {
-		return true;
-	}
+	do {
+		if (MatchVariableDefine(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchNull(value, size, 0, &pos)) {
+			break;
+		}
+		bool bBoolValue = false;
+		if (MatchBool(value, size, 0, &pos, &bBoolValue)) {
+			break;
+		}
+		if (MatchEcho(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchForeach(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchFor(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchWhile(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchLoop(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchBlockBegin(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchBlockEnd(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchTry(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchCatch(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchFinally(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchBreak(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchContinue(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchDo(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchConditionIf(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchConditionElse(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchReturn(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchClass(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchClassExtends(value, size, 0, &pos)) {
+			break;
+		}
+		ScopeSign scopeSign;
+		if (MatchClassMemberScope(value, size, 0, &pos, &scopeSign)) {
+			break;
+		}
+		if (MatchClassNew(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchClassStruct(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchAssign(value, size, 0, &pos)) {
+			break;
+		}
+		// temp todo...
 
-	// temp todo...
-	return false;
+		return false;
+	} while (false);
+
+	return pos >= size || IsTextSpecialChar(value[pos]);
 }
 int Grammar::GetMathSymbolLevel(MathSymbol value) {
 	auto ite = MAP_SET_MATH_SYMBOL.find(value);
