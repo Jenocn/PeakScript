@@ -28,6 +28,7 @@
 using namespace peak::interpreter;
 
 ParseTool::SentenceParseList ParseTool::_sentenceParseList = {
+	_ParseVariableAssign,
 	_ParseVariableDefine,
 	_ParseVariableSet,
 	_ParseFunctionDefine,
@@ -42,7 +43,6 @@ ParseTool::SentenceParseList ParseTool::_sentenceParseList = {
 	_ParseLoopControl,
 	_ParseReturn,
 	_ParseTryCatchFinally,
-	_ParseVariableAssign,
 	_ParseExpressionToEnd,
 };
 ParseTool::ExpressionParseList ParseTool::_sentenceValueParseList = {
@@ -334,7 +334,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableAssign(const std::string& src
 	if (!variableExpression) {
 		return nullptr;
 	}
-	
+
 	Jump(src, size, pos, &pos);
 	if (!Grammar::MatchAssign(src, size, pos, &pos)) {
 		return nullptr;
