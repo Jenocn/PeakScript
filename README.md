@@ -1,5 +1,14 @@
 # PeakScript  
-  
+ 
+
+## 最新版本
+
+版本|链接
+-|-
+1.2.1|[peak1.2.1.zip](https://jenocn.github.io/peak/peak1.2.1.zip)
+
+## 介绍  
+
 PeakScript是一个脚本语言,在第一次加载脚本时创建一组运行时的对象,之后的调用不会多次进行代码解析,从而运行效率非常好,和大多数脚本语言一样,使用动态类型,支持`number`,`bool`,`string`,`null`,`array`几种类型,支持代码块`{}`,支持常见的`if - else if - else`和`for`,`foreach`,`while`,`do - while`循环,此外还增加了一个`loop`指定次数的循环,支持`break`,`continue`,`return`控制语句,支持`function`函数,支持`try - catch - finally`, 支持常见的算术表达式和关系表达式,支持自增自减运算符  
   
 ---  
