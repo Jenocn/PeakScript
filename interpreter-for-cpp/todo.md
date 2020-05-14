@@ -6,7 +6,7 @@
 
 6. class, public, private
 5. enum
-8. find, is_define, is_number, is_bool, is_string, is_null, is_array, is_function
+<!-- 8. find, is_define, is_number, is_bool, is_string, is_null, is_array, is_function -->
 
 <!-- 1. try, catch, finally -->
 <!-- 2. break, continue -->
