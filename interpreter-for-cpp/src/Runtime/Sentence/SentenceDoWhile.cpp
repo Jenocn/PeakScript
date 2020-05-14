@@ -11,8 +11,9 @@ ExecuteResult SentenceDoWhile::Execute(std::shared_ptr<Space> space) {
 	if (!_sentence || !_expression) {
 		return ExecuteResult::Failed;
 	}
+	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
 	while (true) {
-		auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
+		tempSpace->Clear();
 		if (!IsSuccess(_sentence->Execute(tempSpace))) {
 			return ExecuteResult::Failed;
 		}

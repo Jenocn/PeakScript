@@ -19,6 +19,7 @@ ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
 		}
 	}
 
+	auto contentSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, tempSpace));
 	while (true) {
 		if (_expression0) {
 			if (!IsSuccess(_expression0->Execute(tempSpace))) {
@@ -29,7 +30,7 @@ ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
 			}
 		}
 		if (_content) {
-			auto contentSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, tempSpace));
+			contentSpace->Clear();
 			auto ret = _content->Execute(contentSpace);
 			if (!IsSuccess(ret)) {
 				return ExecuteResult::Failed;

@@ -26,6 +26,7 @@ ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
 	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
 	if (_indexParam.empty()) {
 		for (int i = 0; i < count; ++i) {
+			tempSpace->Clear();
 			auto ret = _sentence->Execute(tempSpace);
 			if (!IsSuccess(ret)) {
 				return ExecuteResult::Failed;
@@ -35,6 +36,7 @@ ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
 			}
 		}
 	} else {
+		tempSpace->Clear();
 		auto indexVariable = std::shared_ptr<Variable>(new Variable(_indexParam, VariableAttribute::None));
 		if (!tempSpace->AddVariable(indexVariable)) {
 			return ExecuteResult::Failed;

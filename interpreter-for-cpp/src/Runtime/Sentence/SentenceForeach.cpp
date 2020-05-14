@@ -28,9 +28,10 @@ ExecuteResult SentenceForeach::Execute(std::shared_ptr<Space> space) {
 	if (!tempSpace->AddVariable(itemVariable)) {
 		return ExecuteResult::Failed;
 	}
+	auto contentSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, tempSpace));
 	for (auto item : arr) {
 		itemVariable->SetValue(item->GetValue());
-		auto contentSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, tempSpace));
+		contentSpace->Clear();
 		auto ret = _sentence->Execute(contentSpace);
 		if (!IsSuccess(ret)) {
 			return ExecuteResult::Failed;
