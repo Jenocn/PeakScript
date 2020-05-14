@@ -12,6 +12,7 @@ ExecuteResult SentenceWhile::Execute(std::shared_ptr<Space> space) {
 		return ExecuteResult::Failed;
 	}
 	if (_sentence) {
+		auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
 		while (true) {
 			if (!IsSuccess(_expression->Execute(space))) {
 				return ExecuteResult::Failed;
@@ -19,7 +20,7 @@ ExecuteResult SentenceWhile::Execute(std::shared_ptr<Space> space) {
 			if (!ValueTool::ToLogic(_expression->GetValue())) {
 				break;
 			}
-			auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
+			tempSpace->Clear();
 			auto ret = _sentence->Execute(tempSpace);
 			if (!IsSuccess(ret)) {
 				return ExecuteResult::Failed;
