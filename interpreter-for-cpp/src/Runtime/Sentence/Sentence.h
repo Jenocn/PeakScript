@@ -7,7 +7,8 @@
 
 #include "../Space.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class Value;
 
@@ -32,4 +33,5 @@ private:
 	Sentence(const Sentence&);
 	Sentence& operator=(const Sentence&);
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

@@ -7,7 +7,8 @@
 
 #include "../Base/CommonInclude.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 enum class MathSymbol : char {
 	None,
@@ -110,4 +111,5 @@ public:
 
 public:
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

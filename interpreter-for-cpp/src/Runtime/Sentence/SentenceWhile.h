@@ -7,7 +7,8 @@
 
 #include "SentenceReturn.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 class SentenceExpression;
 class SentenceWhile : public SentenceReturn {
 public:
@@ -18,4 +19,5 @@ private:
 	std::shared_ptr<SentenceExpression> _expression{nullptr};
 	std::shared_ptr<Sentence> _sentence{nullptr};
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

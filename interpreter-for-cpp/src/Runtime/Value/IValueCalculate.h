@@ -7,7 +7,8 @@
 
 #include "Value.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class IValueCalculate {
 public:
@@ -23,4 +24,5 @@ public:
 		return &_instance;
 	}
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

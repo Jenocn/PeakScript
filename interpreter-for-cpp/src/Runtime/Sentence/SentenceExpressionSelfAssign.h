@@ -7,7 +7,8 @@
 
 #include "SentenceExpressionMath.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class IValueCalculate;
 
@@ -17,4 +18,5 @@ public:
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 	virtual ExpressionType GetExpressionType() const { return ExpressionType::SelfAssign; }
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

@@ -7,7 +7,8 @@
 
 #include "Value.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 class ValueNumber : public TypeValue<ValueNumber> {
 public:
 	ValueNumber(double value);
@@ -17,4 +18,5 @@ public:
 private:
 	double _value{0};
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

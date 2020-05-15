@@ -7,7 +7,8 @@
 
 #include "../Base/CommonInclude.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class Variable;
 
@@ -29,4 +30,5 @@ private:
 	static std::function<void(const std::string&)> _funcEcho;
 	static BuiltIn _buildIn;
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

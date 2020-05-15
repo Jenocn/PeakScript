@@ -7,7 +7,8 @@
 
 #include "Value.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class Variable;
 class Space;
@@ -23,4 +24,5 @@ private:
 	std::vector<std::string> _params;
 	std::function<std::shared_ptr<Value>(const std::vector<std::shared_ptr<Value>>&, std::shared_ptr<Space>)> _func{nullptr};
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

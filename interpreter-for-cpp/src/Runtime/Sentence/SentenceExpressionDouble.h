@@ -7,7 +7,8 @@
 
 #include "SentenceExpression.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class SentenceExpressionVariable;
 class IValueCalculate;
@@ -24,4 +25,5 @@ private:
 	IValueCalculate* _calculate{nullptr};
 	bool _bLast{false};
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

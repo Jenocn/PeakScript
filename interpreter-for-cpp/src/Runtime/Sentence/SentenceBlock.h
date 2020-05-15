@@ -7,7 +7,8 @@
 
 #include "SentenceReturn.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 	
 class SentenceBlock : public SentenceReturn {
 public:
@@ -17,4 +18,5 @@ public:
 private:
 	std::list<std::shared_ptr<Sentence>> _list;
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

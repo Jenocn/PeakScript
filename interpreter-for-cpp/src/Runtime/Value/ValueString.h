@@ -7,7 +7,8 @@
 
 #include "Value.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 class ValueString : public TypeValue<ValueString> {
 public:
 	ValueString(const std::string& value);
@@ -17,4 +18,5 @@ public:
 private:
 	std::string _value;
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

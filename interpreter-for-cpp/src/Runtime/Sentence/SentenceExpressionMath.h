@@ -7,7 +7,8 @@
 
 #include "SentenceExpression.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class IValueCalculate;
 
@@ -22,4 +23,5 @@ protected:
 	std::shared_ptr<SentenceExpression> _right{nullptr};
 	IValueCalculate* _calculate{nullptr};
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

@@ -7,7 +7,8 @@
 
 #include "SentenceExpression.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class Value;
 
@@ -19,4 +20,5 @@ public:
 private:
 	std::vector<std::shared_ptr<SentenceExpression>> _expressionArray;
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

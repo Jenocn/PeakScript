@@ -39,11 +39,11 @@ static const std::map<MathSymbol, std::pair<int, std::set<std::string>>> MAP_SET
 	{MathSymbol::LogicAnd, {60, {"&&", "and"}}},
 	{MathSymbol::LogicOr, {60, {"||", "or"}}},
 };
-static const std::unordered_map<DoubleSymbol, std::string> MAP_DOUBLE_SYMBOL = {
+static const std::map<DoubleSymbol, std::string> MAP_DOUBLE_SYMBOL = {
 	{DoubleSymbol::AddAdd, "++"},
 	{DoubleSymbol::SubSub, "--"},
 };
-static const std::unordered_map<ScopeSign, std::string> MAP_SCOPE_SIGN = {
+static const std::map<ScopeSign, std::string> MAP_SCOPE_SIGN = {
 	{ScopeSign::Private, "private"},
 	{ScopeSign::Public, "public"},
 	{ScopeSign::Static, "static"},

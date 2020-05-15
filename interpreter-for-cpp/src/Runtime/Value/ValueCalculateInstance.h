@@ -7,7 +7,8 @@
 
 #include "IValueCalculate.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class Value;
 
@@ -65,4 +66,5 @@ class ValueCalculateLogicOr : public ValueCalculateSingleton<ValueCalculateLogic
 public:
 	virtual std::shared_ptr<Value> Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right) const;
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

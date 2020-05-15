@@ -1,6 +1,7 @@
 #include "IExpressionVariableAnalysis.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 class ExpressionVariableAnalysisName : public IExpressionVariableAnalysis {
 public:
 	ExpressionVariableAnalysisName(const std::string& name);
@@ -21,4 +22,5 @@ private:
 	std::vector<std::shared_ptr<SentenceExpression>> _indexExpressionVec{nullptr};
 };
 
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

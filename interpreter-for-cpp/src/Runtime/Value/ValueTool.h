@@ -13,7 +13,8 @@
 #include "ValueNumber.h"
 #include "ValueString.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 class Value;
 
 class ValueTool {
@@ -32,4 +33,5 @@ public:
 
 	static bool IsInteger(std::shared_ptr<Value> value);
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak
