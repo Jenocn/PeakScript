@@ -229,3 +229,13 @@ try {
 `type([1]); // 返回 array`  
 `type(print); // 返回 function`  
 
+#### is_xxx函数  
+判断一个变量是否为某个类型的值  
+例如:   
+`is_null(); // 返回是否为null`   
+`is_string(); // 返回是否为string`   
+`is_number(); // 返回是否为number`   
+`is_bool(); // 返回是否为bool`   
+`is_array(); // 返回是否为array`   
+`is_function(); // 返回是否为function`   
+
