@@ -7,7 +7,8 @@
 
 #include "Value.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 class ValueBool : public TypeValue<ValueBool> {
 public:
 	static const std::shared_ptr<ValueBool> TRUE;
@@ -20,4 +21,5 @@ public:
 private:
 	bool _value{false};
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

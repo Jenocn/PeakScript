@@ -7,7 +7,8 @@
 
 #include "../Base/CommonInclude.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class Value;
 
@@ -31,4 +32,5 @@ private:
 	VariableAttribute _attribute{VariableAttribute::None};
 	std::shared_ptr<Value> _value{nullptr};
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

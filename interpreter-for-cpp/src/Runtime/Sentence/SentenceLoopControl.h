@@ -7,7 +7,8 @@
 
 #include "Sentence.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 class SentenceLoopControlContinue : public Sentence {
 public:
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
@@ -16,4 +17,5 @@ class SentenceLoopControlBreak : public Sentence {
 public:
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

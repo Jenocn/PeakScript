@@ -7,7 +7,8 @@
 
 #include "Sentence.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 class SentenceExpression;
 class SentenceEcho : public Sentence {
 public:
@@ -16,4 +17,5 @@ public:
 private:
 	std::shared_ptr<SentenceExpression> _expression{nullptr};
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

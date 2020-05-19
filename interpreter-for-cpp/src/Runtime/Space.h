@@ -7,7 +7,8 @@
 
 #include "../Base/CommonInclude.h"
 
-namespace peak::interpreter {
+namespace peak {
+namespace interpreter {
 
 class Variable;
 
@@ -41,4 +42,5 @@ private:
 
 	std::unordered_map<std::string, std::shared_ptr<Variable>> _variables;
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

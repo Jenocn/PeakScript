@@ -7,7 +7,8 @@
 
 #include "../../Base/CommonInclude.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 class Value {
 public:
 	virtual ~Value() {}
@@ -43,4 +44,5 @@ private:
 template <typename T>
 TypeValueCount TypeValue<T>::_count;
 
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

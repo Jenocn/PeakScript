@@ -7,7 +7,8 @@
 
 #include "Grammar.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class Sentence;
 class SentenceExpression;
@@ -85,4 +86,5 @@ private:
 
 	static ExpressionParseList __sentenceArrayItemParseList;
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak

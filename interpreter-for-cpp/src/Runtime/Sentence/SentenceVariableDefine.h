@@ -8,7 +8,8 @@
 #include "../Variable.h"
 #include "Sentence.h"
 
-namespace peak::interpreter {
+namespace peak { 
+namespace interpreter {
 
 class SentenceExpression;
 
@@ -23,4 +24,5 @@ private:
 	std::shared_ptr<Variable> _variable{nullptr};
 	std::shared_ptr<SentenceExpression> _expression{nullptr};
 };
-} // namespace peak::interpreter
+} // namespace interpreter
+} // namespace peak
