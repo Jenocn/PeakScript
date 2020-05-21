@@ -72,7 +72,7 @@ ParseTool::ExpressionParseList ParseTool::__sentenceArrayItemParseList = {
 
 std::shared_ptr<ParseData> ParseTool::Load(const std::string& src) {
 	auto retData = std::shared_ptr<ParseData>(new ParseData());
-	retData->bSuccess = false;
+	retData->bSuccess = true;
 	std::size_t pos = 0;
 	auto size = src.size();
 	while (pos < size) {
@@ -80,13 +80,15 @@ std::shared_ptr<ParseData> ParseTool::Load(const std::string& src) {
 		if (pos >= size) {
 			break;
 		}
+		_ClearErrorMessage();
 		auto parseSentence = ParseSentence(src, size, pos, &pos);
 		if (!parseSentence) {
+			retData->bSuccess = false;
+			_ShowErrorMessage();
 			break;
 		}
 		retData->sentenceList.emplace_back(parseSentence);
 	}
-	retData->bSuccess = true;
 	return retData;
 }
 
@@ -231,6 +233,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseReturn(const std::string& src, std::s
 		return nullptr;
 	}
 	if (!Jump(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::SignSpace, src, size, pos);
 		return nullptr;
 	}
 
@@ -240,6 +243,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseReturn(const std::string& src, std::s
 	}
 
 	if (!JumpEnd(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 		return nullptr;
 	}
 
@@ -252,10 +256,12 @@ std::shared_ptr<Sentence> ParseTool::_ParseFunctionDefine(const std::string& src
 	}
 	std::string name;
 	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+		_SetErrorMessage(ErrorCode::Name, src, size, pos);
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
 	if (!Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::Bracket, src, size, pos);
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -270,6 +276,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseFunctionDefine(const std::string& src
 		Jump(src, size, pos, &pos);
 	}
 	if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::Bracket, src, size, pos);
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -284,10 +291,12 @@ std::shared_ptr<Sentence> ParseTool::_ParseFunctionDefine(const std::string& src
 std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	bool bConst = Grammar::MatchConst(src, size, pos, &pos);
 	if (bConst && !Jump(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::SignSpace, src, size, pos);
 		return nullptr;
 	}
 	if (Grammar::MatchVariableDefine(src, size, pos, &pos)) {
 		if (!Jump(src, size, pos, &pos)) {
+			_SetErrorMessage(ErrorCode::SignSpace, src, size, pos);
 			return nullptr;
 		}
 	} else {
@@ -298,6 +307,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src
 
 	std::string name;
 	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+		_SetErrorMessage(ErrorCode::Name, src, size, pos);
 		return nullptr;
 	}
 
@@ -309,12 +319,14 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src
 	if (!Grammar::MatchAssign(src, size, pos, &pos)) {
 		pos = beginPos;
 		if (bConst) {
+			_SetErrorMessage(ErrorCode::ConstAssign, src, size, pos);
 			return nullptr;
 		}
 		if (JumpEnd(src, size, pos, &pos)) {
 			*nextPos = pos;
 			return std::shared_ptr<Sentence>(new SentenceVariableDefine(name, attribute, nullptr));
 		}
+		_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 		return nullptr;
 	}
 
@@ -324,6 +336,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src
 		return nullptr;
 	}
 	if (!JumpEnd(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 		return nullptr;
 	}
 
@@ -347,6 +360,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableAssign(const std::string& src
 		return nullptr;
 	}
 	if (!JumpEnd(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 		return nullptr;
 	}
 	*nextPos = pos;
@@ -358,11 +372,13 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableSet(const std::string& src, s
 		return nullptr;
 	}
 	if (!Jump(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::SignSpace, src, size, pos);
 		return nullptr;
 	}
 
 	std::string name;
 	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+		_SetErrorMessage(ErrorCode::Name, src, size, pos);
 		return nullptr;
 	}
 
@@ -372,6 +388,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableSet(const std::string& src, s
 	if (!Grammar::MatchAssign(src, size, pos, &pos)) {
 		pos = beginPos;
 		if (!JumpEnd(src, size, pos, &pos)) {
+			_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 			return nullptr;
 		}
 		*nextPos = pos;
@@ -384,6 +401,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableSet(const std::string& src, s
 		return nullptr;
 	}
 	if (!JumpEnd(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 		return nullptr;
 	}
 
@@ -397,6 +415,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseExpressionToEnd(const std::string& sr
 		return nullptr;
 	}
 	if (!JumpEnd(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 		return nullptr;
 	}
 	*nextPos = pos;
@@ -419,6 +438,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+			_SetErrorMessage(ErrorCode::Bracket, src, size, pos);
 			return nullptr;
 		}
 	}
@@ -481,6 +501,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseLoop(const std::string& src, std::siz
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+			_SetErrorMessage(ErrorCode::Bracket, src, size, pos);
 			return nullptr;
 		}
 	}
@@ -509,6 +530,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size
 		sentence0 = _ParseExpression(src, size, pos, &pos);
 		Jump(src, size, pos, &pos);
 		if ((pos >= size) || !Grammar::IsGrammarEndSign(src[pos])) {
+			_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 			return nullptr;
 		}
 		++pos;
@@ -517,6 +539,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size
 	{
 		Jump(src, size, pos, &pos);
 		if ((pos >= size) || !Grammar::IsGrammarEndSign(src[pos])) {
+			_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 			return nullptr;
 		}
 		++pos;
@@ -525,12 +548,14 @@ std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+			_SetErrorMessage(ErrorCode::Bracket, src, size, pos);
 			return nullptr;
 		}
 	}
 	Jump(src, size, pos, &pos);
 	auto content = ParseSentence(src, size, pos, &pos);
 	if (!content && !JumpEnd(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 		return nullptr;
 	}
 
@@ -556,10 +581,12 @@ std::shared_ptr<Sentence> ParseTool::_ParseForeach(const std::string& src, std::
 	}
 	std::string name;
 	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+		_SetErrorMessage(ErrorCode::Name, src, size, pos);
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
 	if (!Grammar::MatchForeachIn(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::ForeachIn, src, size, pos);
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -571,6 +598,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseForeach(const std::string& src, std::
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+			_SetErrorMessage(ErrorCode::Bracket, src, size, pos);
 			return nullptr;
 		}
 	}
@@ -599,12 +627,14 @@ std::shared_ptr<Sentence> ParseTool::_ParseWhile(const std::string& src, std::si
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+			_SetErrorMessage(ErrorCode::Bracket, src, size, pos);
 			return nullptr;
 		}
 	}
 	Jump(src, size, pos, &pos);
 	auto sentence = ParseSentence(src, size, pos, &pos);
 	if (!sentence && !JumpEnd(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 		return nullptr;
 	}
 	*nextPos = pos;
@@ -639,10 +669,12 @@ std::shared_ptr<Sentence> ParseTool::_ParseDoWhile(const std::string& src, std::
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+			_SetErrorMessage(ErrorCode::Bracket, src, size, pos);
 			return nullptr;
 		}
 	}
 	if (!JumpEnd(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 		return nullptr;
 	}
 	*nextPos = pos;
@@ -657,6 +689,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseBlock(const std::string& src, std::si
 	auto sentenceBlock = std::shared_ptr<SentenceBlock>(new SentenceBlock());
 	while (true) {
 		if (pos >= size) {
+			_SetErrorMessage(ErrorCode::EndSign, src, size, size - 1);
 			return nullptr;
 		}
 		JumpEnd(src, size, pos, &pos);
@@ -680,6 +713,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseEcho(const std::string& src, std::siz
 		return nullptr;
 	}
 	if (!Jump(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::SignSpace, src, size, pos);
 		return nullptr;
 	}
 
@@ -689,6 +723,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseEcho(const std::string& src, std::siz
 	}
 
 	if (!JumpEnd(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 		return nullptr;
 	}
 
@@ -742,6 +777,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseLoopControl(const std::string& src, s
 		return nullptr;
 	} while (false);
 	if (!JumpEnd(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::EndSign, src, size, pos);
 		return nullptr;
 	}
 	*nextPos = pos;
@@ -758,6 +794,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseString(const std::string& s
 		*nextPos = pos;
 		return std::shared_ptr<SentenceExpression>(new SentenceExpression(std::shared_ptr<Value>(new ValueString(temp))));
 	}
+	_SetErrorMessage(ErrorCode::String, src, size, pos);
 	return nullptr;
 }
 
@@ -801,6 +838,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArray(const std::string& sr
 		}
 	}
 	if (!Grammar::MatchArrayEnd(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::Array, src, size, pos);
 		return nullptr;
 	}
 	*nextPos = pos;
@@ -827,6 +865,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string
 		}
 		Jump(src, size, pos, &pos);
 		if (!Grammar::MatchArrayEnd(src, size, pos, &pos)) {
+			_SetErrorMessage(ErrorCode::Array, src, size, pos);
 			return nullptr;
 		}
 		indexExpressionVec.emplace_back(indexExpression);
@@ -856,6 +895,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseFunctioCall(const std::stri
 	}
 	Jump(src, size, pos, &pos);
 	if (!Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::Bracket, src, size, pos);
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -873,6 +913,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseFunctioCall(const std::stri
 		Jump(src, size, pos, &pos);
 	}
 	if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+		_SetErrorMessage(ErrorCode::Bracket, src, size, pos);
 		return nullptr;
 	}
 	*nextPos = pos;
@@ -905,6 +946,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseNotExpression(const std::st
 	auto expression = _ParseExpressionValue(src, size, pos, &pos);
 	if (!expression) {
 		if (!Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
+			_SetErrorMessage(ErrorCode::Bracket, src, size, pos);
 			return nullptr;
 		}
 		expression = _ParseExpressionMathBracket(src, size, pos, &pos, true);
@@ -1073,4 +1115,29 @@ IValueCalculate* ParseTool::_GetCalculate(DoubleSymbol symbol) {
 		break;
 	}
 	return nullptr;
+}
+
+std::pair<ErrorCode, std::string> ParseTool::_errorMessage = {ErrorCode::None, ""};
+
+std::string ParseTool::_GetErrorLine(const std::string& src, std::size_t size, std::size_t pos) {
+	std::size_t lineNum = 1;
+	std::size_t save = 0;
+	for (std::size_t i = 0; i < pos; ++i) {
+		if (src[i] == '\n') {
+			++lineNum;
+			save = i + 1;
+		}
+	}
+	return "[" + std::to_string(lineNum) + "," + std::to_string(pos - save - 1) + "]: " + src.substr(save, pos - save);
+}
+void ParseTool::_SetErrorMessage(ErrorCode code, const std::string& src, std::size_t size, std::size_t pos) {
+	_errorMessage.first = code;
+	_errorMessage.second = std::move(_GetErrorLine(src, size, pos));
+}
+void ParseTool::_ClearErrorMessage() {
+	_errorMessage.first = ErrorCode::None;
+	_errorMessage.second = "";
+}
+void ParseTool::_ShowErrorMessage() {
+	ErrorLogger::Log(_errorMessage.first, _errorMessage.second);
 }
