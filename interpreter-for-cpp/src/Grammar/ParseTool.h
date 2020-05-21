@@ -89,11 +89,7 @@ private:
 	static ExpressionParseList __sentenceArrayItemParseList;
 
 private:
-	static std::string _GetErrorLine(const std::string& src, std::size_t size, std::size_t pos);
-	static void _SetErrorMessage(ErrorCode code, const std::string& src, std::size_t size, std::size_t pos);
-	static void _ClearErrorMessage();
-	static void _ShowErrorMessage();
-	static std::pair<ErrorCode, std::string> _errorMessage;
+	static void _ShowErrorMessage(const std::string& src, std::size_t size, std::size_t pos);
 };
 } // namespace interpreter
 } // namespace peak
