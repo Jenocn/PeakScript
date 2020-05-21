@@ -71,6 +71,7 @@ private: // Expression Value
 	static std::shared_ptr<SentenceExpression> _ParseVariableName(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseFunctioCall(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseDoubleExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static std::shared_ptr<SentenceExpression> _ParseNotExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 private:
 	static IValueCalculate* _GetCalculate(MathSymbol symbol);

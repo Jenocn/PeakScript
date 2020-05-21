@@ -7,6 +7,7 @@
 #include "../Runtime/Sentence/SentenceExpressionDouble.h"
 #include "../Runtime/Sentence/SentenceExpressionFunctionCall.h"
 #include "../Runtime/Sentence/SentenceExpressionMath.h"
+#include "../Runtime/Sentence/SentenceExpressionNot.h"
 #include "../Runtime/Sentence/SentenceExpressionSelfAssign.h"
 #include "../Runtime/Sentence/SentenceExpressionValueArray.h"
 #include "../Runtime/Sentence/SentenceExpressionVariable.h"
@@ -54,6 +55,7 @@ ParseTool::ExpressionParseList ParseTool::_sentenceValueParseList = {
 	_ParseArray,
 	_ParseFunctioCall,
 	_ParseDoubleExpression,
+	_ParseNotExpression,
 	_ParseVariableName,
 };
 
@@ -894,6 +896,24 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseDoubleExpression(const std:
 	}
 	*nextPos = pos;
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionDouble(variableSentence, calculate, bLast));
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::_ParseNotExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchNotSymbol(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	auto expression = _ParseExpressionValue(src, size, pos, &pos);
+	if (!expression) {
+		if (!Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
+			return nullptr;
+		}
+		expression = _ParseExpressionMathBracket(src, size, pos, &pos, true);
+		if (!expression) {
+			return nullptr;
+		}
+	}
+	*nextPos = pos;
+	return std::shared_ptr<SentenceExpression>(new SentenceExpressionNot(expression));
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMath(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

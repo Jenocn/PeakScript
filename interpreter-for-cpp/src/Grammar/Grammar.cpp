@@ -71,6 +71,7 @@ static const std::string STRING_CLASS_SIGN = "class";
 static const std::string STRING_STRUCT_SIGN = "struct";
 static const std::string STRING_NEW_SIGN = "new";
 
+static const char CHAR_NOT_SYMBOL = '!';
 static const char CHAR_LEFT_BRACKET = '(';
 static const char CHAR_RIGHT_BRACKET = ')';
 static const char CHAR_SPLIT_SYMBOL = ',';
@@ -261,6 +262,9 @@ bool Grammar::MatchDoubleSymbol(const std::string& src, std::size_t size, std::s
 		}
 	}
 	return false;
+}
+bool Grammar::MatchNotSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(CHAR_NOT_SYMBOL, src, size, pos, nextPos);
 }
 bool Grammar::MatchConst(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_CONST_SIGN, src, size, pos, nextPos);
