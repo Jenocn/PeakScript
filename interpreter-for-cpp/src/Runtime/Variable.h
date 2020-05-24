@@ -6,6 +6,7 @@
 #pragma once
 
 #include "../Base/CommonInclude.h"
+#include "../Base/ErrorLogger.h"
 
 namespace peak { 
 namespace interpreter {

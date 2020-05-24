@@ -8,7 +8,12 @@ ExpressionVariableAnalysisName::ExpressionVariableAnalysisName(const std::string
 	: _name(name) {
 }
 std::shared_ptr<Variable> ExpressionVariableAnalysisName::Execute(std::shared_ptr<Space> space) {
-	return space->FindVariable(_name);
+	auto ret = space->FindVariable(_name);
+	if (!ret) {
+		ErrorLogger::LogRuntimeError(_name);
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableNameAnalysis, "The variable \"" + _name + "\" not found!");
+	}
+	return ret;
 }
 void ExpressionVariableAnalysisName::SetName(const std::string& name) {
 	_name = name;
@@ -19,10 +24,8 @@ ExpressionVariableAnalysisArrayItem::ExpressionVariableAnalysisArrayItem(std::sh
 }
 
 std::shared_ptr<Variable> ExpressionVariableAnalysisArrayItem::Execute(std::shared_ptr<Space> space) {
-	if (_indexExpressionVec.empty()) {
-		return nullptr;
-	}
 	if (!Sentence::IsSuccess(_valueExpression->Execute(space))) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableArrayItemAnalysis, "The expression execute failed!");
 		return nullptr;
 	}
 	auto retValue = _valueExpression->GetValue();
@@ -31,23 +34,28 @@ std::shared_ptr<Variable> ExpressionVariableAnalysisArrayItem::Execute(std::shar
 	auto expressionVecSize = _indexExpressionVec.size();
 	for (auto i = 0u; i < expressionVecSize; ++i) {
 		if (!ValueTool::IsArray(retValue)) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableArrayItemAnalysis, "The result of expression isn't a array!");
 			return nullptr;
 		}
 		auto& arr = std::static_pointer_cast<ValueArray>(retValue)->GetArray();
 		auto expression = _indexExpressionVec[i];
 		if (!Sentence::IsSuccess(expression->Execute(space))) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableArrayItemAnalysis, "The expression execute failed!");
 			return nullptr;
 		}
 		auto indexValue = expression->GetValue();
 		if (!ValueTool::IsInteger(indexValue)) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableArrayItemAnalysis, "The index isn't a integer value!");
 			return nullptr;
 		}
 		auto index = static_cast<std::size_t>(std::static_pointer_cast<ValueNumber>(indexValue)->GetValue());
 		if (index >= arr.size()) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableArrayItemAnalysis, "The index out of range!");
 			return nullptr;
 		}
 		retVariable = arr[index];
 		if (!retVariable) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableArrayItemAnalysis, "The array value is invalid!");
 			return nullptr;
 		}
 		retValue = retVariable->GetValue();

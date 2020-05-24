@@ -9,10 +9,8 @@ SentenceCondition::SentenceCondition(std::shared_ptr<SentenceExpression> express
 }
 
 ExecuteResult SentenceCondition::Execute(std::shared_ptr<Space> space) {
-	if (!_expression) {
-		return ExecuteResult::Failed;
-	}
 	if (!IsSuccess(_expression->Execute(space))) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Condition, "The condition expression execute failed!");
 		return ExecuteResult::Failed;
 	}
 	bool bTrue = ValueTool::ToLogic(_expression->GetValue());
@@ -21,6 +19,7 @@ ExecuteResult SentenceCondition::Execute(std::shared_ptr<Space> space) {
 		auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Condition, space));
 		auto executeRet = tempSentence->Execute(tempSpace);
 		if (!IsSuccess(executeRet)) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Condition, bTrue ? "The 'true' code sentence execute failed!" : "The 'false' code sentence execute failed!");
 			return ExecuteResult::Failed;
 		}
 		if (executeRet == ExecuteResult::Return) {

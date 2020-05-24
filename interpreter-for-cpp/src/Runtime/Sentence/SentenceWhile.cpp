@@ -8,13 +8,11 @@ SentenceWhile::SentenceWhile(std::shared_ptr<SentenceExpression> expression, std
 	: _expression(expression), _sentence(sentence) {
 }
 ExecuteResult SentenceWhile::Execute(std::shared_ptr<Space> space) {
-	if (!_expression) {
-		return ExecuteResult::Failed;
-	}
 	if (_sentence) {
 		auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
 		while (true) {
 			if (!IsSuccess(_expression->Execute(space))) {
+				ErrorLogger::LogRuntimeError(ErrorRuntimeCode::While, "The condition expression execute failed!");
 				return ExecuteResult::Failed;
 			}
 			if (!ValueTool::ToLogic(_expression->GetValue())) {
@@ -23,6 +21,7 @@ ExecuteResult SentenceWhile::Execute(std::shared_ptr<Space> space) {
 			tempSpace->Clear();
 			auto ret = _sentence->Execute(tempSpace);
 			if (!IsSuccess(ret)) {
+				ErrorLogger::LogRuntimeError(ErrorRuntimeCode::While, "The sentence execute failed!");
 				return ExecuteResult::Failed;
 			}
 			if (ret == ExecuteResult::Break) {
@@ -36,6 +35,7 @@ ExecuteResult SentenceWhile::Execute(std::shared_ptr<Space> space) {
 	} else {
 		while (true) {
 			if (!IsSuccess(_expression->Execute(space))) {
+				ErrorLogger::LogRuntimeError(ErrorRuntimeCode::While, "The expression execute failed!");
 				return ExecuteResult::Failed;
 			}
 			if (!ValueTool::ToLogic(_expression->GetValue())) {

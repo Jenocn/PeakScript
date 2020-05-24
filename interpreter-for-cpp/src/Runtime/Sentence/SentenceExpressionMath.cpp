@@ -10,18 +10,18 @@ SentenceExpressionMath::SentenceExpressionMath(std::shared_ptr<SentenceExpressio
 }
 
 ExecuteResult SentenceExpressionMath::Execute(std::shared_ptr<Space> space) {
-	if (!_calculate) {
-		return ExecuteResult::Failed;
-	}
 	if (!_left || !IsSuccess(_left->Execute(space))) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Math, "The math expression execute failed!");
 		return ExecuteResult::Failed;
 	}
 	if (!_right || !IsSuccess(_right->Execute(space))) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Math, "The math expression execute failed!");
 		return ExecuteResult::Failed;
 	}
 
 	auto value = _calculate->Calculate(_left->GetValue(), _right->GetValue());
 	if (!value) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Math, "The math expression execute failed!");
 		return ExecuteResult::Failed;
 	}
 	SetValue(value);

@@ -20,6 +20,7 @@ void SentenceExpression::SetValue(std::shared_ptr<Value> value) {
 
 ExecuteResult SentenceExpression::Execute(std::shared_ptr<Space> space) {
 	if (!_value) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Expression, "The value is null!");
 		return ExecuteResult::Failed;
 	}
 	return ExecuteResult::Successed;

@@ -83,7 +83,7 @@ std::shared_ptr<ParseData> ParseTool::Load(const std::string& src) {
 		auto parseSentence = ParseSentence(src, size, pos, &pos);
 		if (!parseSentence) {
 			retData->bSuccess = false;
-			_ShowErrorMessage(src, size, pos);
+			ErrorLogger::LogParseError(src, size, pos);
 			break;
 		}
 		retData->sentenceList.emplace_back(parseSentence);
@@ -1074,21 +1074,4 @@ IValueCalculate* ParseTool::_GetCalculate(DoubleSymbol symbol) {
 		break;
 	}
 	return nullptr;
-}
-
-void ParseTool::_ShowErrorMessage(const std::string& src, std::size_t size, std::size_t pos) {
-	std::size_t lineNum = 0;
-	std::size_t save0 = 0;
-	std::size_t save1 = 0;
-	for (std::size_t i = 0; i < size; ++i) {
-		if (src[i] == '\n') {
-			++lineNum;
-			if (i >= pos) {
-				save1 = i;
-				break;
-			}
-			save0 = i + 1;
-		}
-	}
-	ErrorLogger::Log("[" + std::to_string(lineNum) + "," + std::to_string(save1 - save0) + "]: " + src.substr(save0, save1 - save0));
 }

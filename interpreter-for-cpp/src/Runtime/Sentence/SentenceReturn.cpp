@@ -10,7 +10,8 @@ SentenceReturn::SentenceReturn(std::shared_ptr<SentenceExpression> expression)
 	: _returnExpression(expression) {
 }
 ExecuteResult SentenceReturn::Execute(std::shared_ptr<Space> space) {
-	if (!_returnExpression || !IsSuccess(_returnExpression->Execute(space))) {
+	if (!IsSuccess(_returnExpression->Execute(space))) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Return, "The expression execute failed!");
 		return ExecuteResult::Failed;
 	}
 	SetReturnValue(_returnExpression->GetValue());

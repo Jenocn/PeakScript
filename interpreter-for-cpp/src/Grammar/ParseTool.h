@@ -87,9 +87,6 @@ private:
 	static ExpressionParseList _sentenceVariableParseList;
 
 	static ExpressionParseList __sentenceArrayItemParseList;
-
-private:
-	static void _ShowErrorMessage(const std::string& src, std::size_t size, std::size_t pos);
 };
 } // namespace interpreter
 } // namespace peak

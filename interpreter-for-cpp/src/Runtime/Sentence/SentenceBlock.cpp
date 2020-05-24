@@ -8,6 +8,7 @@ ExecuteResult SentenceBlock::Execute(std::shared_ptr<Space> space) {
 	for (auto sentence : _list) {
 		auto executeRet = sentence->Execute(tempSpace);
 		if (!IsSuccess(executeRet)) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Block, "The sentence execute failed!");
 			return ExecuteResult::Failed;
 		}
 		if (executeRet == ExecuteResult::Return) {

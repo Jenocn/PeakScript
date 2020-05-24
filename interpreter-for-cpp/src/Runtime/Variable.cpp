@@ -26,6 +26,8 @@ bool Variable::SetValue(std::shared_ptr<Value> value) {
 		_value = value;
 		return true;
 	case VariableAttribute::Const:
+		ErrorLogger::LogRuntimeError(_name);
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Variable, "Can't set value, The variable \"" + _name + "\" is 'const'!");
 		return false;
 	}
 	return true;

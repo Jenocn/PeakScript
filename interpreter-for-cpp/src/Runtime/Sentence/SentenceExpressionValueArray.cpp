@@ -13,6 +13,7 @@ ExecuteResult SentenceExpressionValueArray::Execute(std::shared_ptr<Space> space
 		for (auto i = 0u; i < _expressionArray.size(); ++i) {
 			auto expression = _expressionArray[i];
 			if (!IsSuccess(expression->Execute(space))) {
+				ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Array, "The array execute failed!");
 				return ExecuteResult::Failed;
 			}
 			auto value = expression->GetValue();

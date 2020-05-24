@@ -11,15 +11,21 @@ SentenceExpressionFunctionCall::SentenceExpressionFunctionCall(const std::string
 ExecuteResult SentenceExpressionFunctionCall::Execute(std::shared_ptr<Space> space) {
 	auto variable = space->FindVariable(_name);
 	if (!variable) {
+		ErrorLogger::LogRuntimeError(_name);
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionCall, "Can't found function \"" + _name + "\"!");
 		return ExecuteResult::Failed;
 	}
 	auto value = variable->GetValue();
 	if (!ValueTool::IsFunction(value)) {
+		ErrorLogger::LogRuntimeError(_name);
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionCall, "Can't found function \"" + _name + "\"!");
 		return ExecuteResult::Failed;
 	}
 	std::vector<std::shared_ptr<Value>> args;
 	for (auto expression : _args) {
 		if (!expression || !IsSuccess(expression->Execute(space))) {
+			ErrorLogger::LogRuntimeError(_name);
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionCall, "The parameters of function \"" + _name + "\" execute failed!");
 			return ExecuteResult::Failed;
 		}
 		auto arg = expression->GetValue();
@@ -27,6 +33,8 @@ ExecuteResult SentenceExpressionFunctionCall::Execute(std::shared_ptr<Space> spa
 	}
 	auto result = std::static_pointer_cast<ValueFunction>(value)->Call(args, space);
 	if (!result) {
+		ErrorLogger::LogRuntimeError(_name);
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionCall, "The function \"" + _name + "\" execute failed!");
 		return ExecuteResult::Failed;
 	}
 	SetValue(result);

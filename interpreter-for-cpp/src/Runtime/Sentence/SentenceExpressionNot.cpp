@@ -7,11 +7,8 @@ SentenceExpressionNot::SentenceExpressionNot(std::shared_ptr<SentenceExpression>
 	: _expression(expression) {
 }
 ExecuteResult SentenceExpressionNot::Execute(std::shared_ptr<Space> space) {
-	if (!_expression) {
-		return ExecuteResult::Failed;
-	}
-
 	if (!IsSuccess(_expression->Execute(space))) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::ExpressionNot, "The [not-expression] execute failed!");
 		return ExecuteResult::Failed;
 	}
 

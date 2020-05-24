@@ -15,6 +15,7 @@ ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
 	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
 	if (_sentence0) {
 		if (!IsSuccess(_sentence0->Execute(tempSpace))) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::For, "The 'sentence0' of 'for' execute failed!");
 			return ExecuteResult::Failed;
 		}
 	}
@@ -23,6 +24,7 @@ ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
 	while (true) {
 		if (_expression0) {
 			if (!IsSuccess(_expression0->Execute(tempSpace))) {
+				ErrorLogger::LogRuntimeError(ErrorRuntimeCode::For, "The condition0-expression of 'for' execute failed!");
 				return ExecuteResult::Failed;
 			}
 			if (!ValueTool::ToLogic(_expression0->GetValue())) {
@@ -33,6 +35,7 @@ ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
 			contentSpace->Clear();
 			auto ret = _content->Execute(contentSpace);
 			if (!IsSuccess(ret)) {
+				ErrorLogger::LogRuntimeError(ErrorRuntimeCode::For, "The sentence of 'for' execute failed!");
 				return ExecuteResult::Failed;
 			}
 			if (ret == ExecuteResult::Break) {
@@ -45,6 +48,7 @@ ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
 		}
 		if (_expression1) {
 			if (!IsSuccess(_expression1->Execute(tempSpace))) {
+				ErrorLogger::LogRuntimeError(ErrorRuntimeCode::For, "The condition1-expression of 'for' execute failed!");
 				return ExecuteResult::Failed;
 			}
 		}

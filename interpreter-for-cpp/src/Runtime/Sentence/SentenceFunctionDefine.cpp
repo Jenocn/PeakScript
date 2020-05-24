@@ -11,10 +11,9 @@ SentenceFunctionDefine::SentenceFunctionDefine(const std::string& name, const st
 	_variable = std::shared_ptr<Variable>(new Variable(name, VariableAttribute::None));
 }
 ExecuteResult SentenceFunctionDefine::Execute(std::shared_ptr<Space> space) {
-	if (!_content) {
-		return ExecuteResult::Failed;
-	}
 	if (!space->AddVariable(_variable)) {
+		ErrorLogger::LogRuntimeError(_variable->GetName());
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionDefine, "The \"" + _variable->GetName() + "\" is exist!");
 		return ExecuteResult::Failed;
 	}
 	auto func = std::shared_ptr<ValueFunction>(new ValueFunction(_params, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> space) -> std::shared_ptr<Value> {
@@ -27,8 +26,6 @@ ExecuteResult SentenceFunctionDefine::Execute(std::shared_ptr<Space> space) {
 		}
 		return std::shared_ptr<Value>(new ValueNull());
 	}));
-	if (!_variable->SetValue(func)) {
-		return ExecuteResult::Failed;
-	}
+	_variable->SetValue(func);
 	return ExecuteResult::Successed;
 }

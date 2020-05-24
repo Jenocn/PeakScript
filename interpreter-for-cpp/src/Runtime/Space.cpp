@@ -1,7 +1,7 @@
 #include "Space.h"
+#include "System.h"
 #include "Value/Value.h"
 #include "Variable.h"
-#include "System.h"
 
 using namespace peak::interpreter;
 
@@ -21,6 +21,8 @@ bool Space::AddVariable(std::shared_ptr<Variable> value) {
 		return false;
 	}
 	if (_variables.find(value->GetName()) != _variables.end()) {
+		ErrorLogger::LogRuntimeError(value->GetName());
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Space, "The variable \"" + value->GetName() + "\" is exist!");
 		return false;
 	}
 	_variables.emplace(value->GetName(), value);

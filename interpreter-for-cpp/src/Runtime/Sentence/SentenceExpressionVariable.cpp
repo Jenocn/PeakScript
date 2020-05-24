@@ -9,11 +9,9 @@ SentenceExpressionVariable::SentenceExpressionVariable(std::shared_ptr<IExpressi
 }
 
 ExecuteResult SentenceExpressionVariable::Execute(std::shared_ptr<Space> space) {
-	if (!_analysis) {
-		return ExecuteResult::Failed;
-	}
 	_variable = _analysis->Execute(space);
 	if (!_variable) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::ExpressionVariable, "The variable-expression execute failed!");
 		return ExecuteResult::Failed;
 	}
 	SetValue(_variable->GetValue());

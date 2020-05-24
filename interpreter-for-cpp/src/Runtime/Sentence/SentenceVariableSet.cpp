@@ -11,14 +11,19 @@ SentenceVariableSet::SentenceVariableSet(const std::string& name, std::shared_pt
 ExecuteResult SentenceVariableSet::Execute(std::shared_ptr<Space> space) {
 	auto variable = space->FindVariable(_name);
 	if (!variable) {
+		ErrorLogger::LogRuntimeError(_name);
 		variable = std::shared_ptr<Variable>(new Variable(_name, VariableAttribute::None));
 		space->AddVariable(variable);
 	}
 	if (_expression) {
 		if (!IsSuccess(_expression->Execute(space))) {
+			ErrorLogger::LogRuntimeError(_name);
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableSet, "The \"" + _name + "\" expression execute failed!");
 			return ExecuteResult::Failed;
 		}
 		if (!variable->SetValue(_expression->GetValue())) {
+			ErrorLogger::LogRuntimeError(_name);
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableSet, "The \"" + _name + "\" expression execute failed!");
 			return ExecuteResult::Failed;
 		}
 	}

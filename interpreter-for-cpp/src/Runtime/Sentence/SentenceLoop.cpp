@@ -9,17 +9,13 @@ SentenceLoop::SentenceLoop(const std::string& indexParam, std::shared_ptr<Senten
 	: _indexParam(indexParam), _condition(condition), _sentence(sentence) {
 }
 ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
-	if (!_condition) {
-		return ExecuteResult::Failed;
-	}
-	if (!_sentence) {
-		return ExecuteResult::Failed;
-	}
 	if (!IsSuccess(_condition->Execute(space))) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Loop, "The condition execute failed!");
 		return ExecuteResult::Failed;
 	}
 	auto value = _condition->GetValue();
 	if (!ValueTool::IsNumber(value)) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Loop, "The value of condition isn't a number!");
 		return ExecuteResult::Failed;
 	}
 	auto count = std::max(0, static_cast<int>(std::static_pointer_cast<ValueNumber>(value)->GetValue()));
@@ -29,6 +25,7 @@ ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
 			tempSpace->Clear();
 			auto ret = _sentence->Execute(tempSpace);
 			if (!IsSuccess(ret)) {
+				ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Loop, "The sentence execute failed!");
 				return ExecuteResult::Failed;
 			}
 			if (ret == ExecuteResult::Break) {
@@ -39,6 +36,8 @@ ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
 		tempSpace->Clear();
 		auto indexVariable = std::shared_ptr<Variable>(new Variable(_indexParam, VariableAttribute::None));
 		if (!tempSpace->AddVariable(indexVariable)) {
+			ErrorLogger::LogRuntimeError(_indexParam);
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Loop, "The variable \"" + _indexParam + "\" is exist!");
 			return ExecuteResult::Failed;
 		}
 		for (int i = 0; i < count; ++i) {
@@ -47,6 +46,7 @@ ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
 			}
 			auto ret = _sentence->Execute(tempSpace);
 			if (!IsSuccess(ret)) {
+				ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Loop, "The sentence execute failed!");
 				return ExecuteResult::Failed;
 			}
 			if (ret == ExecuteResult::Break) {
