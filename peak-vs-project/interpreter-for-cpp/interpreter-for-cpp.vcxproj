@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Base\ErrorLogger.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Grammar\Grammar.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Grammar\ParseTool.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Analysis\ExpressionVariableAnalysisInstance.cpp" />
@@ -30,6 +31,7 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionMath.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionNot.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionSelfAssign.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValueArray.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionVariable.cpp" />
@@ -61,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\interpreter-for-cpp\src\Base\CommonInclude.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Base\ErrorLogger.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Grammar\Grammar.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Grammar\ParseTool.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Analysis\ExpressionVariableAnalysisInstance.h" />
@@ -74,6 +77,7 @@
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionMath.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionNot.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionSelfAssign.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValueArray.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionVariable.h" />

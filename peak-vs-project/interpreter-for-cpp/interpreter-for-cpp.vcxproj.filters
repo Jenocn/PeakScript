@@ -123,6 +123,12 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Grammar\Grammar.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Base\ErrorLogger.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionNot.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\interpreter-for-cpp\src\VirtualMachine.h">
@@ -255,6 +261,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\interpreter-for-cpp\src\Base\CommonInclude.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Base\ErrorLogger.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionNot.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
