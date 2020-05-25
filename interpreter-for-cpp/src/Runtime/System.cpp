@@ -17,7 +17,7 @@ System::BuiltIn::BuiltIn() {
 			Echo(ret);
 			return ValueNull::DEFAULT_VALUE;
 		};
-		auto value_print = std::shared_ptr<ValueFunction>(new ValueFunction(func_print));
+		auto value_print = std::shared_ptr<ValueFunction>(new ValueFunction(1, func_print));
 		auto variable_print = std::shared_ptr<Variable>(new Variable("print", VariableAttribute::Const, value_print));
 		variables.emplace(variable_print->GetName(), variable_print);
 	}
@@ -29,7 +29,7 @@ System::BuiltIn::BuiltIn() {
 			}
 			return std::shared_ptr<Value>(new ValueString(ValueTool::ToTypeString(args[0])));
 		};
-		auto value_type = std::shared_ptr<ValueFunction>(new ValueFunction(func_type));
+		auto value_type = std::shared_ptr<ValueFunction>(new ValueFunction(1, func_type));
 		auto variable_type = std::shared_ptr<Variable>(new Variable("type", VariableAttribute::Const, value_type));
 		variables.emplace(variable_type->GetName(), variable_type);
 	}
@@ -45,7 +45,7 @@ System::BuiltIn::BuiltIn() {
 			}
 			return std::shared_ptr<Value>(new ValueBool(ret));
 		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(func));
+		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
 		auto variable = std::shared_ptr<Variable>(new Variable("is_null", VariableAttribute::Const, value));
 		variables.emplace(variable->GetName(), variable);
 	}
@@ -61,7 +61,7 @@ System::BuiltIn::BuiltIn() {
 			}
 			return std::shared_ptr<Value>(new ValueBool(ret));
 		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(func));
+		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
 		auto variable = std::shared_ptr<Variable>(new Variable("is_number", VariableAttribute::Const, value));
 		variables.emplace(variable->GetName(), variable);
 	}
@@ -77,7 +77,7 @@ System::BuiltIn::BuiltIn() {
 			}
 			return std::shared_ptr<Value>(new ValueBool(ret));
 		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(func));
+		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
 		auto variable = std::shared_ptr<Variable>(new Variable("is_bool", VariableAttribute::Const, value));
 		variables.emplace(variable->GetName(), variable);
 	}
@@ -93,7 +93,7 @@ System::BuiltIn::BuiltIn() {
 			}
 			return std::shared_ptr<Value>(new ValueBool(ret));
 		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(func));
+		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
 		auto variable = std::shared_ptr<Variable>(new Variable("is_string", VariableAttribute::Const, value));
 		variables.emplace(variable->GetName(), variable);
 	}
@@ -109,7 +109,7 @@ System::BuiltIn::BuiltIn() {
 			}
 			return std::shared_ptr<Value>(new ValueBool(ret));
 		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(func));
+		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
 		auto variable = std::shared_ptr<Variable>(new Variable("is_array", VariableAttribute::Const, value));
 		variables.emplace(variable->GetName(), variable);
 	}
@@ -125,7 +125,7 @@ System::BuiltIn::BuiltIn() {
 			}
 			return std::shared_ptr<Value>(new ValueBool(ret));
 		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(func));
+		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
 		auto variable = std::shared_ptr<Variable>(new Variable("is_function", VariableAttribute::Const, value));
 		variables.emplace(variable->GetName(), variable);
 	}

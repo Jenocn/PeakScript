@@ -29,6 +29,14 @@ bool Space::AddVariable(std::shared_ptr<Variable> value) {
 	return true;
 }
 
+std::shared_ptr<Variable> Space::FindVariableFromTop(const std::string& name) const {
+	auto ite = _variables.find(name);
+	if (ite != _variables.end()) {
+		return ite->second;
+	}
+	return nullptr;
+}
+
 std::shared_ptr<Variable> Space::FindVariable(const std::string& name) const {
 	auto ite = _variables.find(name);
 	if (ite != _variables.end()) {

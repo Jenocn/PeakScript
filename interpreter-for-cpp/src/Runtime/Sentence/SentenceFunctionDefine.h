@@ -7,7 +7,7 @@
 
 #include "Sentence.h"
 
-namespace peak { 
+namespace peak {
 namespace interpreter {
 
 class Variable;
@@ -18,9 +18,9 @@ public:
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 
 private:
+	std::string _name;
 	std::vector<std::string> _params;
 	std::shared_ptr<Sentence> _content{nullptr};
-	std::shared_ptr<Variable> _variable{nullptr};
 };
 } // namespace interpreter
 } // namespace peak

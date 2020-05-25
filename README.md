@@ -195,6 +195,13 @@ sum(a, b) {
 var ret = sum(1, 2); // 返回3  
 ```  
 
+支持函数重载:  
+```
+sum(a, b, c) {
+	return a + b + c;
+}
+```
+
 ## 异常处理      
 ```  
 try {  
@@ -217,10 +224,9 @@ try {
 `echo "Hello World"; // Hello World`  
 
 #### print函数  
-同`echo`但print作为一个函数存在,支持多个参数,多参数为无缝拼接  
+同`echo`但print作为一个函数存在 
 例如:  
-`print("Hello"); // Hello`  
-`print(1, 2, 3); // 123`  
+`print("Hello"); // Hello`   
 
 #### type函数  
 返回当前参数数值类型的字符串  

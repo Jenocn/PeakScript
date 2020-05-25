@@ -29,6 +29,7 @@ public:
 
 	bool AddVariable(std::shared_ptr<Variable> value);
 	std::shared_ptr<Variable> FindVariable(const std::string& name) const;
+	std::shared_ptr<Variable> FindVariableFromTop(const std::string& name) const;
 
 	SpaceType GetSpaceType() const;
 

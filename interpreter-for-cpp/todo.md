@@ -7,6 +7,7 @@
 6. class, public, private
 5. enum
 
+<!-- * 函数重载 -->
 <!-- * 左值 -->
 <!-- * 排除指定方法解析 -->
 <!-- 8. find, is_define, is_number, is_bool, is_string, is_null, is_array, is_function -->
