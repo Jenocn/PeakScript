@@ -7,7 +7,7 @@
 
 #include "../Base/CommonInclude.h"
 
-namespace peak { 
+namespace peak {
 namespace interpreter {
 
 class Variable;

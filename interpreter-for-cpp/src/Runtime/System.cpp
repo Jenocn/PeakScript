@@ -6,129 +6,107 @@
 using namespace peak::interpreter;
 
 System::BuiltIn::BuiltIn() {
+	auto _Emplace = [this](const std::string& name, std::size_t paramSize, ValueFunction::FunctionType func) {
+		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(paramSize, func));
+		auto variable = std::shared_ptr<Variable>(new Variable(name, VariableAttribute::Const, value));
+		variables.emplace(name, variable);
+	};
 
-	{
-		// print
-		auto func_print = [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
-			std::string ret = "";
-			for (auto arg : args) {
-				ret += ValueTool::ToString(arg);
-			}
-			Echo(ret);
-			return ValueNull::DEFAULT_VALUE;
-		};
-		auto value_print = std::shared_ptr<ValueFunction>(new ValueFunction(1, func_print));
-		auto variable_print = std::shared_ptr<Variable>(new Variable("print", VariableAttribute::Const, value_print));
-		variables.emplace(variable_print->GetName(), variable_print);
-	}
-	{
-		// type
-		auto func_type = [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
-			if (args.empty()) {
-				return nullptr;
-			}
-			return std::shared_ptr<Value>(new ValueString(ValueTool::ToTypeString(args[0])));
-		};
-		auto value_type = std::shared_ptr<ValueFunction>(new ValueFunction(1, func_type));
-		auto variable_type = std::shared_ptr<Variable>(new Variable("type", VariableAttribute::Const, value_type));
-		variables.emplace(variable_type->GetName(), variable_type);
-	}
-	{
-		// is_null
-		auto func = [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
-			if (args.empty()) {
-				return nullptr;
-			}
-			bool ret = true;
-			for (auto arg : args) {
-				ret &= ValueTool::IsNull(arg);
-			}
-			return std::shared_ptr<Value>(new ValueBool(ret));
-		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
-		auto variable = std::shared_ptr<Variable>(new Variable("is_null", VariableAttribute::Const, value));
-		variables.emplace(variable->GetName(), variable);
-	}
-	{
-		// is_number
-		auto func = [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
-			if (args.empty()) {
-				return nullptr;
-			}
-			bool ret = true;
-			for (auto arg : args) {
-				ret &= ValueTool::IsNumber(arg);
-			}
-			return std::shared_ptr<Value>(new ValueBool(ret));
-		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
-		auto variable = std::shared_ptr<Variable>(new Variable("is_number", VariableAttribute::Const, value));
-		variables.emplace(variable->GetName(), variable);
-	}
-	{
-		// is_bool
-		auto func = [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
-			if (args.empty()) {
-				return nullptr;
-			}
-			bool ret = true;
-			for (auto arg : args) {
-				ret &= ValueTool::IsBool(arg);
-			}
-			return std::shared_ptr<Value>(new ValueBool(ret));
-		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
-		auto variable = std::shared_ptr<Variable>(new Variable("is_bool", VariableAttribute::Const, value));
-		variables.emplace(variable->GetName(), variable);
-	}
-	{
-		// is_string
-		auto func = [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
-			if (args.empty()) {
-				return nullptr;
-			}
-			bool ret = true;
-			for (auto arg : args) {
-				ret &= ValueTool::IsString(arg);
-			}
-			return std::shared_ptr<Value>(new ValueBool(ret));
-		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
-		auto variable = std::shared_ptr<Variable>(new Variable("is_string", VariableAttribute::Const, value));
-		variables.emplace(variable->GetName(), variable);
-	}
-	{
-		// is_array
-		auto func = [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
-			if (args.empty()) {
-				return nullptr;
-			}
-			bool ret = true;
-			for (auto arg : args) {
-				ret &= ValueTool::IsArray(arg);
-			}
-			return std::shared_ptr<Value>(new ValueBool(ret));
-		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
-		auto variable = std::shared_ptr<Variable>(new Variable("is_array", VariableAttribute::Const, value));
-		variables.emplace(variable->GetName(), variable);
-	}
-	{
-		// is_function
-		auto func = [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
-			if (args.empty()) {
-				return nullptr;
-			}
-			bool ret = true;
-			for (auto arg : args) {
-				ret &= ValueTool::IsFunction(arg);
-			}
-			return std::shared_ptr<Value>(new ValueBool(ret));
-		};
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(1, func));
-		auto variable = std::shared_ptr<Variable>(new Variable("is_function", VariableAttribute::Const, value));
-		variables.emplace(variable->GetName(), variable);
-	}
+	// print
+	_Emplace("print", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		std::string ret = "";
+		for (auto arg : args) {
+			ret += ValueTool::ToString(arg);
+		}
+		Echo(ret);
+		return ValueNull::DEFAULT_VALUE;
+	});
+	// type
+	_Emplace("type", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		if (args.empty()) {
+			return nullptr;
+		}
+		return std::shared_ptr<Value>(new ValueString(ValueTool::ToTypeString(args[0])));
+	});
+	// is_null
+	_Emplace("is_null", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		if (args.empty()) {
+			return nullptr;
+		}
+		bool ret = true;
+		for (auto arg : args) {
+			ret &= ValueTool::IsNull(arg);
+		}
+		return std::shared_ptr<Value>(new ValueBool(ret));
+	});
+	// is_number
+	_Emplace("is_number", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		if (args.empty()) {
+			return nullptr;
+		}
+		bool ret = true;
+		for (auto arg : args) {
+			ret &= ValueTool::IsNumber(arg);
+		}
+		return std::shared_ptr<Value>(new ValueBool(ret));
+	});
+	// is_bool
+	_Emplace("is_bool", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		if (args.empty()) {
+			return nullptr;
+		}
+		bool ret = true;
+		for (auto arg : args) {
+			ret &= ValueTool::IsBool(arg);
+		}
+		return std::shared_ptr<Value>(new ValueBool(ret));
+	});
+	// is_string
+	_Emplace("is_string", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		if (args.empty()) {
+			return nullptr;
+		}
+		bool ret = true;
+		for (auto arg : args) {
+			ret &= ValueTool::IsString(arg);
+		}
+		return std::shared_ptr<Value>(new ValueBool(ret));
+	});
+	// is_array
+	_Emplace("is_array", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		if (args.empty()) {
+			return nullptr;
+		}
+		bool ret = true;
+		for (auto arg : args) {
+			ret &= ValueTool::IsArray(arg);
+		}
+		return std::shared_ptr<Value>(new ValueBool(ret));
+	});
+	// is_function
+	_Emplace("is_function", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		if (args.empty()) {
+			return nullptr;
+		}
+		bool ret = true;
+		for (auto arg : args) {
+			ret &= ValueTool::IsFunction(arg);
+		}
+		return std::shared_ptr<Value>(new ValueBool(ret));
+	});
+	// len
+	_Emplace("len", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		if (args.empty()) {
+			return nullptr;
+		}
+		auto value = args[0];
+		if (ValueTool::IsArray(value)) {
+			return std::shared_ptr<Value>(new ValueNumber(std::static_pointer_cast<ValueArray>(value)->GetArray().size()));
+		} else if (ValueTool::IsString(value)) {
+			return std::shared_ptr<Value>(new ValueNumber(std::static_pointer_cast<ValueString>(value)->GetValue().length()));
+		}
+		return ValueNull::DEFAULT_VALUE;
+	});
 }
 
 System::BuiltIn System::_buildIn;
