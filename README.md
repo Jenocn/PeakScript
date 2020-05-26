@@ -228,6 +228,12 @@ try {
 例如:  
 `print("Hello"); // Hello`   
 
+#### len函数  
+返回一个数组或者字符串的长度  
+例如:  
+`len("abc"); // 返回3`  
+`len([1, 2, 3]); // 返回3`  
+
 #### type函数  
 返回当前参数数值类型的字符串  
 例如:
@@ -247,4 +253,3 @@ try {
 `is_bool(); // 返回是否为bool`   
 `is_array(); // 返回是否为array`   
 `is_function(); // 返回是否为function`   
-
