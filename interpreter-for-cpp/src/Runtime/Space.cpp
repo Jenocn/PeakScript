@@ -42,14 +42,14 @@ std::shared_ptr<Variable> Space::FindVariable(const std::string& name) const {
 	if (ite != _variables.end()) {
 		return ite->second;
 	}
-	if (_parent) {
-		return _parent->FindVariable(name);
-	}
 	for (auto space : _spaceOfUsing) {
 		auto find = space->FindVariable(name);
 		if (find) {
 			return find;
 		}
+	}
+	if (_parent) {
+		return _parent->FindVariable(name);
 	}
 	return System::FindVariable(name);
 }
