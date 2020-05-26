@@ -12,7 +12,7 @@ namespace peak {
 class VirtualTool {
 public:
 	static std::string OpenFile(const std::string& filename) {
-		std::ifstream in(filename.c_str(), std::ios::in | std::ios::ate);
+		std::ifstream in(filename, std::ios::in | std::ios::ate);
 		if (!in.is_open()) {
 			return "";
 		}
@@ -20,11 +20,8 @@ public:
 		std::size_t size = (std::size_t)in.tellg();
 		if (size > 0) {
 			in.seekg(std::ios::beg);
-			char* buffer = new char[size];
-			memset(buffer, 0, size);
-			in.read(buffer, size);
-			result = buffer;
-			delete[] buffer;
+			result.resize(size);
+			in.read(const_cast<char*>(result.data()), size);
 		}
 		in.close();
 		return result;
