@@ -3,9 +3,7 @@
 * 数组/对象 调用 (表达式Value可继续调用)
 * C#版本
 * using
-
 5. enum
-6. class, public, private
 
 <!-- * 错误提示 -->
 <!-- * 函数重载 -->
