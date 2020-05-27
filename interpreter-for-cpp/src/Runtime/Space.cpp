@@ -13,20 +13,14 @@ Space::Space(SpaceType spaceType, std::shared_ptr<Space> parent)
 }
 
 std::shared_ptr<Space> Space::CopySpace() const {
-	std::shared_ptr<Space> parent{nullptr};
-	if (_parent) {
-		parent = _parent->CopySpace();
-	}
-	auto space = std::shared_ptr<Space>(new Space(_spaceType, parent));
+	auto space = std::shared_ptr<Space>(new Space(_spaceType, _parent));
 	space->_spaceOfUsing = _spaceOfUsing;
 
 	for (auto& pair : _variables) {
 		auto tempVariable = pair.second;
 		auto tempVlaue = tempVariable->GetValue();
-		auto variable = std::shared_ptr<Variable>(new Variable(pair.first, tempVariable->GetAttribute()));
-		if (tempVlaue) {
-			variable->SetValue(tempVlaue->Clone());
-		}
+		auto variable = std::shared_ptr<Variable>(
+			new Variable(pair.first, tempVariable->GetAttribute(), tempVlaue ? tempVlaue->Clone() : nullptr));
 		space->_variables.emplace(pair.first, variable);
 	}
 	return space;
