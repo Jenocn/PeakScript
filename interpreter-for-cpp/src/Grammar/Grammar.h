@@ -60,8 +60,8 @@ public:
 	static int GetMathSymbolLevel(MathSymbol value);
 
 public:
-	static bool MatchClassInsideSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static bool MatchClassNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchInsideSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchClassExtends(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchClassBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchClassEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

@@ -16,3 +16,7 @@ bool ValueBool::GetValue() const {
 std::string ValueBool::ToString() const {
 	return _value ? "true" : "false";
 }
+
+std::shared_ptr<Value> ValueBool::Clone() const {
+	return std::shared_ptr<Value>(new ValueBool(_value));
+}

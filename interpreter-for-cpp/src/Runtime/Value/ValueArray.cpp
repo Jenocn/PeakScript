@@ -20,6 +20,17 @@ std::string ValueArray::ToString() const {
 	ret += "]";
 	return ret;
 }
+std::shared_ptr<Value> ValueArray::Clone() const {
+	auto valueArray = new ValueArray();
+	for (auto item : _value) {
+		auto variable = std::shared_ptr<Variable>(new Variable(item->GetName(), item->GetAttribute()));
+		if (item->GetValue()) {
+			variable->SetValue(item->GetValue()->Clone());
+		}
+		valueArray->EmplaceBack(variable);
+	}
+	return std::shared_ptr<Value>(valueArray);
+}
 
 std::vector<std::shared_ptr<Variable>>& ValueArray::GetArray() {
 	return _value;

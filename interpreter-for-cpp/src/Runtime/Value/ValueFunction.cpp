@@ -12,6 +12,9 @@ ValueFunction::ValueFunction(const std::vector<std::string>& params, FunctionTyp
 	AddFunction(params, func);
 }
 
+ValueFunction::ValueFunction() {
+}
+
 bool ValueFunction::AddFunction(std::size_t paramSize, FunctionType func) {
 	auto ite = _functionMap.find(paramSize);
 	if (ite == _functionMap.end()) {
@@ -57,4 +60,9 @@ std::shared_ptr<Value> ValueFunction::Call(const std::vector<std::shared_ptr<Val
 
 std::string ValueFunction::ToString() const {
 	return "function";
+}
+std::shared_ptr<Value> ValueFunction::Clone() const {
+	auto valueFunc = new ValueFunction();
+	valueFunc->_functionMap = _functionMap;
+	return std::shared_ptr<Value>(valueFunc);
 }

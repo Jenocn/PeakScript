@@ -33,6 +33,7 @@ std::map<ErrorRuntimeCode, std::string> ErrorLogger::_errorCodeNameMap = {
 	{ErrorRuntimeCode::While, "While, \"while\""},
 	{ErrorRuntimeCode::VariableNameAnalysis, "VariableNameAnalysis, \"variable-name\""},
 	{ErrorRuntimeCode::VariableArrayItemAnalysis, "VariableArrayItemAnalysis, \"array [ ]\""},
+	{ErrorRuntimeCode::New, "New, \"new\""},
 };
 
 void ErrorLogger::Locate(std::function<void(const std::string&)> logger) {

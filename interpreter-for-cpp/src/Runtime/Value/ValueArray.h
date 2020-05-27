@@ -17,6 +17,7 @@ public:
 	ValueArray();
 	ValueArray(const std::vector<std::shared_ptr<Variable>>& value);
 	virtual std::string ToString() const;
+	virtual std::shared_ptr<Value> Clone() const;
 
 	std::vector<std::shared_ptr<Variable>>& GetArray();
 

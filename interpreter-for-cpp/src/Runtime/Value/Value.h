@@ -13,6 +13,7 @@ class Value {
 public:
 	virtual ~Value() {}
 	virtual int GetType() const = 0;
+	virtual std::shared_ptr<Value> Clone() const = 0;
 	virtual std::string ToString() const { return ""; }
 };
 

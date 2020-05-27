@@ -17,6 +17,7 @@ public:
 	ValueBool(bool value);
 	bool GetValue() const;
 	virtual std::string ToString() const;
+	virtual std::shared_ptr<Value> Clone() const;
 
 private:
 	bool _value{false};

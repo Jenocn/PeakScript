@@ -25,6 +25,8 @@ public:
 	Space(SpaceType spaceType);
 	Space(SpaceType spaceType, std::shared_ptr<Space> parent);
 
+public:
+	std::shared_ptr<Space> CopySpace() const;
 	void Clear();
 
 	bool AddVariable(std::shared_ptr<Variable> value);

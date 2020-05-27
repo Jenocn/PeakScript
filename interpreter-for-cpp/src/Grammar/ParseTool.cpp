@@ -7,6 +7,7 @@
 #include "../Runtime/Sentence/SentenceExpressionDouble.h"
 #include "../Runtime/Sentence/SentenceExpressionFunctionCall.h"
 #include "../Runtime/Sentence/SentenceExpressionMath.h"
+#include "../Runtime/Sentence/SentenceExpressionNew.h"
 #include "../Runtime/Sentence/SentenceExpressionNot.h"
 #include "../Runtime/Sentence/SentenceExpressionSelfAssign.h"
 #include "../Runtime/Sentence/SentenceExpressionValueArray.h"
@@ -53,6 +54,7 @@ ParseTool::ExpressionParseList ParseTool::_sentenceValueParseList = {
 	_ParseNull,
 	_ParseArrayItem,
 	_ParseArray,
+	_ParseNew,
 	_ParseFunctioCall,
 	_ParseDoubleExpression,
 	_ParseNotExpression,
@@ -915,6 +917,28 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseNotExpression(const std::st
 	}
 	*nextPos = pos;
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionNot(expression));
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::_ParseNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchNew(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	if (!Jump(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	std::string name;
+	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	if (Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+			return nullptr;
+		}
+	}
+	*nextPos = pos;
+	return std::shared_ptr<SentenceExpression>(new SentenceExpressionNew(name));
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMath(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

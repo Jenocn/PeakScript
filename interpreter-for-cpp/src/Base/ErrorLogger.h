@@ -38,6 +38,7 @@ enum class ErrorRuntimeCode {
 	While,
 	VariableNameAnalysis,
 	VariableArrayItemAnalysis,
+	New,
 };
 
 class ErrorLogger {

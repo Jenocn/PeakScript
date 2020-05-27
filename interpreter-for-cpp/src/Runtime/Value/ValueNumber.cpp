@@ -15,3 +15,7 @@ std::string ValueNumber::ToString() const {
 	// sprintf(ch, "%0.15lg", _value);
 	return ch;
 }
+
+std::shared_ptr<Value> ValueNumber::Clone() const {
+	return std::shared_ptr<Value>(new ValueNumber(_value));
+}

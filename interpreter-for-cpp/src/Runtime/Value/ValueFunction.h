@@ -22,9 +22,13 @@ public:
 	ValueFunction(const std::vector<std::string>& params, FunctionType func);
 	std::shared_ptr<Value> Call(const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> space);
 	virtual std::string ToString() const;
+	virtual std::shared_ptr<Value> Clone() const;
 
 	bool AddFunction(std::size_t paramSize, FunctionType func);
 	bool AddFunction(const std::vector<std::string>& params, FunctionType func);
+
+private:
+	ValueFunction();
 
 private:
 	std::map<std::size_t, std::pair<std::vector<std::string>, FunctionType>> _functionMap;

@@ -14,6 +14,7 @@ public:
 	ValueNumber(double value);
 	double GetValue() const;
 	virtual std::string ToString() const;
+	virtual std::shared_ptr<Value> Clone() const;
 
 private:
 	double _value{0};

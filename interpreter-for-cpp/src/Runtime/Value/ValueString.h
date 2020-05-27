@@ -14,6 +14,7 @@ public:
 	ValueString(const std::string& value);
 	const std::string& GetValue() const;
 	virtual std::string ToString() const;
+	virtual std::shared_ptr<Value> Clone() const;
 
 private:
 	std::string _value;
