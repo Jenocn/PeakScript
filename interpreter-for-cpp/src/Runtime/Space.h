@@ -18,6 +18,7 @@ enum class SpaceType {
 	Condition,
 	Loop,
 	Function,
+	Object,
 };
 
 class Space {

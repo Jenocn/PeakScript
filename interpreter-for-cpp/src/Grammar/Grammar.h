@@ -37,12 +37,6 @@ enum class DoubleSymbol : char {
 	SubSub, // --
 };
 
-enum class ScopeSign : char {
-	Public,	 // public
-	Private, // private
-	Static,	 // static
-};
-
 class Grammar {
 public:
 	static bool IsTextSpace(char ch);
@@ -60,14 +54,11 @@ public:
 	static int GetMathSymbolLevel(MathSymbol value);
 
 public:
+	static bool MatchObject(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchInsideSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static bool MatchClassExtends(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static bool MatchClassBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static bool MatchClassEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static bool MatchClassStruct(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static bool MatchClass(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static bool MatchClassMemberScope(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, ScopeSign* sign);
+	static bool MatchObjectBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchObjectEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchArrayBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchArrayEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchDoubleSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, DoubleSymbol* symbol);

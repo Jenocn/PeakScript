@@ -43,11 +43,6 @@ static const std::map<DoubleSymbol, std::string> MAP_DOUBLE_SYMBOL = {
 	{DoubleSymbol::AddAdd, "++"},
 	{DoubleSymbol::SubSub, "--"},
 };
-static const std::map<ScopeSign, std::string> MAP_SCOPE_SIGN = {
-	{ScopeSign::Private, "private"},
-	{ScopeSign::Public, "public"},
-	{ScopeSign::Static, "static"},
-};
 static const std::string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
 static const std::string STRING_COMMENT_BLOCK_END_SIGN = "*/";
 static const std::string STRING_NULL_SIGN = "null";
@@ -67,9 +62,8 @@ static const std::string STRING_FUNCTION_SIGN = "function";
 static const std::string STRING_RETURN_SIGN = "return";
 static const std::string STRING_SET_SIGN = "set";
 static const std::string STRING_CONST_SIGN = "const";
-static const std::string STRING_CLASS_SIGN = "class";
-static const std::string STRING_STRUCT_SIGN = "struct";
 static const std::string STRING_NEW_SIGN = "new";
+static const std::string STRING_OBJECT_SIGN = "object";
 
 static const char CHAR_NOT_SYMBOL = '!';
 static const char CHAR_LEFT_BRACKET = '(';
@@ -161,20 +155,7 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 		if (MatchReturn(value, size, 0, &pos)) {
 			break;
 		}
-		if (MatchClass(value, size, 0, &pos)) {
-			break;
-		}
-		if (MatchClassExtends(value, size, 0, &pos)) {
-			break;
-		}
-		ScopeSign scopeSign;
-		if (MatchClassMemberScope(value, size, 0, &pos, &scopeSign)) {
-			break;
-		}
 		if (MatchNew(value, size, 0, &pos)) {
-			break;
-		}
-		if (MatchClassStruct(value, size, 0, &pos)) {
 			break;
 		}
 		if (MatchAssign(value, size, 0, &pos)) {
@@ -212,6 +193,9 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
 }
+bool Grammar::MatchObject(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_OBJECT_SIGN, src, size, pos, nextPos);
+}
 bool Grammar::MatchInsideSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_INSIDE_SYMBOL, src, size, pos, nextPos);
 }
@@ -219,34 +203,11 @@ bool Grammar::MatchInsideSymbol(const std::string& src, std::size_t size, std::s
 bool Grammar::MatchNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_NEW_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchClassExtends(const std::string& src, std ::size_t size, std::size_t pos, std::size_t* nextPos) {
-	for (auto& sign : SET_EXTENDS_SIGN) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			return true;
-		}
-	}
-	return false;
-}
-bool Grammar::MatchClassBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Grammar::MatchObjectBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchBlockBegin(src, size, pos, nextPos);
 }
-bool Grammar::MatchClassEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Grammar::MatchObjectEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchBlockEnd(src, size, pos, nextPos);
-}
-bool Grammar::MatchClassStruct(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	return MatchSign(STRING_STRUCT_SIGN, src, size, pos, nextPos);
-}
-bool Grammar::MatchClass(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	return MatchSign(STRING_CLASS_SIGN, src, size, pos, nextPos);
-}
-bool Grammar::MatchClassMemberScope(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, ScopeSign* sign) {
-	for (auto& pair : MAP_SCOPE_SIGN) {
-		if (MatchSign(pair.second, src, size, pos, nextPos)) {
-			*sign = pair.first;
-			return true;
-		}
-	}
-	return false;
 }
 bool Grammar::MatchArrayBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_ARRAY_BEGIN, src, size, pos, nextPos);

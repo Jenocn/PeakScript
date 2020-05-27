@@ -34,6 +34,7 @@ std::map<ErrorRuntimeCode, std::string> ErrorLogger::_errorCodeNameMap = {
 	{ErrorRuntimeCode::VariableNameAnalysis, "VariableNameAnalysis, \"variable-name\""},
 	{ErrorRuntimeCode::VariableArrayItemAnalysis, "VariableArrayItemAnalysis, \"array [ ]\""},
 	{ErrorRuntimeCode::New, "New, \"new\""},
+	{ErrorRuntimeCode::ObjectDefine, "ObjectDefine, \"object\""},
 };
 
 void ErrorLogger::Locate(std::function<void(const std::string&)> logger) {

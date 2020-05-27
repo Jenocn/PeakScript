@@ -16,5 +16,5 @@ std::shared_ptr<Space> ValueObject::GetSpace() const {
 }
 
 std::string ValueObject::ToString() const {
-	return "Object";
+	return "object";
 }

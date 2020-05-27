@@ -39,6 +39,7 @@ enum class ErrorRuntimeCode {
 	VariableNameAnalysis,
 	VariableArrayItemAnalysis,
 	New,
+	ObjectDefine,
 };
 
 class ErrorLogger {
