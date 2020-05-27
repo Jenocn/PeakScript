@@ -11,9 +11,10 @@
 #include "ValueFunction.h"
 #include "ValueNull.h"
 #include "ValueNumber.h"
+#include "ValueObject.h"
 #include "ValueString.h"
 
-namespace peak { 
+namespace peak {
 namespace interpreter {
 class Value;
 
@@ -25,6 +26,7 @@ public:
 	static bool IsString(std::shared_ptr<Value> value);
 	static bool IsFunction(std::shared_ptr<Value> value);
 	static bool IsArray(std::shared_ptr<Value> value);
+	static bool IsObject(std::shared_ptr<Value> value);
 	static std::string ToString(std::shared_ptr<Value> value);
 	static std::string ToTypeString(std::shared_ptr<Value> value);
 	static bool ToLogic(std::shared_ptr<Value> value);

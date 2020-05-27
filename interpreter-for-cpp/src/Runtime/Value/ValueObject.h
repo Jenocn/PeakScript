@@ -1,0 +1,26 @@
+/*
+	PeakScript: https://github.com/Jenocn/PeakScript
+	By Jenocn: https://jenocn.github.io
+*/
+
+#pragma once
+
+#include "Value.h"
+
+namespace peak {
+namespace interpreter {
+
+class Space;
+
+class ValueObject : public TypeValue<ValueObject> {
+public:
+	ValueObject(std::shared_ptr<Space> space);
+	virtual std::shared_ptr<Value> Clone() const;
+	std::shared_ptr<Space> GetSpace() const;
+	virtual std::string ToString() const;
+
+private:
+	std::shared_ptr<Space> _space{nullptr};
+};
+} // namespace interpreter
+} // namespace peak
