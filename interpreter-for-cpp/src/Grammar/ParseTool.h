@@ -43,6 +43,8 @@ private:
 	static std::shared_ptr<SentenceExpression> _ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 	static std::shared_ptr<SentenceExpression> __ParseExpressionValueForArrayValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static std::shared_ptr<SentenceExpression> __ParseExpressionInsideHeader(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static std::shared_ptr<SentenceExpression> __ParseExpressionInsideAppend(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 private: // Sentence
 	static std::shared_ptr<Sentence> _ParseReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
@@ -75,6 +77,7 @@ private: // Expression Value
 	static std::shared_ptr<SentenceExpression> _ParseDoubleExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseNotExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<SentenceExpression> _ParseNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static std::shared_ptr<SentenceExpression> _ParseInside(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 
 private:
 	static IValueCalculate* _GetCalculate(MathSymbol symbol);
@@ -89,6 +92,8 @@ private:
 	static ExpressionParseList _sentenceVariableParseList;
 
 	static ExpressionParseList __sentenceArrayItemParseList;
+	static ExpressionParseList __sentenceInsideHeaderParseList;
+	static ExpressionParseList __sentenceInsideAppendParseList;
 };
 } // namespace interpreter
 } // namespace peak

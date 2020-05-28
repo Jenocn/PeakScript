@@ -1,6 +1,7 @@
 #include "ExpressionVariableAnalysisInstance.h"
 #include "../../Value/ValueTool.h"
 #include "../../Variable.h"
+#include "../SentenceExpressionVariable.h"
 
 using namespace peak::interpreter;
 
@@ -61,5 +62,40 @@ std::shared_ptr<Variable> ExpressionVariableAnalysisArrayItem::Execute(std::shar
 		retValue = retVariable->GetValue();
 	}
 
+	return retVariable;
+}
+
+ExpressionVariableAnalysisInside::ExpressionVariableAnalysisInside(std::shared_ptr<SentenceExpression> header, std::vector<std::shared_ptr<SentenceExpression>> insides)
+	: _header(header), _insides(insides) {
+}
+std::shared_ptr<Variable> ExpressionVariableAnalysisInside::Execute(std::shared_ptr<Space> space) {
+	if (!Sentence::IsSuccess(_header->Execute(space))) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableInsideAnalysis, "The header expression execute failed!");
+		return nullptr;
+	}
+	auto headerValue = _header->GetValue();
+	if (!ValueTool::IsObject(headerValue)) {
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableInsideAnalysis, "The header expression isn't a object!");
+		return nullptr;
+	}
+	auto tempValue = headerValue;
+	std::shared_ptr<Variable> retVariable{nullptr};
+	for (auto expression : _insides) {
+		if (!ValueTool::IsObject(tempValue)) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableInsideAnalysis, "The expression isn't a object!");
+			return nullptr;
+		}
+		auto objSpace = std::static_pointer_cast<ValueObject>(tempValue)->GetSpace();
+		if (expression->GetExpressionType() != ExpressionType::Variable) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableInsideAnalysis, "The inside expression can't return a variable!");
+			return nullptr;
+		}
+		if (!Sentence::IsSuccess(expression->Execute(objSpace))) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableInsideAnalysis, "The inside expression execute failed!");
+			return nullptr;
+		}
+		retVariable = std::static_pointer_cast<SentenceExpressionVariable>(expression)->GetVariable();
+		tempValue = expression->GetValue();
+	}
 	return retVariable;
 }

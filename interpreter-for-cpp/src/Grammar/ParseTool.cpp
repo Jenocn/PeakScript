@@ -6,6 +6,7 @@
 #include "../Runtime/Sentence/SentenceEcho.h"
 #include "../Runtime/Sentence/SentenceExpressionDouble.h"
 #include "../Runtime/Sentence/SentenceExpressionFunctionCall.h"
+#include "../Runtime/Sentence/SentenceExpressionInside.h"
 #include "../Runtime/Sentence/SentenceExpressionMath.h"
 #include "../Runtime/Sentence/SentenceExpressionNew.h"
 #include "../Runtime/Sentence/SentenceExpressionNot.h"
@@ -50,6 +51,7 @@ ParseTool::SentenceParseList ParseTool::_sentenceParseList = {
 	_ParseExpressionToEnd,
 };
 ParseTool::ExpressionParseList ParseTool::_sentenceValueParseList = {
+	_ParseInside,
 	_ParseString,
 	_ParseNumber,
 	_ParseBool,
@@ -63,13 +65,31 @@ ParseTool::ExpressionParseList ParseTool::_sentenceValueParseList = {
 	_ParseVariableName,
 };
 
+// target = value;
 ParseTool::ExpressionParseList ParseTool::_sentenceVariableParseList = {
+	_ParseInside,
 	_ParseArrayItem,
 	_ParseVariableName,
 };
 
+// target[]
 ParseTool::ExpressionParseList ParseTool::__sentenceArrayItemParseList = {
 	_ParseArray,
+	_ParseFunctioCall,
+	_ParseVariableName,
+};
+
+// target.
+ParseTool::ExpressionParseList ParseTool::__sentenceInsideHeaderParseList = {
+	_ParseNew,
+	_ParseFunctioCall,
+	_ParseArrayItem,
+	_ParseVariableName,
+};
+
+// .target
+ParseTool::ExpressionParseList ParseTool::__sentenceInsideAppendParseList = {
+	_ParseArrayItem,
 	_ParseFunctioCall,
 	_ParseVariableName,
 };
@@ -223,6 +243,26 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string&
 
 std::shared_ptr<SentenceExpression> ParseTool::__ParseExpressionValueForArrayValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto func : __sentenceArrayItemParseList) {
+		auto value = func(src, size, pos, nextPos);
+		if (value) {
+			return value;
+		}
+	}
+	return nullptr;
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::__ParseExpressionInsideHeader(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (auto func : __sentenceInsideHeaderParseList) {
+		auto value = func(src, size, pos, nextPos);
+		if (value) {
+			return value;
+		}
+	}
+	return nullptr;
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::__ParseExpressionInsideAppend(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for (auto func : __sentenceInsideAppendParseList) {
 		auto value = func(src, size, pos, nextPos);
 		if (value) {
 			return value;
@@ -973,6 +1013,38 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseNew(const std::string& src,
 	}
 	*nextPos = pos;
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionNew(name));
+}
+
+std::shared_ptr<SentenceExpression> ParseTool::_ParseInside(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	auto header = __ParseExpressionInsideHeader(src, size, pos, &pos);
+	if (!header) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	if (!Grammar::MatchInsideSymbol(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	std::vector<std::shared_ptr<SentenceExpression>> insides;
+	bool bTailCall = false;
+	while (true) {
+		auto append = __ParseExpressionInsideAppend(src, size, pos, &pos);
+		if (!append) {
+			break;
+		}
+		insides.emplace_back(append);
+		if (!Grammar::MatchInsideSymbol(src, size, pos, &pos)) {
+			bTailCall = (append->GetExpressionType() == ExpressionType::Function);
+		}
+	}
+	if (insides.empty()) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	if (bTailCall) {
+		return std::shared_ptr<SentenceExpression>(new SentenceExpressionInside(header, insides));
+	}
+	auto analysis = std::shared_ptr<ExpressionVariableAnalysisInside>(new ExpressionVariableAnalysisInside(header, insides));
+	return std::shared_ptr<SentenceExpression>(new SentenceExpressionVariable(analysis));
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMath(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
