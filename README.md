@@ -9,7 +9,7 @@
 
 ## 介绍  
 
-PeakScript是一个脚本语言,在第一次加载脚本时创建一组运行时的对象,之后的调用不会多次进行代码解析,从而运行效率非常好,和大多数脚本语言一样,使用动态类型,支持`number`,`bool`,`string`,`null`,`array`几种类型,支持代码块`{}`,支持常见的`if - else if - else`和`for`,`foreach`,`while`,`do - while`循环,此外还增加了一个`loop`指定次数的循环,支持`break`,`continue`,`return`控制语句,支持`function`函数,支持`try - catch - finally`, 支持常见的算术表达式和关系表达式,支持自增自减运算符  
+PeakScript是一个脚本语言,在第一次加载脚本时创建一组运行时的对象,之后的调用不会多次进行代码解析,从而运行效率非常好,和大多数脚本语言一样,使用动态类型,支持`number`,`bool`,`string`,`null`,`array`,`object`几种类型,支持代码块`{}`,支持常见的`if - else if - else`和`for`,`foreach`,`while`,`do - while`循环,此外还增加了一个`loop`指定次数的循环,支持`break`,`continue`,`return`控制语句,支持`function`函数,支持`try - catch - finally`, 支持常见的算术表达式和关系表达式,支持自增自减运算符  
   
 ---  
   
@@ -71,6 +71,36 @@ PeakScript使用的是动态数据类型,number,bool,string,null,array
 数组下标可以是任何返回整数的表达式  
 例如:  
 `var i = 0;` `arr[i];` `arr[1 + 1];`   
+
+#### `object`类型  
+表示一个对象,对象可以包括一组变量和方法  
+对象声明:  
+```
+// 和function一样, object声明标识可不写,如:`MyObj {}`
+objcet MyObj {
+	var v0 = 0;
+	var v1 = 1;
+	function sum() {
+		return v0 + v1;
+	}
+}
+```   
+对象调用:  
+```
+MyObj.v0 = 10;
+MyObj.v1 = 20;
+echo MyObj.sum();
+```
+
+## new操作符  
+new操作符可以对任何变量使用, 表示根据变量当前的值生成一个新的变量  
+例如:
+```
+var obj = new MyObj;
+var arr = new array0;
+```
+一般情况下,对于`number`,`bool`,`null`,`string`,`function`无需使用new操作符  
+而对于`array`,`object`则必须使用new才能生成一个新的对象,直接赋值相当与一个引用    
   
 ## 算术表达式    
 常规的`+`,`-`,`*`,`/`,`%`,`(`,`)`  
@@ -243,6 +273,7 @@ try {
 `type(null); // 返回 null`  
 `type([1]); // 返回 array`  
 `type(print); // 返回 function`  
+`type(MyObj); // 返回 object`
 
 #### is_xxx函数  
 判断一个变量是否为某个类型的值  
@@ -253,3 +284,4 @@ try {
 `is_bool(); // 返回是否为bool`   
 `is_array(); // 返回是否为array`   
 `is_function(); // 返回是否为function`   
+`is_object(); // 返回是否为object`   
