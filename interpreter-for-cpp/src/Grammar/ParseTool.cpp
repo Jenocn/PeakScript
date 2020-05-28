@@ -892,14 +892,12 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string
 	if (!valueExpression) {
 		return nullptr;
 	}
+	Jump(src, size, pos, &pos);
+	if (!Grammar::MatchArrayBegin(src, size, pos, &pos)) {
+		return nullptr;
+	}
 	std::vector<std::shared_ptr<SentenceExpression>> indexExpressionVec;
 	while (true) {
-		auto savePos = pos;
-		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchArrayBegin(src, size, pos, &pos)) {
-			pos = savePos;
-			break;
-		}
 		Jump(src, size, pos, &pos);
 		auto indexExpression = _ParseExpression(src, size, pos, &pos);
 		if (!indexExpression) {
@@ -910,6 +908,13 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string
 			return nullptr;
 		}
 		indexExpressionVec.emplace_back(indexExpression);
+
+		auto savePos = pos;
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchArrayBegin(src, size, pos, &pos)) {
+			pos = savePos;
+			break;
+		}
 	}
 	if (indexExpressionVec.empty()) {
 		return nullptr;
