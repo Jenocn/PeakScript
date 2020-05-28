@@ -30,7 +30,9 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionInside.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionMath.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionNew.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionNot.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionSelfAssign.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValueArray.cpp" />
@@ -40,6 +42,7 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFunctionDefine.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoop.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoopControl.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceObjectDefine.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceReturn.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceTryCatchFinally.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableAssign.cpp" />
@@ -55,6 +58,7 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueFunction.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNull.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNumber.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueObject.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueString.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueTool.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Variable.cpp" />
@@ -76,7 +80,9 @@
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionInside.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionMath.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionNew.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionNot.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionSelfAssign.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionValueArray.h" />
@@ -86,6 +92,7 @@
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFunctionDefine.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoop.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoopControl.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceObjectDefine.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceReturn.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceTryCatchFinally.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceVariableAssign.h" />
@@ -102,6 +109,7 @@
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueFunction.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNull.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueNumber.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueObject.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueString.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Value\ValueTool.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Variable.h" />
