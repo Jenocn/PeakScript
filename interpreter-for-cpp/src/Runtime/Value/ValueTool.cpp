@@ -9,6 +9,7 @@ static const std::unordered_map<int, std::string> TypeStringMap = {
 	{ValueString::Type(), "string"},
 	{ValueNumber::Type(), "number"},
 	{ValueFunction::Type(), "function"},
+	{ValueObject::Type(), "object"},
 };
 
 bool ValueTool::IsNull(std::shared_ptr<Value> value) {

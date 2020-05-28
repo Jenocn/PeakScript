@@ -94,6 +94,17 @@ System::BuiltIn::BuiltIn() {
 		}
 		return std::shared_ptr<Value>(new ValueBool(ret));
 	});
+	// is_object
+	_Emplace("is_object", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		if (args.empty()) {
+			return nullptr;
+		}
+		bool ret = true;
+		for (auto arg : args) {
+			ret &= ValueTool::IsObject(arg);
+		}
+		return std::shared_ptr<Value>(new ValueBool(ret));
+	});
 	// len
 	_Emplace("len", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
 		if (args.empty()) {
