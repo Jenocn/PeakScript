@@ -36,6 +36,10 @@ namespace peak.interpreter {
 		While,
 		VariableNameAnalysis,
 		VariableArrayItemAnalysis,
+		VariableInsideAnalysis,
+		New,
+		ObjectDefine,
+		Inside,
 	}
 
 	public class ErrorLogger {
@@ -73,6 +77,10 @@ namespace peak.interpreter {
 				{ErrorRuntimeCode.While, "While, \"while\""},
 				{ErrorRuntimeCode.VariableNameAnalysis, "VariableNameAnalysis, \"variable-name\""},
 				{ErrorRuntimeCode.VariableArrayItemAnalysis, "VariableArrayItemAnalysis, \"array [ ]\""},
+				{ErrorRuntimeCode.VariableInsideAnalysis, "VariableInsideAnalysis, \"inside.value\""},
+				{ErrorRuntimeCode.New, "New, \"new\""},
+				{ErrorRuntimeCode.ObjectDefine, "ObjectDefine, \"object\""},
+				{ErrorRuntimeCode.Inside, "Inside, \"inside.value\""},
 			};
 		}
 		public static void Locate(Action<string> logger) {
