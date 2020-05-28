@@ -193,6 +193,51 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
 }
+bool Grammar::IsWordValidSymbol(char ch) {
+	if (!IsTextSpecialChar(ch)) {
+		return true;
+	}
+	return IsTextSpace(ch) ||
+		   (ch == CHAR_LEFT_BRACKET) ||
+		   (ch == CHAR_RIGHT_BRACKET) ||
+		   (ch == CHAR_SPLIT_SYMBOL) ||
+		   (ch == CHAR_ARRAY_BEGIN) ||
+		   (ch == CHAR_ARRAY_END) ||
+		   (ch == CHAR_INSIDE_SYMBOL);
+}
+
+bool Grammar::SearchNextInside(const std::string& src, std::size_t size, std::size_t pos) {
+	for (auto i = pos; i < size; ++i) {
+		if (MatchInsideSymbol(src, size, i, &i)) {
+			return true;
+		}
+		char ch = src[i];
+		if (!IsWordValidSymbol(ch)) {
+			MathSymbol symbol;
+			if (!MatchMathSymbol(src, size, i, &i, &symbol)) {
+				return false;
+			}
+		}
+	}
+	return false;
+}
+
+bool Grammar::SearchNextArray(const std::string& src, std::size_t size, std::size_t pos) {
+	for (auto i = pos; i < size; ++i) {
+		if (MatchArrayBegin(src, size, i, &i)) {
+			return true;
+		}
+		char ch = src[i];
+		if (!IsWordValidSymbol(ch)) {
+			MathSymbol symbol;
+			if (!MatchMathSymbol(src, size, i, &i, &symbol)) {
+				return false;
+			}
+		}
+	}
+	return false;
+}
+
 bool Grammar::MatchObject(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_OBJECT_SIGN, src, size, pos, nextPos);
 }

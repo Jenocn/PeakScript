@@ -49,6 +49,9 @@ public:
 	static bool IsLeftBrcket(char ch);
 	static bool IsRightBrcket(char ch);
 	static bool IsVariableSelfAssignSymbol(MathSymbol value);
+	static bool IsWordValidSymbol(char ch);
+	static bool SearchNextInside(const std::string& src, std::size_t size, std::size_t pos);
+	static bool SearchNextArray(const std::string& src, std::size_t size, std::size_t pos);
 
 public:
 	static int GetMathSymbolLevel(MathSymbol value);

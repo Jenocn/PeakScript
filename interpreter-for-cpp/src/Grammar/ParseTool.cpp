@@ -51,11 +51,11 @@ ParseTool::SentenceParseList ParseTool::_sentenceParseList = {
 	_ParseExpressionToEnd,
 };
 ParseTool::ExpressionParseList ParseTool::_sentenceValueParseList = {
-	_ParseInside,
 	_ParseString,
 	_ParseNumber,
 	_ParseBool,
 	_ParseNull,
+	_ParseInside,
 	_ParseArrayItem,
 	_ParseArray,
 	_ParseNew,
@@ -885,7 +885,9 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArray(const std::string& sr
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-
+	if (!Grammar::SearchNextArray(src, size, pos)) {
+		return nullptr;
+	}
 	auto valueExpression = __ParseExpressionValueForArrayValue(src, size, pos, &pos);
 	if (!valueExpression) {
 		return nullptr;
@@ -1016,6 +1018,9 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseNew(const std::string& src,
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseInside(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::SearchNextInside(src, size, pos)) {
+		return nullptr;
+	}
 	auto header = __ParseExpressionInsideHeader(src, size, pos, &pos);
 	if (!header) {
 		return nullptr;
@@ -1024,6 +1029,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseInside(const std::string& s
 	if (!Grammar::MatchInsideSymbol(src, size, pos, &pos)) {
 		return nullptr;
 	}
+	Jump(src, size, pos, &pos);
 	std::vector<std::shared_ptr<SentenceExpression>> insides;
 	bool bTailCall = false;
 	while (true) {
