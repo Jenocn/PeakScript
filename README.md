@@ -5,7 +5,7 @@
 
 版本|链接
 -|-
-1.2.5|[peak1.2.5.zip](https://jenocn.github.io/peak/peak1.2.5.zip)
+1.3.0|[peak1.3.0.zip](https://jenocn.github.io/peak/peak1.3.0.zip)
 
 ## 介绍  
 
