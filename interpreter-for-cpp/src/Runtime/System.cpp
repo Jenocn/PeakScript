@@ -112,9 +112,9 @@ System::BuiltIn::BuiltIn() {
 		}
 		auto value = args[0];
 		if (ValueTool::IsArray(value)) {
-			return std::shared_ptr<Value>(new ValueNumber(std::static_pointer_cast<ValueArray>(value)->GetArray().size()));
+			return std::shared_ptr<Value>(new ValueNumber(static_cast<double>(std::static_pointer_cast<ValueArray>(value)->GetArray().size())));
 		} else if (ValueTool::IsString(value)) {
-			return std::shared_ptr<Value>(new ValueNumber(std::static_pointer_cast<ValueString>(value)->GetValue().length()));
+			return std::shared_ptr<Value>(new ValueNumber(static_cast<double>(std::static_pointer_cast<ValueString>(value)->GetValue().length())));
 		}
 		return ValueNull::DEFAULT_VALUE;
 	});
