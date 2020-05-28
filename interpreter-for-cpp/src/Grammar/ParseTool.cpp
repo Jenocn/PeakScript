@@ -892,11 +892,12 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string
 	if (!valueExpression) {
 		return nullptr;
 	}
-	Jump(src, size, pos, &pos);
 	std::vector<std::shared_ptr<SentenceExpression>> indexExpressionVec;
 	while (true) {
+		auto savePos = pos;
 		Jump(src, size, pos, &pos);
 		if (!Grammar::MatchArrayBegin(src, size, pos, &pos)) {
+			pos = savePos;
 			break;
 		}
 		Jump(src, size, pos, &pos);
@@ -1029,17 +1030,22 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseInside(const std::string& s
 	if (!Grammar::MatchInsideSymbol(src, size, pos, &pos)) {
 		return nullptr;
 	}
-	Jump(src, size, pos, &pos);
 	std::vector<std::shared_ptr<SentenceExpression>> insides;
 	bool bTailCall = false;
 	while (true) {
+		Jump(src, size, pos, &pos);
 		auto append = __ParseExpressionInsideAppend(src, size, pos, &pos);
 		if (!append) {
-			break;
+			return nullptr;
 		}
 		insides.emplace_back(append);
+
+		auto savePos = pos;
+		Jump(src, size, pos, &pos);
 		if (!Grammar::MatchInsideSymbol(src, size, pos, &pos)) {
 			bTailCall = (append->GetExpressionType() == ExpressionType::Function);
+			pos = savePos;
+			break;
 		}
 	}
 	if (insides.empty()) {
