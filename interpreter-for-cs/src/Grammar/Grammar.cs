@@ -81,7 +81,7 @@ namespace peak.interpreter {
 				MathSymbol.AssignSub,
 				MathSymbol.AssignMul,
 				MathSymbol.AssignMod,
-			};
+		};
 		private const string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
 		private const string STRING_COMMENT_BLOCK_END_SIGN = "*/";
 		private const string STRING_NULL_SIGN = "null";

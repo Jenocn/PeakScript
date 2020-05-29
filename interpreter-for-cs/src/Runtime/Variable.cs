@@ -39,5 +39,5 @@ namespace peak.interpreter {
 			}
 			return true;
 		}
-	};
+	}
 } // namespace peak.interpreter

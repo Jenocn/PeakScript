@@ -17,5 +17,5 @@ namespace peak.interpreter {
 		public override Value Clone() {
 			return new ValueObject(_space.CopySpace());
 		}
-	};
+	}
 } // namespace peak.interpreter

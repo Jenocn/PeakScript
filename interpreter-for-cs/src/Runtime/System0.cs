@@ -143,6 +143,6 @@ namespace peak.interpreter {
 					return ValueNull.DEFAULT_VALUE;
 				});
 			}
-		};
-	};
+		}
+	}
 } // namespace peak.interpreter

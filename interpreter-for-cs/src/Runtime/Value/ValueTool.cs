@@ -7,7 +7,14 @@ using System.Collections.Generic;
 
 namespace peak.interpreter {
 	public class ValueTool {
-		public static readonly Dictionary<int, string> TypeStringMap = new Dictionary<int, string>() { { ValueNull.VALUE_TYPE, "null" }, { ValueBool.VALUE_TYPE, "bool" }, { ValueArray.VALUE_TYPE, "array" }, { ValueString.VALUE_TYPE, "string" }, { ValueNumber.VALUE_TYPE, "number" }, { ValueFunction.VALUE_TYPE, "function" }, { ValueObject.VALUE_TYPE, "object" },
+		public static readonly Dictionary<int, string> TypeStringMap = new Dictionary<int, string>() {
+			{ ValueNull.VALUE_TYPE, "null" },
+			{ ValueBool.VALUE_TYPE, "bool" },
+			{ ValueArray.VALUE_TYPE, "array" },
+			{ ValueString.VALUE_TYPE, "string" },
+			{ ValueNumber.VALUE_TYPE, "number" },
+			{ ValueFunction.VALUE_TYPE, "function" },
+			{ ValueObject.VALUE_TYPE, "object" },
 		};
 		public static bool IsNull(Value value) {
 			return !value || (value.GetValueType() == ValueNull.VALUE_TYPE);

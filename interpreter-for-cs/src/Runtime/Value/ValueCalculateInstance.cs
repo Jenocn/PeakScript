@@ -15,7 +15,7 @@ namespace peak.interpreter {
 			}
 			return null;
 		}
-	};
+	}
 	public class ValueCalculateSub : ValueCalculateSingleton<ValueCalculateSub> {
 		public override Value Calculate(Value left, Value right) {
 			if (ValueTool.IsNumber(left) && ValueTool.IsNumber(right)) {
@@ -23,7 +23,7 @@ namespace peak.interpreter {
 			}
 			return null;
 		}
-	};
+	}
 	public class ValueCalculateMul : ValueCalculateSingleton<ValueCalculateMul> {
 		public override Value Calculate(Value left, Value right) {
 			if (ValueTool.IsNumber(left) && ValueTool.IsNumber(right)) {
@@ -31,7 +31,7 @@ namespace peak.interpreter {
 			}
 			return null;
 		}
-	};
+	}
 	public class ValueCalculateDiv : ValueCalculateSingleton<ValueCalculateDiv> {
 		public override Value Calculate(Value left, Value right) {
 			if (ValueTool.IsNumber(left) && ValueTool.IsNumber(right)) {
@@ -39,7 +39,7 @@ namespace peak.interpreter {
 			}
 			return null;
 		}
-	};
+	}
 	public class ValueCalculateMod : ValueCalculateSingleton<ValueCalculateMod> {
 		public override Value Calculate(Value left, Value right) {
 			if (ValueTool.IsNumber(left) && ValueTool.IsNumber(right)) {
@@ -47,48 +47,48 @@ namespace peak.interpreter {
 			}
 			return null;
 		}
-	};
+	}
 
 	public class ValueCalculateSame : ValueCalculateSingleton<ValueCalculateSame> {
 		public override Value Calculate(Value left, Value right) {
 			return (new ValueBool(ValueTool.Equal(left, right)));
 
 		}
-	};
+	}
 	public class ValueCalculateNotSame : ValueCalculateSingleton<ValueCalculateNotSame> {
 		public override Value Calculate(Value left, Value right) {
 			return (new ValueBool(!ValueTool.Equal(left, right)));
 		}
-	};
+	}
 	public class ValueCalculateMore : ValueCalculateSingleton<ValueCalculateMore> {
 		public override Value Calculate(Value left, Value right) {
 			return (new ValueBool(ValueTool.More(left, right)));
 		}
-	};
+	}
 	public class ValueCalculateSameOrMore : ValueCalculateSingleton<ValueCalculateSameOrMore> {
 		public override Value Calculate(Value left, Value right) {
 			return (new ValueBool(ValueTool.More(left, right) || ValueTool.Equal(left, right)));
 		}
-	};
+	}
 	public class ValueCalculateLess : ValueCalculateSingleton<ValueCalculateLess> {
 		public override Value Calculate(Value left, Value right) {
 			return (new ValueBool(ValueTool.More(right, left)));
 		}
-	};
+	}
 	public class ValueCalculateSameOrLess : ValueCalculateSingleton<ValueCalculateSameOrLess> {
 		public override Value Calculate(Value left, Value right) {
 			return (new ValueBool(ValueTool.More(right, left) || ValueTool.Equal(right, left)));
 		}
-	};
+	}
 
 	public class ValueCalculateLogicAnd : ValueCalculateSingleton<ValueCalculateLogicAnd> {
 		public override Value Calculate(Value left, Value right) {
 			return new ValueBool(ValueTool.ToLogic(left) && ValueTool.ToLogic(right));
 		}
-	};
+	}
 	public class ValueCalculateLogicOr : ValueCalculateSingleton<ValueCalculateLogicOr> {
 		public override Value Calculate(Value left, Value right) {
 			return new ValueBool(ValueTool.ToLogic(left) || ValueTool.ToLogic(right));
 		}
-	};
+	}
 } // namespace peak.interpreter
