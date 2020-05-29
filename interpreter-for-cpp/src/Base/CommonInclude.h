@@ -7,6 +7,8 @@
 
 #include <algorithm>
 #include <fstream>
+#include <sstream>
+#include <streambuf>
 #include <functional>
 #include <iostream>
 #include <list>
