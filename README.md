@@ -5,7 +5,7 @@
 
 版本|链接
 -|-
-1.3.0|[peak1.3.0.zip](https://jenocn.github.io/peak/peak1.3.0.zip)
+1.3.1|[peak1.3.1.zip](https://jenocn.github.io/peak/peak1.3.1.zip)
 
 ## 介绍  
 
@@ -44,7 +44,7 @@ set value = "Hello World"; // value已经存在,则直接赋值
 例如:`num = 99;`  
   
 ## 数据类型     
-PeakScript使用的是动态数据类型,number,bool,string,null,array    
+PeakScript使用的是动态数据类型,number,bool,string,null,array,object    
 #### `number`类型    
 常见的小数,整数和负数    
   
