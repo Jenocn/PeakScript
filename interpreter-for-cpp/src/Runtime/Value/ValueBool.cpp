@@ -18,5 +18,5 @@ std::string ValueBool::ToString() const {
 }
 
 std::shared_ptr<Value> ValueBool::Clone() const {
-	return std::shared_ptr<Value>(new ValueBool(_value));
+	return _value ? TRUE : FALSE;
 }

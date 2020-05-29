@@ -8,7 +8,7 @@ Variable::Variable(const std::string& name, VariableAttribute attribute, std::sh
 	if (value) {
 		_value = value;
 	} else {
-		_value = std::shared_ptr<Value>(new ValueNull());
+		_value = ValueNull::DEFAULT_VALUE;
 	}
 }
 

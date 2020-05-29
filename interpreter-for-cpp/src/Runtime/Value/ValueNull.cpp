@@ -8,5 +8,5 @@ std::string ValueNull::ToString() const {
 	return "null";
 }
 std::shared_ptr<Value> ValueNull::Clone() const {
-	return std::shared_ptr<Value>(new ValueNull());
+	return DEFAULT_VALUE;
 }

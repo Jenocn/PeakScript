@@ -642,5 +642,5 @@ namespace peak.interpreter {
 			}
 			return false;
 		}
-	};
+	}
 } // namespace peak.interpreter

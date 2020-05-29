@@ -91,17 +91,9 @@ bool ValueTool::More(std::shared_ptr<Value> a, std::shared_ptr<Value> b) {
 	if (a->GetType() != b->GetType()) {
 		return false;
 	}
-	if (IsBool(a)) {
-		return std::static_pointer_cast<ValueBool>(a)->GetValue() >
-			   std::static_pointer_cast<ValueBool>(b)->GetValue();
-	}
 	if (IsNumber(a)) {
 		return std::static_pointer_cast<ValueNumber>(a)->GetValue() >
 			   std::static_pointer_cast<ValueNumber>(b)->GetValue();
-	}
-	if (IsString(a)) {
-		return std::static_pointer_cast<ValueString>(a)->GetValue() >
-			   std::static_pointer_cast<ValueString>(b)->GetValue();
 	}
 	return false;
 }
