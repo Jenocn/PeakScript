@@ -174,8 +174,8 @@ bool ParseTool::JumpTextSpaceAndEnd(const std::string& src, std::size_t size, st
 }
 bool ParseTool::JumpComment(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	if (Grammar::MatchComment(src, size, pos, &pos)) {
-		while (pos < size) {
-			if (Grammar::IsTextNewLine(src[pos])) {
+		while (pos <= size) {
+			if ((pos == size) || Grammar::IsTextNewLine(src[pos])) {
 				*nextPos = pos;
 				return true;
 			}
@@ -318,8 +318,16 @@ std::shared_ptr<Sentence> ParseTool::_ParseFunctionDefine(const std::string& src
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
+	if (!Grammar::MatchBlockBegin(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
 	auto contentSentence = ParseSentence(src, size, pos, &pos);
 	if (!contentSentence) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	if (!Grammar::MatchBlockEnd(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	*nextPos = pos;

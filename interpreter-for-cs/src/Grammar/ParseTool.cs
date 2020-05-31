@@ -152,8 +152,8 @@ namespace peak.interpreter {
 		private static bool JumpComment(string src, int size, int pos, out int nextPos) {
 			nextPos = pos;
 			if (Grammar.MatchComment(src, size, pos, out pos)) {
-				while (pos < size) {
-					if (Grammar.IsTextNewLine(src[pos])) {
+				while (pos <= size) {
+					if ((pos == size) || Grammar.IsTextNewLine(src[pos])) {
 						nextPos = pos;
 						return true;
 					}
@@ -305,8 +305,16 @@ namespace peak.interpreter {
 				return null;
 			}
 			Jump(src, size, pos, out pos);
+			if (!Grammar.MatchBlockBegin(src, size, pos, out pos)) {
+				return null;
+			}
+			Jump(src, size, pos, out pos);
 			var contentSentence = ParseSentence(src, size, pos, out pos);
 			if (!contentSentence) {
+				return null;
+			}
+			Jump(src, size, pos, out pos);
+			if (!Grammar.MatchBlockEnd(src, size, pos, out pos)) {
 				return null;
 			}
 			nextPos = pos;
