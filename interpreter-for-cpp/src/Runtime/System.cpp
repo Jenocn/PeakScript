@@ -118,6 +118,25 @@ System::BuiltIn::BuiltIn() {
 		}
 		return ValueNull::DEFAULT_VALUE;
 	});
+	// to_string
+	_Emplace("to_string", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		if (args.empty()) {
+			return nullptr;
+		}
+		auto value = args[0];
+		return std::shared_ptr<Value>(new ValueString(ValueTool::ToString(value)));
+	});
+	// to_number
+	_Emplace("to_number", 1, [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+		if (args.empty()) {
+			return nullptr;
+		}
+		auto value = args[0];
+		if (!ValueTool::IsString(value)) {
+			return nullptr;
+		}
+		return std::shared_ptr<Value>(new ValueNumber(std::atof(std::static_pointer_cast<ValueString>(value)->GetValue().c_str())));
+	});
 }
 
 System::BuiltIn System::_buildIn;
