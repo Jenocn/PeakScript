@@ -323,6 +323,14 @@ namespace peak.interpreter {
 				return null;
 			}
 			Jump(src, size, pos, out pos);
+			string parentName = "";
+			if (Grammar.MatchExtends(src, size, pos, out pos)) {
+				Jump(src, size, pos, out pos);
+				if (!Grammar.MatchName(src, size, pos, out pos, out parentName)) {
+					return null;
+				}
+				Jump(src, size, pos, out pos);
+			}
 			if (!Grammar.MatchObjectBegin(src, size, pos, out pos)) {
 				return null;
 			}
@@ -343,7 +351,7 @@ namespace peak.interpreter {
 				sentenceList.Add(sentence);
 			}
 			nextPos = pos;
-			return new SentenceObjectDefine(name, sentenceList);
+			return new SentenceObjectDefine(name, parentName, sentenceList);
 		}
 
 		private static Sentence _ParseVariableDefine(string src, int size, int pos, out int nextPos) {

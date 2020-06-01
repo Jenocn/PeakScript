@@ -335,6 +335,15 @@ std::shared_ptr<Sentence> ParseTool::_ParseObjectDefine(const std::string& src, 
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
+	std::string parentName = "";
+	if (Grammar::MatchExtends(src, size, pos, &pos)) {
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchName(src, size, pos, &pos, &parentName)) {
+			return nullptr;
+		}
+		Jump(src, size, pos, &pos);
+	}
+
 	if (!Grammar::MatchObjectBegin(src, size, pos, &pos)) {
 		return nullptr;
 	}
@@ -355,7 +364,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseObjectDefine(const std::string& src, 
 		sentenceList.emplace_back(sentence);
 	}
 	*nextPos = pos;
-	return std::shared_ptr<Sentence>(new SentenceObjectDefine(name, sentenceList));
+	return std::shared_ptr<Sentence>(new SentenceObjectDefine(name, parentName, sentenceList));
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

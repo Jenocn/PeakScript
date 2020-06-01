@@ -3,8 +3,12 @@
 
 using namespace peak::interpreter;
 
-ValueObject::ValueObject(std::shared_ptr<Space> space)
-	: _space(space) {
+ValueObject::ValueObject(std::shared_ptr<Space> indexSpace, std::shared_ptr<ValueObject> parent) {
+	decltype(_space) parentSpace = parent ? parent->GetSpace()->CopySpace() : nullptr;
+	_space = std::shared_ptr<Space>(new Space(SpaceType::Object, parentSpace));
+	if (indexSpace) {
+		_space->AddSpaceOfUsing(indexSpace);
+	}
 }
 
 std::shared_ptr<Value> ValueObject::Clone() const {

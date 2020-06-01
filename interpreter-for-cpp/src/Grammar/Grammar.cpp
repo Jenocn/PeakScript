@@ -161,6 +161,9 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 		if (MatchAssign(value, size, 0, &pos)) {
 			break;
 		}
+		if (MatchExtends(value, size, 0, &pos)) {
+			break;
+		}
 		// temp todo...
 
 		return false;
@@ -238,6 +241,14 @@ bool Grammar::SearchNextArray(const std::string& src, std::size_t size, std::siz
 	return false;
 }
 
+bool Grammar::MatchExtends(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	for(auto& sign : SET_EXTENDS_SIGN) {
+		if (MatchSign(sign, src, size, pos, nextPos)) {
+			return true;
+		}
+	}
+	return false;
+}
 bool Grammar::MatchObject(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_OBJECT_SIGN, src, size, pos, nextPos);
 }

@@ -35,7 +35,11 @@ namespace peak.interpreter {
 		}
 
 		public Space CopySpace() {
-			var space = new Space(_spaceType, _parent);
+			Space parent = null;
+			if (_parent) {
+				parent = _parent.CopySpace();
+			}
+			var space = new Space(_spaceType, parent);
 			space._spaceOfUsing = _spaceOfUsing;
 
 			foreach (var pair in _variables) {

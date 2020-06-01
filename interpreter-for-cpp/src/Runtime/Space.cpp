@@ -13,7 +13,11 @@ Space::Space(SpaceType spaceType, std::shared_ptr<Space> parent)
 }
 
 std::shared_ptr<Space> Space::CopySpace() const {
-	auto space = std::shared_ptr<Space>(new Space(_spaceType, _parent));
+	std::shared_ptr<Space> parent{nullptr};
+	if (_parent) {
+		parent = _parent->CopySpace();
+	}
+	auto space = std::shared_ptr<Space>(new Space(_spaceType, parent));
 	space->_spaceOfUsing = _spaceOfUsing;
 
 	for (auto& pair : _variables) {

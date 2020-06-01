@@ -198,6 +198,9 @@ namespace peak.interpreter {
 				if (MatchAssign(value, size, 0, out pos)) {
 					break;
 				}
+				if (MatchExtends(value, size, 0, out pos)) {
+					break;
+				}
 				// temp todo...
 
 				return false;
@@ -264,7 +267,16 @@ namespace peak.interpreter {
 			}
 			return 0;
 		}
-
+		
+		public static bool MatchExtends(string src, int size, int pos, out int nextPos) {
+			nextPos = pos;
+			foreach (var sign in SET_EXTENDS_SIGN) {
+				if (MatchSign(sign, src, size, pos, out nextPos)) {
+					return true;
+				}
+			}
+			return false;
+		}
 		public static bool MatchObject(string src, int size, int pos, out int nextPos) {
 			return MatchSign(STRING_OBJECT_SIGN, src, size, pos, out nextPos);
 		}
