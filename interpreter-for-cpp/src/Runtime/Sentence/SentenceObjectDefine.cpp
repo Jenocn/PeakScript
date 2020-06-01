@@ -10,7 +10,8 @@ SentenceObjectDefine::SentenceObjectDefine(const std::string& name, std::list<st
 
 ExecuteResult SentenceObjectDefine::Execute(std::shared_ptr<Space> space) {
 
-	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Object, space));
+	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Object));
+	tempSpace->AddSpaceOfUsing(space);
 	auto valueObject = std::shared_ptr<ValueObject>(new ValueObject(tempSpace));
 	for (auto sentence : _sentenceList) {
 		if (!IsSuccess(sentence->Execute(tempSpace))) {

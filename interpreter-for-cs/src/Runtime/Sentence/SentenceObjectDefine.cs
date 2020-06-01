@@ -15,7 +15,8 @@ namespace peak.interpreter {
 			_sentenceList = sentenceList;
 		}
 		public override ExecuteResult Execute(Space space) {
-			var tempSpace = new Space(SpaceType.Object, space);
+			var tempSpace = new Space(SpaceType.Object);
+			tempSpace.AddSpaceOfUsing(space);
 			var valueObject = new ValueObject(tempSpace);
 			foreach (var sentence in _sentenceList) {
 				if (!IsSuccess(sentence.Execute(tempSpace))) {
