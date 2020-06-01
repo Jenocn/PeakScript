@@ -201,6 +201,9 @@ namespace peak.interpreter {
 				if (MatchExtends(value, size, 0, out pos)) {
 					break;
 				}
+				if (MatchObject(value, size, 0, out pos)) {
+					break;
+				}
 				// temp todo...
 
 				return false;
