@@ -305,16 +305,8 @@ namespace peak.interpreter {
 				return null;
 			}
 			Jump(src, size, pos, out pos);
-			if (!Grammar.MatchBlockBegin(src, size, pos, out pos)) {
-				return null;
-			}
-			Jump(src, size, pos, out pos);
-			var contentSentence = ParseSentence(src, size, pos, out pos);
+			var contentSentence = _ParseBlock(src, size, pos, out pos);
 			if (!contentSentence) {
-				return null;
-			}
-			Jump(src, size, pos, out pos);
-			if (!Grammar.MatchBlockEnd(src, size, pos, out pos)) {
 				return null;
 			}
 			nextPos = pos;

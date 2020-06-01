@@ -318,16 +318,8 @@ std::shared_ptr<Sentence> ParseTool::_ParseFunctionDefine(const std::string& src
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	if (!Grammar::MatchBlockBegin(src, size, pos, &pos)) {
-		return nullptr;
-	}
-	Jump(src, size, pos, &pos);
-	auto contentSentence = ParseSentence(src, size, pos, &pos);
+	auto contentSentence = _ParseBlock(src, size, pos, &pos);
 	if (!contentSentence) {
-		return nullptr;
-	}
-	Jump(src, size, pos, &pos);
-	if (!Grammar::MatchBlockEnd(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	*nextPos = pos;
