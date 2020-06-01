@@ -16,8 +16,6 @@ public:
 		std::stringstream buffer;
 		buffer << in.rdbuf();
 		return buffer.str();
-		std::string result(buffer.str());
-		return result;
 	}
 };
 } // namespace peak
