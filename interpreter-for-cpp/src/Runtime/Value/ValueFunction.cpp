@@ -59,7 +59,7 @@ std::shared_ptr<Value> ValueFunction::Call(const std::vector<std::shared_ptr<Val
 }
 
 std::string ValueFunction::ToString() const {
-	return "function";
+	return "<function>";
 }
 std::shared_ptr<Value> ValueFunction::Clone() const {
 	auto valueFunc = new ValueFunction();
