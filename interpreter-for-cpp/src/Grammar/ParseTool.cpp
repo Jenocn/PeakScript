@@ -4,6 +4,7 @@
 #include "../Runtime/Sentence/SentenceCondition.h"
 #include "../Runtime/Sentence/SentenceDoWhile.h"
 #include "../Runtime/Sentence/SentenceEcho.h"
+#include "../Runtime/Sentence/SentenceEnumDefine.h"
 #include "../Runtime/Sentence/SentenceExpressionDouble.h"
 #include "../Runtime/Sentence/SentenceExpressionFunctionCall.h"
 #include "../Runtime/Sentence/SentenceExpressionInside.h"
@@ -37,6 +38,7 @@ ParseTool::SentenceParseList ParseTool::_sentenceParseList = {
 	_ParseVariableSet,
 	_ParseFunctionDefine,
 	_ParseObjectDefine,
+	_ParseEnumDefine,
 	_ParseCondition,
 	_ParseLoop,
 	_ParseForeach,
@@ -326,9 +328,80 @@ std::shared_ptr<Sentence> ParseTool::_ParseFunctionDefine(const std::string& src
 	return std::shared_ptr<Sentence>(new SentenceFunctionDefine(name, params, contentSentence));
 }
 
+std::shared_ptr<Sentence> ParseTool::_ParseEnumDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchEnum(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	if (!Jump(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	std::string name;
+	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+	if (!Grammar::MatchObjectBegin(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	std::set<std::string> checkNameSet;
+	std::set<double> checkValueSet;
+	std::list<std::pair<std::string, std::shared_ptr<ValueNumber>>> valueList;
+	double indexValue = 0;
+	while (true) {
+		if (pos >= size) {
+			return nullptr;
+		}
+		Jump(src, size, pos, &pos);
+		if (Grammar::MatchObjectEnd(src, size, pos, &pos)) {
+			break;
+		}
+		std::string valueName = "";
+		if (!Grammar::MatchName(src, size, pos, &pos, &valueName)) {
+			return nullptr;
+		}
+		Jump(src, size, pos, &pos);
+		if (Grammar::MatchAssign(src, size, pos, &pos)) {
+			Jump(src, size, pos, &pos);
+			if (!Grammar::MatchNumber(src, size, pos, &pos, &indexValue)) {
+				return nullptr;
+			}
+			Jump(src, size, pos, &pos);
+		}
+
+		auto valueNumber = std::shared_ptr<ValueNumber>(new ValueNumber(indexValue));
+		if (!ValueTool::IsInteger(valueNumber)) {
+			return nullptr;
+		}
+
+		if (checkNameSet.find(valueName) != checkNameSet.end()) {
+			return nullptr;
+		}
+		if (checkValueSet.find(indexValue) != checkValueSet.end()) {
+			return nullptr;
+		}
+		checkNameSet.emplace(valueName);
+		checkValueSet.emplace(indexValue);
+		valueList.emplace_back(valueName, valueNumber);
+
+		Jump(src, size, pos, &pos);
+		if (!Grammar::MatchSplitSymbol(src, size, pos, &pos)) {
+			if (Grammar::MatchObjectEnd(src, size, pos, &pos)) {
+				break;
+			}
+			return nullptr;
+		}
+
+		indexValue += 1;
+	}
+	*nextPos = pos;
+	return std::shared_ptr<Sentence>(new SentenceEnumDefine(name, valueList));
+}
+
 std::shared_ptr<Sentence> ParseTool::_ParseObjectDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	if (Grammar::MatchObject(src, size, pos, &pos)) {
-		Jump(src, size, pos, &pos);
+		if (!Jump(src, size, pos, &pos)) {
+			return nullptr;
+		}
 	}
 	std::string name;
 	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {

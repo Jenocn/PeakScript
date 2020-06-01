@@ -37,6 +37,7 @@ std::map<ErrorRuntimeCode, std::string> ErrorLogger::_errorCodeNameMap = {
 	{ErrorRuntimeCode::New, "New, \"new\""},
 	{ErrorRuntimeCode::ObjectDefine, "ObjectDefine, \"object\""},
 	{ErrorRuntimeCode::Inside, "Inside, \"inside.value\""},
+	{ErrorRuntimeCode::EnumDefine, "EnumDefine, \"enum\""},
 };
 
 void ErrorLogger::Locate(std::function<void(const std::string&)> logger) {

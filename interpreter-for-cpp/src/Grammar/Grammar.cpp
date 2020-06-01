@@ -64,6 +64,7 @@ static const std::string STRING_SET_SIGN = "set";
 static const std::string STRING_CONST_SIGN = "const";
 static const std::string STRING_NEW_SIGN = "new";
 static const std::string STRING_OBJECT_SIGN = "object";
+static const std::string STRING_ENUM_SIGN = "enum";
 
 static const char CHAR_NOT_SYMBOL = '!';
 static const char CHAR_LEFT_BRACKET = '(';
@@ -167,6 +168,9 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 		if (MatchObject(value, size, 0, &pos)) {
 			break;
 		}
+		if (MatchEnum(value, size, 0, &pos)) {
+			break;
+		}
 		// temp todo...
 
 		return false;
@@ -244,6 +248,9 @@ bool Grammar::SearchNextArray(const std::string& src, std::size_t size, std::siz
 	return false;
 }
 
+bool Grammar::MatchEnum(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_ENUM_SIGN, src, size, pos, nextPos);
+}
 bool Grammar::MatchExtends(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto& sign : SET_EXTENDS_SIGN) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {

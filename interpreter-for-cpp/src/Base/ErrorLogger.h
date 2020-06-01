@@ -42,6 +42,7 @@ enum class ErrorRuntimeCode {
 	New,
 	ObjectDefine,
 	Inside,
+	EnumDefine,
 };
 
 class ErrorLogger {
