@@ -142,6 +142,29 @@ namespace peak.interpreter {
 					}
 					return ValueNull.DEFAULT_VALUE;
 				});
+				// to_string
+				_Emplace("to_string", 1, (List<Value> args, Space s) => {
+					if (args.Count == 0) {
+						return null;
+					}
+					var value = args[0];
+					return new ValueString(ValueTool.ToString(value));
+				});
+				// to_number
+				_Emplace("to_number", 1, (List<Value> args, Space s) => {
+					if (args.Count == 0) {
+						return null;
+					}
+					var value = args[0];
+					if (!ValueTool.IsString(value)) {
+						return null;
+					}
+					double ret = 0;
+					if (!double.TryParse((value as ValueString).value, out ret)) {
+						ret = 0;
+					}
+					return new ValueNumber(ret);
+				});
 			}
 		}
 	}
