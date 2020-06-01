@@ -5,7 +5,7 @@
 
 版本|链接
 -|-
-1.3.1|[peak1.3.1.zip](https://jenocn.github.io/peak/peak1.3.1.zip)
+1.3.2|[peak1.3.2.zip](https://jenocn.github.io/peak/peak1.3.2.zip)
 
 ## 介绍  
 
@@ -285,3 +285,9 @@ try {
 `is_array(); // 返回是否为array`   
 `is_function(); // 返回是否为function`   
 `is_object(); // 返回是否为object`   
+
+#### to_string函数
+将任意类型转换为字符串并返回
+
+#### to_number函数
+将字符串转换为number类型并返回
