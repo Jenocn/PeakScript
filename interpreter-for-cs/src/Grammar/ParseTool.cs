@@ -22,6 +22,7 @@ namespace peak.interpreter {
 			_ParseVariableSet,
 			_ParseFunctionDefine,
 			_ParseObjectDefine,
+			_ParseEnumDefine,
 			_ParseCondition,
 			_ParseLoop,
 			_ParseForeach,
@@ -313,10 +314,82 @@ namespace peak.interpreter {
 			return new SentenceFunctionDefine(name, params_, contentSentence);
 		}
 
+		private static Sentence _ParseEnumDefine(string src, int size, int pos, out int nextPos) {
+			nextPos = pos;
+			if (!Grammar.MatchEnum(src, size, pos, out pos)) {
+				return null;
+			}
+			if (!Jump(src, size, pos, out pos)) {
+				return null;
+			}
+			string name;
+			if (!Grammar.MatchName(src, size, pos, out pos, out name)) {
+				return null;
+			}
+			Jump(src, size, pos, out pos);
+			if (!Grammar.MatchObjectBegin(src, size, pos, out pos)) {
+				return null;
+			}
+			var checkNameSet = new HashSet<string>();
+			var checkValueSet = new HashSet<double>();
+			var valueList = new LinkedList<KeyValuePair<string, ValueNumber>>();
+			double indexValue = 0;
+			while (true) {
+				if (pos >= size) {
+					return null;
+				}
+				Jump(src, size, pos, out pos);
+				if (Grammar.MatchObjectEnd(src, size, pos, out pos)) {
+					break;
+				}
+				string valueName = "";
+				if (!Grammar.MatchName(src, size, pos, out pos, out valueName)) {
+					return null;
+				}
+				Jump(src, size, pos, out pos);
+				if (Grammar.MatchAssign(src, size, pos, out pos)) {
+					Jump(src, size, pos, out pos);
+					if (!Grammar.MatchNumber(src, size, pos, out pos, out indexValue)) {
+						return null;
+					}
+					Jump(src, size, pos, out pos);
+				}
+
+				var valueNumber = new ValueNumber(indexValue);
+				if (!ValueTool.IsInteger(valueNumber)) {
+					return null;
+				}
+
+				if (checkNameSet.Contains(valueName)) {
+					return null;
+				}
+				if (checkValueSet.Contains(indexValue)) {
+					return null;
+				}
+				checkNameSet.Add(valueName);
+				checkValueSet.Add(indexValue);
+				valueList.AddLast(new KeyValuePair<string, ValueNumber>(valueName, valueNumber));
+
+				Jump(src, size, pos, out pos);
+				if (!Grammar.MatchSplitSymbol(src, size, pos, out pos)) {
+					if (Grammar.MatchObjectEnd(src, size, pos, out pos)) {
+						break;
+					}
+					return null;
+				}
+
+				indexValue += 1;
+			}
+			nextPos = pos;
+			return new SentenceEnumDefine(name, valueList);
+		}
+
 		private static Sentence _ParseObjectDefine(string src, int size, int pos, out int nextPos) {
 			nextPos = pos;
 			if (Grammar.MatchObject(src, size, pos, out pos)) {
-				Jump(src, size, pos, out pos);
+				if (!Jump(src, size, pos, out pos)) {
+					return null;
+				}
 			}
 			string name;
 			if (!Grammar.MatchName(src, size, pos, out pos, out name)) {

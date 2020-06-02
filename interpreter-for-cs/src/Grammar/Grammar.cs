@@ -103,6 +103,7 @@ namespace peak.interpreter {
 		private const string STRING_CONST_SIGN = "const";
 		private const string STRING_NEW_SIGN = "new";
 		private const string STRING_OBJECT_SIGN = "object";
+		private const string STRING_ENUM_SIGN = "enum";
 
 		private const char CHAR_NOT_SYMBOL = '!';
 		private const char CHAR_LEFT_BRACKET = '(';
@@ -204,6 +205,9 @@ namespace peak.interpreter {
 				if (MatchObject(value, size, 0, out pos)) {
 					break;
 				}
+				if (MatchEnum(value, size, 0, out pos)) {
+					break;
+				}
 				// temp todo...
 
 				return false;
@@ -279,6 +283,9 @@ namespace peak.interpreter {
 				}
 			}
 			return false;
+		}
+		public static bool MatchEnum(string src, int size, int pos, out int nextPos) {
+			return MatchSign(STRING_ENUM_SIGN, src, size, pos, out nextPos);
 		}
 		public static bool MatchObject(string src, int size, int pos, out int nextPos) {
 			return MatchSign(STRING_OBJECT_SIGN, src, size, pos, out nextPos);

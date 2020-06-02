@@ -40,6 +40,7 @@ namespace peak.interpreter {
 		New,
 		ObjectDefine,
 		Inside,
+		EnumDefine,
 	}
 
 	public class ErrorLogger {
@@ -81,6 +82,7 @@ namespace peak.interpreter {
 				{ErrorRuntimeCode.New, "New, \"new\""},
 				{ErrorRuntimeCode.ObjectDefine, "ObjectDefine, \"object\""},
 				{ErrorRuntimeCode.Inside, "Inside, \"inside.value\""},
+				{ErrorRuntimeCode.EnumDefine, "EnumDefine, \"enum\""},
 			};
 		}
 		public static void Locate(Action<string> logger) {
