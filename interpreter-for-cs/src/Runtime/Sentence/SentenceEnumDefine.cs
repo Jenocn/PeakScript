@@ -9,7 +9,7 @@ namespace peak.interpreter {
 
 	public class SentenceEnumDefine : Sentence {
 		private string _name = "";
-		private LinkedList<KeyValuePair<string, ValueNumber>> _valueList = new LinkedList<KeyValuePair<string, ValueNumber>>();
+		private LinkedList<KeyValuePair<string, ValueNumber>> _valueList = null;
 		public SentenceEnumDefine(string name, LinkedList<KeyValuePair<string, ValueNumber>> valueList) {
 			_name = name;
 			_valueList = valueList;

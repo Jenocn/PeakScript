@@ -10,8 +10,8 @@ namespace peak.interpreter {
 	class SentenceObjectDefine : Sentence {
 		private string _name = "";
 		private string _parentName = "";
-		private List<Sentence> _sentenceList = null;
-		public SentenceObjectDefine(string name, string parentName, List<Sentence> sentenceList) {
+		private LinkedList<Sentence> _sentenceList = null;
+		public SentenceObjectDefine(string name, string parentName, LinkedList<Sentence> sentenceList) {
 			_name = name;
 			_parentName = parentName;
 			_sentenceList = sentenceList;

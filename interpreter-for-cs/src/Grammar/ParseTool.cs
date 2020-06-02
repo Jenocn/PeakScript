@@ -408,7 +408,7 @@ namespace peak.interpreter {
 				return null;
 			}
 
-			List<Sentence> sentenceList = new List<Sentence>();
+			var sentenceList = new LinkedList<Sentence>();
 			while (true) {
 				if (pos >= size) {
 					return null;
@@ -421,7 +421,7 @@ namespace peak.interpreter {
 				if (!sentence) {
 					return null;
 				}
-				sentenceList.Add(sentence);
+				sentenceList.AddLast(sentence);
 			}
 			nextPos = pos;
 			return new SentenceObjectDefine(name, parentName, sentenceList);
