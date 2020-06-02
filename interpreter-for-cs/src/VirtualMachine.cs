@@ -16,7 +16,7 @@ namespace peak {
 			return new VirtualJourney(parseData.sentenceList, parent);
 		}
 		public static VirtualJourney LoadFile(string filename, Space parent = null) {
-			var src = VirtualTool.OpenFile(filename);
+			var src = VirtualTool.OpenSrc(filename);
 			return Load(src, parent);
 		}
 		public static void LocateLogger(Action<string> logger) {

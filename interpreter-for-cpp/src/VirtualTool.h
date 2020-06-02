@@ -11,11 +11,6 @@ namespace peak {
 
 class VirtualTool {
 public:
-	static std::string OpenFile(const std::string& filename) {
-		std::ifstream in(filename);
-		std::stringstream buffer;
-		buffer << in.rdbuf();
-		return buffer.str();
-	}
+	static std::string OpenSrc(const std::string& filename);
 };
 } // namespace peak

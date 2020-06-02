@@ -4,14 +4,12 @@
 */
 
 using System.IO;
+using peak.interpreter;
 
 namespace peak {
 	public class VirtualTool {
-		public static string OpenFile(string filename) {
-			if (!File.Exists(filename)) {
-				return "";
-			}
-			return File.ReadAllText(filename);
+		public static string OpenSrc(string filename) {
+			return System0.OpenSrc(filename);
 		}
 	}
 } // namespace peak

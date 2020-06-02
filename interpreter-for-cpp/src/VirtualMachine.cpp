@@ -16,7 +16,7 @@ std::shared_ptr<VirtualJourney> VirtualMachine::Load(const std::string& src, std
 }
 
 std::shared_ptr<VirtualJourney> VirtualMachine::LoadFile(const std::string& filename, std::shared_ptr<interpreter::Space> parent) {
-	const auto& src = VirtualTool::OpenFile(filename);
+	const auto& src = VirtualTool::OpenSrc(filename);
 	return Load(src, parent);
 }
 
