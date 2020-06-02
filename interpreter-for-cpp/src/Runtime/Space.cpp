@@ -1,5 +1,5 @@
 #include "Space.h"
-#include "System.h"
+#include "BuiltIn.h"
 #include "Value/Value.h"
 #include "Variable.h"
 
@@ -69,7 +69,7 @@ std::shared_ptr<Variable> Space::FindVariable(const std::string& name) const {
 	if (_parent) {
 		return _parent->FindVariable(name);
 	}
-	return System::FindVariable(name);
+	return BuiltIn::GetInstance()->FindVariable(name);
 }
 
 SpaceType Space::GetSpaceType() const {

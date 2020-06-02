@@ -80,7 +80,7 @@ namespace peak.interpreter {
 			if (_parent) {
 				return _parent.FindVariable(name);
 			}
-			return System0.FindVariable(name);
+			return BuiltIn.instance.FindVariable(name);
 		}
 		public Variable FindVariableFromTop(string name) {
 			Variable ret = null;
