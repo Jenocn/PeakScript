@@ -141,6 +141,9 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionNew.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEnumDefine.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\interpreter-for-cpp\src\VirtualMachine.h">
@@ -291,6 +294,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionNew.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEnumDefine.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
