@@ -9,12 +9,12 @@
 
 ## 介绍  
 
-PeakScript是一个脚本语言,在第一次加载脚本时创建一组运行时的对象,之后的调用不会多次进行代码解析,从而运行效率非常好,和大多数脚本语言一样,使用动态类型,支持`number`,`bool`,`string`,`null`,`array`,`object`几种类型,支持代码块`{}`,支持常见的`if - else if - else`和`for`,`foreach`,`while`,`do - while`循环,此外还增加了一个`loop`指定次数的循环,支持`break`,`continue`,`return`控制语句,支持`function`函数,支持`try - catch - finally`, 支持常见的算术表达式和关系表达式,支持自增自减运算符  
+PeakScript是一个脚本语言,在第一次加载脚本时创建一组运行时的对象,之后的调用不会多次进行解析,从而运行效率非常好,提供了c++和c#两个版本的解释器,通用易接入  
   
 ---  
   
 ## 语句结束符     
-* `\n`的换行 或 `;`分号为一条语句的结束符  
+* `;`分号或`\n`换行为一条语句的结束符  
   
 ## 变量声明     
 #### **`var`或`the`**    
@@ -220,14 +220,6 @@ for (var i = 0; i < 10; ++i) {
   
 #### `break`和`continue`  
 循环中遇到`break`则直接跳出当前循环,遇到`continue`则立即执行下一次循环    
-  
-#### 语句的简写    
-例如:  
-```  
-var arr = [1, 2, 3];  
-for item in arr echo item;  
-loop i in 3 echo i;  
-```  
   
 ## 函数    
 函数声明,前置声明符号`function`可写可不写  
