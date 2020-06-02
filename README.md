@@ -99,8 +99,8 @@ new操作符可以对任何变量使用, 表示根据变量当前的值生成一
 var obj = new MyObj;
 var arr = new array0;
 ```
-一般情况下,对于`number`,`bool`,`null`,`string`,`function`无需使用new操作符  
-而对于`array`,`object`则必须使用new才能生成一个新的对象,直接赋值相当与一个引用    
+* 对于`number`,`bool`,`null`,`string`,`function`无需使用new操作符来生成新的对象,直接赋值即可     
+* 对于`array`,`object`则必须使用new才能生成一个新的对象    
   
 ## enum枚举  
 例如:  
