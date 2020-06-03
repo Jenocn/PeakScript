@@ -1,26 +1,21 @@
 #include "VirtualJourney.h"
+#include "Runtime/Executer.h"
 #include "Runtime/Sentence/Sentence.h"
 
 using namespace peak;
 using namespace peak::interpreter;
 
-VirtualJourney::VirtualJourney(const std::list<std::shared_ptr<interpreter::Sentence>>& sentenceList, std::shared_ptr<interpreter::Space> parent)
-	: _sentenceList(sentenceList), _space(std::shared_ptr<Space>(new Space(SpaceType::None, parent))) {
+VirtualJourney::VirtualJourney(std::shared_ptr<Executer> executer)
+	: _executer(executer) {
 }
 
 bool VirtualJourney::Execute() {
-	_space->Clear();
-	for (auto sentence : _sentenceList) {
-		if (!Sentence::IsSuccess(sentence->Execute(_space))) {
-			return false;
-		}
-	}
-	return true;
+	return _executer->Execute();
 }
 
 std::shared_ptr<Variable> VirtualJourney::FindVariable(const std::string& name) {
-	return _space->FindVariable(name);
+	return _executer->FindVariable(name);
 }
 bool VirtualJourney::AddVariable(std::shared_ptr<Variable> variable) {
-	return _space->AddVariable(variable);
+	return _executer->AddVariable(variable);
 }

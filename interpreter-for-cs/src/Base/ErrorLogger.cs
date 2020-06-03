@@ -41,6 +41,8 @@ namespace peak.interpreter {
 		ObjectDefine,
 		Inside,
 		EnumDefine,
+		Import,
+		Export,
 	}
 
 	public class ErrorLogger {
@@ -83,6 +85,8 @@ namespace peak.interpreter {
 				{ErrorRuntimeCode.ObjectDefine, "ObjectDefine, \"object\""},
 				{ErrorRuntimeCode.Inside, "Inside, \"inside.value\""},
 				{ErrorRuntimeCode.EnumDefine, "EnumDefine, \"enum\""},
+				{ErrorRuntimeCode.Import, "Import, \"import\""},
+				{ErrorRuntimeCode.Export, "Export, \"export\""},
 			};
 		}
 		public static void Locate(Action<string> logger) {

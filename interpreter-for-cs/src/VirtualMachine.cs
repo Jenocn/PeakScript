@@ -8,16 +8,17 @@ using System;
 namespace peak {
 	using interpreter;
 	public class VirtualMachine {
-		public static VirtualJourney Load(string src, Space parent = null) {
-			var parseData = ParseTool.Load(src);
-			if (!parseData.bSuccess) {
-				return null;
+		public static ModulePool modulePool { get => ModulePool.instance; }
+		public static VirtualJourney Load(string src) {
+			var executer = Executer.Create(src);
+			if (executer != null) {
+				return new VirtualJourney(executer);
 			}
-			return new VirtualJourney(parseData.sentenceList, parent);
+			return null;
 		}
-		public static VirtualJourney LoadFile(string filename, Space parent = null) {
+		public static VirtualJourney LoadFile(string filename) {
 			var src = VirtualTool.OpenSrc(filename);
-			return Load(src, parent);
+			return Load(src);
 		}
 		public static void LocateLogger(Action<string> logger) {
 			LocateLogger(logger, logger);
@@ -25,6 +26,9 @@ namespace peak {
 		public static void LocateLogger(Action<string> echo, Action<string> errorLogger) {
 			System0.LocateEcho(echo);
 			ErrorLogger.Locate(errorLogger);
+		}
+		public static void LocateOpenSrc(Func<string, string> func) {
+			System0.LocateOpenSrc(func);
 		}
 	}
 } // namespace peak

@@ -5,19 +5,18 @@
 
 #pragma once
 
-#include "Runtime/Space.h"
-#include "Runtime/Value/ValueTool.h"
-#include "Runtime/Variable.h"
+#include "Base/CommonInclude.h"
 
 namespace peak {
 
 namespace interpreter {
-class Sentence;
+class Variable;
+class Executer;
 } // namespace interpreter
 
 class VirtualJourney {
 public:
-	VirtualJourney(const std::list<std::shared_ptr<interpreter::Sentence>>& sentenceList, std::shared_ptr<interpreter::Space> parent = nullptr);
+	VirtualJourney(std::shared_ptr<interpreter::Executer> executer);
 
 	bool Execute();
 
@@ -26,7 +25,6 @@ public:
 	bool AddVariable(std::shared_ptr<interpreter::Variable> variable);
 
 private:
-	std::shared_ptr<interpreter::Space> _space{nullptr};
-	std::list<std::shared_ptr<interpreter::Sentence>> _sentenceList{nullptr};
+	std::shared_ptr<interpreter::Executer> _executer{nullptr};
 };
 } // namespace peak

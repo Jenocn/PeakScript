@@ -4,7 +4,7 @@
 */
 
 namespace peak.interpreter {
-	public class SentenceDoWhile : Sentence {
+	public class SentenceDoWhile : SentenceReturn {
 		private SentenceExpression _expression = null;
 		private Sentence _sentence = null;
 		public SentenceDoWhile(SentenceExpression expression, Sentence sentence) {
@@ -15,9 +15,18 @@ namespace peak.interpreter {
 			var tempSpace = new Space(SpaceType.Loop, space);
 			while (true) {
 				tempSpace.Clear();
-				if (!IsSuccess(_sentence.Execute(tempSpace))) {
+				var ret = _sentence.Execute(tempSpace);
+				if (!IsSuccess(ret)) {
 					ErrorLogger.LogRuntimeError(ErrorRuntimeCode.DoWhile, "The sentence execute failed!");
 					return ExecuteResult.Failed;
+				}
+				if (ret == ExecuteResult.Break) {
+					break;
+				}
+				if (ret == ExecuteResult.Return) {
+					SetReturnValue((_sentence as SentenceReturn).returnValue);
+					tempSpace.Clear();
+					return ExecuteResult.Return;
 				}
 				if (!IsSuccess(_expression.Execute(space))) {
 					ErrorLogger.LogRuntimeError(ErrorRuntimeCode.DoWhile, "The condition expression execute failed!");
@@ -27,6 +36,7 @@ namespace peak.interpreter {
 					break;
 				}
 			}
+			tempSpace.Clear();
 			return ExecuteResult.Successed;
 		}
 

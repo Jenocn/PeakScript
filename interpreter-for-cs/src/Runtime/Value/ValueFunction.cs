@@ -39,7 +39,9 @@ namespace peak.interpreter {
 				}
 				tempVariable.SetValue(args[i]);
 			}
-			return func.Invoke(args, tempSpace);
+			var result = func.Invoke(args, tempSpace);
+			tempSpace.Clear();
+			return result;
 		}
 		public override string ToString() {
 			return "function";

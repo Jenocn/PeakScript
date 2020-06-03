@@ -11,10 +11,22 @@ ExecuteResult SentenceDoWhile::Execute(std::shared_ptr<Space> space) {
 	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
 	while (true) {
 		tempSpace->Clear();
-		if (!IsSuccess(_sentence->Execute(tempSpace))) {
+		auto ret = _sentence->Execute(tempSpace);
+
+		if (!IsSuccess(ret)) {
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::DoWhile, "The sentence execute failed!");
 			return ExecuteResult::Failed;
 		}
+
+		if (ret == ExecuteResult::Break) {
+			break;
+		}
+		if (ret == ExecuteResult::Return) {
+			SetReturnValue(std::static_pointer_cast<SentenceReturn>(_sentence)->GetReturnValue());
+			tempSpace->Clear();
+			return ExecuteResult::Return;
+		}
+
 		if (!IsSuccess(_expression->Execute(space))) {
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::DoWhile, "The condition expression execute failed!");
 			return ExecuteResult::Failed;
@@ -23,5 +35,6 @@ ExecuteResult SentenceDoWhile::Execute(std::shared_ptr<Space> space) {
 			break;
 		}
 	}
+	tempSpace->Clear();
 	return ExecuteResult::Successed;
 }

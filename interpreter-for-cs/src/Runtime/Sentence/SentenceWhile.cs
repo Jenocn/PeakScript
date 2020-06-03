@@ -33,9 +33,11 @@ namespace peak.interpreter {
 					}
 					if (ret == ExecuteResult.Return) {
 						SetReturnValue((_sentence as SentenceReturn).returnValue);
+						tempSpace.Clear();
 						return ExecuteResult.Return;
 					}
 				}
+				tempSpace.Clear();
 			} else {
 				while (true) {
 					if (!IsSuccess(_expression.Execute(space))) {

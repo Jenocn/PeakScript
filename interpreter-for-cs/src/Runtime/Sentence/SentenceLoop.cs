@@ -61,10 +61,12 @@ namespace peak.interpreter {
 					}
 					if (ret == ExecuteResult.Return) {
 						SetReturnValue((_sentence as SentenceReturn).returnValue);
+						tempSpace.Clear();
 						return ExecuteResult.Return;
 					}
 				}
 			}
+			tempSpace.Clear();
 			return ExecuteResult.Successed;
 		}
 

@@ -43,6 +43,8 @@ enum class ErrorRuntimeCode {
 	ObjectDefine,
 	Inside,
 	EnumDefine,
+	Import,
+	Export,
 };
 
 class ErrorLogger {

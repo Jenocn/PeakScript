@@ -5,12 +5,12 @@
 
 #pragma once
 
-#include "Sentence.h"
+#include "SentenceReturn.h"
 
-namespace peak { 
+namespace peak {
 namespace interpreter {
 class SentenceExpression;
-class SentenceDoWhile : public Sentence {
+class SentenceDoWhile : public SentenceReturn {
 public:
 	SentenceDoWhile(std::shared_ptr<SentenceExpression> expression, std::shared_ptr<Sentence> sentence);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);

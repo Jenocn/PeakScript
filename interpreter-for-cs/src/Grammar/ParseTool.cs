@@ -33,6 +33,8 @@ namespace peak.interpreter {
 			_ParseEcho,
 			_ParseLoopControl,
 			_ParseReturn,
+			_ParseImport,
+			_ParseExport,
 			_ParseTryCatchFinally,
 			_ParseExpressionToEnd,
 		};
@@ -255,6 +257,57 @@ namespace peak.interpreter {
 				}
 			}
 			return null;
+		}
+
+		private static Sentence _ParseImport(string src, int size, int pos, out int nextPos) {
+			nextPos = pos;
+			if (!Grammar.MatchImport(src, size, pos, out pos)) {
+				return null;
+			}
+			Jump(src, size, pos, out pos);
+
+			if (pos >= size) {
+				return null;
+			}
+			char sign = src[pos];
+			if (!Grammar.IsGrammarStringSign(sign)) {
+				return null;
+			}
+			string moduleName;
+			if (!Grammar.MatchPair(sign, sign, src, size, pos, out pos, out moduleName)) {
+				return null;
+			}
+
+			if (!JumpEnd(src, size, pos, out pos)) {
+				return null;
+			}
+			nextPos = pos;
+			return new SentenceImport(moduleName);
+		}
+		private static Sentence _ParseExport(string src, int size, int pos, out int nextPos) {
+			nextPos = pos;
+			if (!Grammar.MatchExport(src, size, pos, out pos)) {
+				return null;
+			}
+			Jump(src, size, pos, out pos);
+
+			if (pos >= size) {
+				return null;
+			}
+			char sign = src[pos];
+			if (!Grammar.IsGrammarStringSign(sign)) {
+				return null;
+			}
+			string moduleName;
+			if (!Grammar.MatchPair(sign, sign, src, size, pos, out pos, out moduleName)) {
+				return null;
+			}
+
+			if (!JumpEnd(src, size, pos, out pos)) {
+				return null;
+			}
+			nextPos = pos;
+			return new SentenceExport(moduleName);
 		}
 
 		private static Sentence _ParseReturn(string src, int size, int pos, out int nextPos) {

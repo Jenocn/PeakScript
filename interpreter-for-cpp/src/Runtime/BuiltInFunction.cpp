@@ -1,4 +1,4 @@
-#include "BuiltIn.h"
+#include "BuiltInFunction.h"
 #include "Space.h"
 #include "System.h"
 #include "Value/ValueTool.h"
@@ -6,17 +6,12 @@
 
 using namespace peak::interpreter;
 
-BuiltIn* BuiltIn::GetInstance() {
-	static BuiltIn _ins;
+BuiltInFunction* BuiltInFunction::GetInstance() {
+	static BuiltInFunction _ins;
 	return &_ins;
 }
 
-BuiltIn::BuiltIn() {
-	_InitFunction();
-	_InitUsing();
-}
-
-std::shared_ptr<Variable> BuiltIn::FindVariable(const std::string& name) const {
+std::shared_ptr<Variable> BuiltInFunction::FindVariable(const std::string& name) const {
 	auto ite = _variables.find(name);
 	if (ite != _variables.end()) {
 		return ite->second;
@@ -24,7 +19,7 @@ std::shared_ptr<Variable> BuiltIn::FindVariable(const std::string& name) const {
 	return nullptr;
 }
 
-void BuiltIn::_InitFunction() {
+BuiltInFunction::BuiltInFunction() {
 	auto _Emplace = [this](const std::string& name, std::size_t paramSize, ValueFunction::FunctionType func) {
 		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(paramSize, func));
 		auto variable = std::shared_ptr<Variable>(new Variable(name, VariableAttribute::Const, value));
@@ -158,6 +153,3 @@ void BuiltIn::_InitFunction() {
 	});
 }
 
-void BuiltIn::_InitUsing() {
-	// todo...
-}

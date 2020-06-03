@@ -38,6 +38,8 @@ std::map<ErrorRuntimeCode, std::string> ErrorLogger::_errorCodeNameMap = {
 	{ErrorRuntimeCode::ObjectDefine, "ObjectDefine, \"object\""},
 	{ErrorRuntimeCode::Inside, "Inside, \"inside.value\""},
 	{ErrorRuntimeCode::EnumDefine, "EnumDefine, \"enum\""},
+	{ErrorRuntimeCode::Import, "Import, \"import\""},
+	{ErrorRuntimeCode::Export, "Export, \"export\""},
 };
 
 void ErrorLogger::Locate(std::function<void(const std::string&)> logger) {

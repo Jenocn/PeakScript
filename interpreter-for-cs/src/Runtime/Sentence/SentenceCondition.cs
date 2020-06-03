@@ -38,8 +38,9 @@ namespace peak.interpreter {
 				if (executeRet == ExecuteResult.Break) {
 					return ExecuteResult.Break;
 				}
+				tempSpace.Clear();
 			}
-
+			
 			return ExecuteResult.Successed;
 		}
 	}

@@ -10,29 +10,20 @@ namespace peak {
 	using interpreter;
 
 	public class VirtualJourney {
-
-		private Space _space = null;
-		private List<Sentence> _sentenceList = new List<Sentence>();
-		public VirtualJourney(List<Sentence> sentenceList, Space parent = null) {
-			_space = new Space(SpaceType.None, parent);
-			_sentenceList = sentenceList;
+		private Executer _executer = null;
+		public VirtualJourney(Executer executer) {
+			_executer = executer;
 		}
 
 		public bool Execute() {
-			_space.Clear();
-			foreach (var sentence in _sentenceList) {
-				if (!Sentence.IsSuccess(sentence.Execute(_space))) {
-					return false;
-				}
-			}
-			return true;
+			return _executer.Execute();
 		}
 
 		public Variable FindVariable(string name) {
-			return _space.FindVariable(name);
+			return _executer.FindVariable(name);
 		}
 		public bool AddVariable(Variable variable) {
-			return _space.AddVariable(variable);
+			return _executer.AddVariable(variable);
 		}
 	}
 } // namespace peak

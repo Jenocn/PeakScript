@@ -5,6 +5,7 @@
 #include "../Runtime/Sentence/SentenceDoWhile.h"
 #include "../Runtime/Sentence/SentenceEcho.h"
 #include "../Runtime/Sentence/SentenceEnumDefine.h"
+#include "../Runtime/Sentence/SentenceExport.h"
 #include "../Runtime/Sentence/SentenceExpressionDouble.h"
 #include "../Runtime/Sentence/SentenceExpressionFunctionCall.h"
 #include "../Runtime/Sentence/SentenceExpressionInside.h"
@@ -17,6 +18,7 @@
 #include "../Runtime/Sentence/SentenceFor.h"
 #include "../Runtime/Sentence/SentenceForeach.h"
 #include "../Runtime/Sentence/SentenceFunctionDefine.h"
+#include "../Runtime/Sentence/SentenceImport.h"
 #include "../Runtime/Sentence/SentenceLoop.h"
 #include "../Runtime/Sentence/SentenceLoopControl.h"
 #include "../Runtime/Sentence/SentenceObjectDefine.h"
@@ -49,6 +51,8 @@ ParseTool::SentenceParseList ParseTool::_sentenceParseList = {
 	_ParseEcho,
 	_ParseLoopControl,
 	_ParseReturn,
+	_ParseImport,
+	_ParseExport,
 	_ParseTryCatchFinally,
 	_ParseExpressionToEnd,
 };
@@ -271,6 +275,55 @@ std::shared_ptr<SentenceExpression> ParseTool::__ParseExpressionInsideAppend(con
 		}
 	}
 	return nullptr;
+}
+
+std::shared_ptr<Sentence> ParseTool::_ParseImport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchImport(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+
+	if (pos >= size) {
+		return nullptr;
+	}
+	char sign = src[pos];
+	if (!Grammar::IsGrammarStringSign(sign)) {
+		return nullptr;
+	}
+	std::string moduleName;
+	if (!Grammar::MatchPair(sign, sign, src, size, pos, &pos, &moduleName)) {
+		return nullptr;
+	}
+
+	if (!JumpEnd(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	return std::shared_ptr<Sentence>(new SentenceImport(moduleName));
+}
+std::shared_ptr<Sentence> ParseTool::_ParseExport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Grammar::MatchExport(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	Jump(src, size, pos, &pos);
+
+	if (pos >= size) {
+		return nullptr;
+	}
+	char sign = src[pos];
+	if (!Grammar::IsGrammarStringSign(sign)) {
+		return nullptr;
+	}
+	std::string moduleName;
+	if (!Grammar::MatchPair(sign, sign, src, size, pos, &pos, &moduleName)) {
+		return nullptr;
+	}
+
+	if (!JumpEnd(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	*nextPos = pos;
+	return std::shared_ptr<Sentence>(new SentenceExport(moduleName));
 }
 
 std::shared_ptr<Sentence> ParseTool::_ParseReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
@@ -908,10 +961,10 @@ std::shared_ptr<Sentence> ParseTool::_ParseLoopControl(const std::string& src, s
 }
 
 std::shared_ptr<SentenceExpression> ParseTool::_ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::IsGrammarStringSign(src[pos])) {
+	char sign = src[pos];
+	if (!Grammar::IsGrammarStringSign(sign)) {
 		return nullptr;
 	}
-	char sign = src[pos];
 	std::string temp;
 	if (Grammar::MatchPair(sign, sign, src, size, pos, &pos, &temp)) {
 		*nextPos = pos;

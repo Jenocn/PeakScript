@@ -55,7 +55,9 @@ std::shared_ptr<Value> ValueFunction::Call(const std::vector<std::shared_ptr<Val
 		}
 		tempVariable->SetValue(args[i]);
 	}
-	return func(args, tempSpace);
+	auto result = func(args, tempSpace);
+	tempSpace->Clear();
+	return result;
 }
 
 std::string ValueFunction::ToString() const {

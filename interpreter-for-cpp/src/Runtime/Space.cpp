@@ -1,5 +1,7 @@
 #include "Space.h"
-#include "BuiltIn.h"
+#include "BuiltInFunction.h"
+#include "Module.h"
+#include "ModulePool.h"
 #include "Value/Value.h"
 #include "Variable.h"
 
@@ -32,6 +34,34 @@ std::shared_ptr<Space> Space::CopySpace() const {
 
 void Space::Clear() {
 	_variables.clear();
+	_spaceOfUsing.clear();
+	_importModules.clear();
+	auto modulePool = ModulePool::GetInstance();
+	for (auto& name : _exportModulesNameSet) {
+		modulePool->RemoveModule(name);
+	}
+	_exportModulesNameSet.clear();
+}
+
+bool Space::UseModule(std::shared_ptr<Module> module) {
+	if (!module) {
+		return false;
+	}
+	if (_importModules.find(module->GetName()) != _importModules.end()) {
+		ErrorLogger::LogRuntimeError(module->GetName());
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Space, "The module \"" + module->GetName() + "\" is exist!");
+		return false;
+	}
+	_importModules.emplace(module->GetName(), module);
+	return true;
+}
+
+bool Space::SetExportModule(const std::string& moduleName) {
+	if (_exportModulesNameSet.find(moduleName) == _exportModulesNameSet.end()) {
+		_exportModulesNameSet.emplace(moduleName);
+		return true;
+	}
+	return false;
 }
 
 bool Space::AddVariable(std::shared_ptr<Variable> value) {
@@ -66,10 +96,16 @@ std::shared_ptr<Variable> Space::FindVariable(const std::string& name) const {
 			return find;
 		}
 	}
+	for (auto& pair : _importModules) {
+		auto find = pair.second->GetSpace()->FindVariableFromTop(name);
+		if (find) {
+			return find;
+		}
+	}
 	if (_parent) {
 		return _parent->FindVariable(name);
 	}
-	return BuiltIn::GetInstance()->FindVariable(name);
+	return BuiltInFunction::GetInstance()->FindVariable(name);
 }
 
 SpaceType Space::GetSpaceType() const {

@@ -32,6 +32,7 @@ ExecuteResult SentenceCondition::Execute(std::shared_ptr<Space> space) {
 		if (executeRet == ExecuteResult::Break) {
 			return ExecuteResult::Break;
 		}
+		tempSpace->Clear();
 	}
 
 	return ExecuteResult::Successed;

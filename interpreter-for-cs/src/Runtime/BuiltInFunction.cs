@@ -8,8 +8,8 @@ using System.Collections.Generic;
 
 namespace peak.interpreter {
 
-	public class BuiltIn {
-		public static BuiltIn instance = new BuiltIn();
+	public class BuiltInFunction {
+		public static BuiltInFunction instance = new BuiltInFunction();
 		public Dictionary<string, Variable> variables = new Dictionary<string, Variable>();
 
 		public Variable FindVariable(string name) {
@@ -20,11 +20,7 @@ namespace peak.interpreter {
 			return null;
 		}
 
-		private BuiltIn() {
-			_InitFunction();
-			_InitUsing();
-		}
-		private void _InitFunction() {
+		private BuiltInFunction() {
 			Action<string, int, Func<List<Value>, Space, Value>> _Emplace = (string name, int paramSize, Func<List<Value>, Space, Value> func) => {
 				var value = new ValueFunction(paramSize, func);
 				var variable = new Variable(name, VariableAttribute.Const, value);
@@ -160,10 +156,6 @@ namespace peak.interpreter {
 				}
 				return new ValueNumber(ret);
 			});
-		}
-
-		private void _InitUsing() {
-
 		}
 	}
 }

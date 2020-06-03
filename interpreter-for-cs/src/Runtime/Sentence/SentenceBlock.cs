@@ -28,6 +28,7 @@ namespace peak.interpreter {
 					return ExecuteResult.Continue;
 				}
 			}
+			tempSpace.Clear();
 			return ExecuteResult.Successed;
 		}
 		public void Push(Sentence sentence) {

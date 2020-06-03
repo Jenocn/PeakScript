@@ -22,6 +22,7 @@ ExecuteResult SentenceBlock::Execute(std::shared_ptr<Space> space) {
 			return ExecuteResult::Continue;
 		}
 	}
+	tempSpace->Clear();
 	return ExecuteResult::Successed;
 }
 void SentenceBlock::Push(std::shared_ptr<Sentence> sentence) {

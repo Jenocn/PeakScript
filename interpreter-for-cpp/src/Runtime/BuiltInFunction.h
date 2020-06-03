@@ -10,21 +10,16 @@
 namespace peak {
 namespace interpreter {
 
-class Space;
 class Variable;
 
-class BuiltIn {
+class BuiltInFunction {
 public:
-	static BuiltIn* GetInstance();
+	static BuiltInFunction* GetInstance();
 
 	std::shared_ptr<Variable> FindVariable(const std::string& name) const;
 
 private:
-	void _InitFunction();
-	void _InitUsing();
-
-private:
-	BuiltIn();
+	BuiltInFunction();
 
 private:
 	std::unordered_map<std::string, std::shared_ptr<Variable>> _variables;

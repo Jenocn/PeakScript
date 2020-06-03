@@ -50,6 +50,7 @@ namespace peak.interpreter {
 					}
 					if (ret == ExecuteResult.Return) {
 						SetReturnValue((_content as SentenceReturn).returnValue);
+						tempSpace.Clear();
 						return ExecuteResult.Return;
 					}
 				}
@@ -60,6 +61,7 @@ namespace peak.interpreter {
 					}
 				}
 			}
+			tempSpace.Clear();
 			return ExecuteResult.Successed;
 		}
 

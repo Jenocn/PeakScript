@@ -43,6 +43,7 @@ ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
 			}
 			if (ret == ExecuteResult::Return) {
 				SetReturnValue(std::static_pointer_cast<SentenceReturn>(_content)->GetReturnValue());
+				tempSpace->Clear();
 				return ExecuteResult::Return;
 			}
 		}
@@ -53,5 +54,6 @@ ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
 			}
 		}
 	}
+	tempSpace->Clear();
 	return ExecuteResult::Successed;
 }
