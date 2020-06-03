@@ -5,7 +5,7 @@
 
 版本|链接
 -|-
-1.4.0|[peak1.4.0.zip](https://jenocn.github.io/peak/peak1.4.0.zip)
+1.5.0|[peak1.5.0.zip](https://jenocn.github.io/peak/peak1.5.0.zip)
 
 ## 介绍  
 
@@ -239,6 +239,26 @@ for (var i = 0; i < 10; ++i) {
 #### `break`和`continue`  
 循环中遇到`break`则直接跳出当前循环,遇到`continue`则立即执行下一次循环   
 
+## 模块 import/export  
+#### import 引用模块  
+添加模块后则可以调用对应模块空间的对象  
+格式:  
+```
+import "ModuleName";
+```
+`ModuleName`:
+* 使用ModulePool事先添加的模块制定名称  
+* 其他代码文件中export的名称  
+* peak脚本代码的文件名  
+
+#### export 导出模块  
+导出当前代码空间  
+格式:  
+```
+export "ModuleName";
+```  
+`ModuleName`不能与已存在的模块名重复  
+
 ## 异常处理      
 ```  
 try {  
@@ -297,4 +317,4 @@ try {
 将任意类型转换为字符串并返回
 
 #### to_number函数
-将字符串转换为number类型并返回
+将字符串转换为number类型并返回  
