@@ -22,12 +22,17 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Base\ErrorLogger.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Grammar\Grammar.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Grammar\ParseTool.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\BuiltInFunction.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Executer.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Module.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\ModulePool.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Analysis\ExpressionVariableAnalysisInstance.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceBlock.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceCondition.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceDoWhile.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEcho.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEnumDefine.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExport.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.cpp" />
@@ -41,6 +46,7 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFor.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceForeach.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFunctionDefine.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceImport.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoop.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoopControl.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceObjectDefine.cpp" />
@@ -65,12 +71,18 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Variable.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\VirtualJourney.cpp" />
     <ClCompile Include="..\..\interpreter-for-cpp\src\VirtualMachine.cpp" />
+    <ClCompile Include="..\..\interpreter-for-cpp\src\VirtualTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\interpreter-for-cpp\src\Base\CommonInclude.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Base\ErrorLogger.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Grammar\Grammar.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Grammar\ParseTool.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\peak.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\BuiltInFunction.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Executer.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Module.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\ModulePool.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Analysis\ExpressionVariableAnalysisInstance.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Analysis\IExpressionVariableAnalysis.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\Sentence.h" />
@@ -79,6 +91,7 @@
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceDoWhile.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEcho.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEnumDefine.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExport.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpression.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionDouble.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExpressionFunctionCall.h" />
@@ -92,6 +105,7 @@
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFor.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceForeach.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceFunctionDefine.h" />
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceImport.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoop.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceLoopControl.h" />
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceObjectDefine.h" />

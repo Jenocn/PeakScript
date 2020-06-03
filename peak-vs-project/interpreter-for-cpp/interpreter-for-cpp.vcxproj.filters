@@ -144,6 +144,27 @@
     <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEnumDefine.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Module.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\ModulePool.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\BuiltInFunction.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Executer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceImport.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExport.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\interpreter-for-cpp\src\VirtualTool.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\interpreter-for-cpp\src\VirtualMachine.h">
@@ -297,6 +318,27 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceEnumDefine.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\peak.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Module.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\ModulePool.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\BuiltInFunction.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Executer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceImport.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\interpreter-for-cpp\src\Runtime\Sentence\SentenceExport.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
