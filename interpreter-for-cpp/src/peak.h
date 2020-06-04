@@ -15,6 +15,7 @@
 
 #include "VirtualJourney.h"
 #include "VirtualMachine.h"
+#include "VirtualTool.h"
 
 // using namespace peak;
 // using namespace peak::interpreter;

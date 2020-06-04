@@ -4,6 +4,7 @@
 #include "Runtime/Executer.h"
 #include "Runtime/ModulePool.h"
 #include "Runtime/System.h"
+#include "VirtualJourney.h"
 #include "VirtualTool.h"
 
 using namespace peak;

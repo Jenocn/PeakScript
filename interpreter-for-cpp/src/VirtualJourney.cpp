@@ -1,6 +1,5 @@
 #include "VirtualJourney.h"
 #include "Runtime/Executer.h"
-#include "Runtime/Sentence/Sentence.h"
 
 using namespace peak;
 using namespace peak::interpreter;

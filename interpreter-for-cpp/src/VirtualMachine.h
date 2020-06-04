@@ -5,9 +5,11 @@
 
 #pragma once
 
-#include "VirtualJourney.h"
+#include "Base/CommonInclude.h"
 
 namespace peak {
+
+class VirtualJourney;
 
 namespace interpreter {
 class ModulePool;
