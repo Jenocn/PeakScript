@@ -9,6 +9,10 @@
 #include "Runtime/Module.h"
 #include "Runtime/ModulePool.h"
 #include "Runtime/Space.h"
+#include "Runtime/System.h"
+#include "Runtime/Value/ValueTool.h"
+#include "Runtime/Variable.h"
+
 #include "VirtualJourney.h"
 #include "VirtualMachine.h"
 
