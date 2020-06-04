@@ -12,15 +12,20 @@ namespace peak.interpreter {
 		}
 
 		public override ExecuteResult Execute(Space space) {
+			if (space.spaceType != SpaceType.None) {
+				ErrorLogger.LogRuntimeError(_moduleName);
+				ErrorLogger.LogRuntimeError(ErrorRuntimeCode.Export, "The module \"" + _moduleName + "\" can't export here!");
+				return ExecuteResult.Failed;
+			}
 			if (!space.SetExportModule(_moduleName)) {
 				ErrorLogger.LogRuntimeError(_moduleName);
-				ErrorLogger.LogRuntimeError(ErrorRuntimeCode.Export, "The module \"" + _moduleName + "\" export failed!");
+				ErrorLogger.LogRuntimeError(ErrorRuntimeCode.Export, "The module \"" + _moduleName + "\" already export!");
 				return ExecuteResult.Failed;
 			}
 			var module = new Module(_moduleName, space);
 			if (!ModulePool.instance.AddModule(_moduleName, module, true)) {
 				ErrorLogger.LogRuntimeError(_moduleName);
-				ErrorLogger.LogRuntimeError(ErrorRuntimeCode.Export, "The module \"" + _moduleName + "\" export failed!");
+				ErrorLogger.LogRuntimeError(ErrorRuntimeCode.Export, "The module \"" + _moduleName + "\" already exists!");
 				return ExecuteResult.Failed;
 			}
 			return ExecuteResult.Successed;

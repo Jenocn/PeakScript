@@ -21,6 +21,7 @@ std::shared_ptr<Space> Space::CopySpace() const {
 	}
 	auto space = std::shared_ptr<Space>(new Space(_spaceType, parent));
 	space->_spaceOfUsing = _spaceOfUsing;
+	space->_importModules = _importModules;
 
 	for (auto& pair : _variables) {
 		auto tempVariable = pair.second;

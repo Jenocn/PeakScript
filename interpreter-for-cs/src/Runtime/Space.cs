@@ -43,6 +43,7 @@ namespace peak.interpreter {
 			}
 			var space = new Space(_spaceType, parent);
 			space._spaceOfUsing = _spaceOfUsing;
+			space._importModules = _importModules;
 
 			foreach (var pair in _variables) {
 				var tempVariable = pair.Value;
