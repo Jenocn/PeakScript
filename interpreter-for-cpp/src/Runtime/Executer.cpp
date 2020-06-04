@@ -19,14 +19,17 @@ std::shared_ptr<Executer> Executer::Create(const std::string& src) {
 Executer::Executer(std::shared_ptr<ParseData> data)
 	: _parseData(data) {
 	_space = std::shared_ptr<Space>(new Space(SpaceType::None));
+	_outsideSpace = std::shared_ptr<Space>(new Space(SpaceType::None));
 }
 
 Executer::~Executer() {
 	_space->Clear();
+	_outsideSpace->Clear();
 }
 
 bool Executer::Execute() {
 	_space->Clear();
+	_space->AddSpaceOfUsing(_outsideSpace);
 	for (auto sentence : _parseData->sentenceList) {
 		if (!Sentence::IsSuccess(sentence->Execute(_space))) {
 			return false;
@@ -43,5 +46,5 @@ std::shared_ptr<Variable> Executer::FindVariable(const std::string& name) {
 	return _space->FindVariable(name);
 }
 bool Executer::AddVariable(std::shared_ptr<Variable> variable) {
-	return _space->AddVariable(variable);
+	return _outsideSpace->AddVariable(variable);
 }

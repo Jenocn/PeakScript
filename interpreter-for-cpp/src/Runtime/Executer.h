@@ -32,6 +32,7 @@ private:
 private:
 	std::shared_ptr<ParseData> _parseData{nullptr};
 	std::shared_ptr<Space> _space{nullptr};
+	std::shared_ptr<Space> _outsideSpace{nullptr};
 };
 
 } // namespace interpreter

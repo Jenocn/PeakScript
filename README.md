@@ -318,3 +318,16 @@ try {
 
 #### to_number函数
 将字符串转换为number类型并返回  
+
+## API调用   
+在`peak`命名空间下的三个类  
+
+#### VirtualMachine 虚拟机  
+* `LoadXXX`系列方法用于加载脚本  
+* `LocateXXX`系列方法用于重定位解释器的一些预设方法    
+* `GetXXX`方法用于获取解释器的一些内置对象  
+
+#### VirtualJourney 虚拟“旅途”  
+* `Execute`方法用于执行脚本  
+* `FindVariable`用于获取空间中的对象  
+* `AddVariable`用于添加对象到空间中  
