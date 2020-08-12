@@ -100,13 +100,14 @@ namespace peak.interpreter {
 			int save0 = 0;
 			int save1 = 0;
 			for (int i = 0; i < size; ++i) {
-				if (src[i] == '\n') {
+				if ((src[i] == '\n') || (i == size - 1)) {
 					++lineNum;
 					if (i >= pos) {
-						save1 = i;
+						save1 = i + 1;
 						break;
 					}
 					save0 = i + 1;
+					save1 = save0;
 				}
 			}
 			Log("[" + lineNum + "," + (save1 - save0) + "]: " + src.Substring(save0, save1 - save0));

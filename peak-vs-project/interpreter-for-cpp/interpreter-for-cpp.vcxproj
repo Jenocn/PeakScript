@@ -225,6 +225,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>
       </LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -257,6 +258,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>
       </LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

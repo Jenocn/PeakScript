@@ -55,13 +55,14 @@ void ErrorLogger::LogParseError(const std::string& src, std::size_t size, std::s
 	std::size_t save0 = 0;
 	std::size_t save1 = 0;
 	for (std::size_t i = 0; i < size; ++i) {
-		if (src[i] == '\n') {
+		if ((src[i] == '\n') || (i == size - 1)) {
 			++lineNum;
 			if (i >= pos) {
-				save1 = i;
+				save1 = i + 1;
 				break;
 			}
 			save0 = i + 1;
+			save1 = save0;
 		}
 	}
 	Log("[" + std::to_string(lineNum) + "," + std::to_string(save1 - save0) + "]: " + src.substr(save0, save1 - save0));

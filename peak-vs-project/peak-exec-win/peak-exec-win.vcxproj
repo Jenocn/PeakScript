@@ -80,13 +80,13 @@
     <TargetName>peak_exec</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Users\jenocn\Desktop\Project\PeakScript\interpreter-for-cpp\src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\jenocn\Desktop\Project\PeakScript\peak-vs-project\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\interpreter-for-cpp\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\x64\Debug;$(LibraryPath)</LibraryPath>
     <TargetName>peak_exec</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Users\jenocn\Desktop\Project\PeakScript\interpreter-for-cpp\src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\jenocn\Desktop\Project\PeakScript\peak-vs-project\x64\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\interpreter-for-cpp\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\x64\Release;$(LibraryPath)</LibraryPath>
     <TargetName>peak_exec</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -110,6 +110,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>
       </LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +143,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>
       </LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

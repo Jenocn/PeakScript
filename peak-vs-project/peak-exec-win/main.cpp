@@ -1,5 +1,5 @@
 
-#include "VirtualMachine.h"
+#include <peak.h>
 
 #pragma comment(lib, "libpeak")
 
