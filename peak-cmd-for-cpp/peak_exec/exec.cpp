@@ -1,6 +1,5 @@
 
-#include "../../interpreter-for-cpp/src/VirtualMachine.h"
-#include "../../interpreter-for-cpp/src/VirtualTool.h"
+#include "../../interpreter-for-cpp/src/peak.h"
 
 using namespace peak;
 
