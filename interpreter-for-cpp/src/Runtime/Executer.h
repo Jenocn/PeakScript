@@ -23,7 +23,7 @@ public:
 
 	std::shared_ptr<Space> GetSpace() const;
 
-	std::shared_ptr<Variable> FindVariable(const std::string& name);
+	std::shared_ptr<Variable> FindVariable(const std::string& name) const;
 	bool AddVariable(std::shared_ptr<Variable> variable);
 
 private:

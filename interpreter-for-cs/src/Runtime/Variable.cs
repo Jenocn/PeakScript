@@ -21,10 +21,16 @@ namespace peak.interpreter {
 		public VariableAttribute attribute { get => _attribute; }
 		public Value value { get => _value; }
 
-		public Variable(string name, VariableAttribute attribute, Value value = null) {
+		public Variable(string name, VariableAttribute attribute, Value value) {
 			_name = name;
 			_attribute = attribute;
 			_value = value;
+		}
+
+		public Variable(string name, VariableAttribute attribute) {
+			_name = name;
+			_attribute = attribute;
+			_value = ValueNull.DEFAULT_VALUE;
 		}
 
 		public bool SetValue(Value value) {

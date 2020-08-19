@@ -42,7 +42,7 @@ std::shared_ptr<Space> Executer::GetSpace() const {
 	return _space;
 }
 
-std::shared_ptr<Variable> Executer::FindVariable(const std::string& name) {
+std::shared_ptr<Variable> Executer::FindVariable(const std::string& name) const {
 	return _space->FindVariable(name);
 }
 bool Executer::AddVariable(std::shared_ptr<Variable> variable) {
