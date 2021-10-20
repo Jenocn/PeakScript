@@ -20,7 +20,7 @@ ExecuteResult SentenceExport::Execute(std::shared_ptr<Space> space) {
 		return ExecuteResult::Failed;
 	}
 	auto module = std::shared_ptr<Module>(new Module(_moduleName, space));
-	if (!ModulePool::GetInstance()->AddModule(_moduleName, module, true)) {
+	if (!ModulePool::GetInstance()->AddModule(_moduleName, module)) {
 		ErrorLogger::LogRuntimeError(_moduleName);
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Export, "The module \"" + _moduleName + "\" already exists!");
 		return ExecuteResult::Failed;

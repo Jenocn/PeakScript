@@ -20,6 +20,7 @@ public:
 	bool Execute();
 
 	const std::string& GetName() const;
+	bool IsExecuted() const;
 
 	std::shared_ptr<Space> GetSpace() const;
 
@@ -27,6 +28,7 @@ private:
 	std::string _name;
 	std::shared_ptr<Executer> _executer{nullptr};
 	std::shared_ptr<Space> _space{nullptr};
+	bool _bExecuted{false};
 };
 
 } // namespace interpreter

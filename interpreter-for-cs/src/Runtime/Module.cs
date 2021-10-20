@@ -9,6 +9,7 @@ namespace peak.interpreter {
 		private string _name = "";
 		private Executer _executer = null;
 		private Space _space = null;
+		private bool _bExecuted = false;
 
 		public string name { get => _name; }
 		public Space space { get => _space; }
@@ -21,13 +22,19 @@ namespace peak.interpreter {
 		public Module(string name, Space space) {
 			_name = name;
 			_space = space;
+			_bExecuted = true;
 		}
 
 		public bool Execute() {
+			_bExecuted = true;
 			if (_executer != null) {
 				return _executer.Execute();
 			}
 			return true;
+		}
+
+		public bool IsExecuted() {
+			return _bExecuted;
 		}
 	}
 

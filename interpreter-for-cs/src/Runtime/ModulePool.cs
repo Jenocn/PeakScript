@@ -32,7 +32,6 @@ namespace peak.interpreter {
 
 		private Dictionary<string, string> _moduleToFilesMap = new Dictionary<string, string>();
 		private Dictionary<string, Module> _modulesMap = new Dictionary<string, Module>();
-		private HashSet<string> _executedSet = new HashSet<string>();
 		private HashSet<string> _searchDirs = new HashSet<string>();
 
 		public void AddSearchDir(string dir) {
@@ -46,19 +45,15 @@ namespace peak.interpreter {
 			}
 		}
 
-		public bool AddModule(string moduleName, Module module, bool bExecuted) {
+		public bool AddModule(string moduleName, Module module) {
 			if (!_modulesMap.ContainsKey(moduleName)) {
 				_modulesMap.Add(moduleName, module);
-				if (bExecuted) {
-					_executedSet.Add(moduleName);
-				}
 				return true;
 			}
 			return false;
 		}
 		public void RemoveModule(string moduleName) {
 			_modulesMap.Remove(moduleName);
-			_executedSet.Remove(moduleName);
 		}
 		public bool AddModuleFilename(string moduleName, string filename) {
 			if (!_moduleToFilesMap.ContainsKey(moduleName)) {
@@ -67,50 +62,47 @@ namespace peak.interpreter {
 			}
 			return false;
 		}
-		public string GetFilenameOfModule(string moduleName) {
-			string ret = "";
-			if (_moduleToFilesMap.TryGetValue(moduleName, out ret)) {
-				return ret;
-			}
-			return "";
-		}
 
 		public Module UseModule(string moduleName) {
-			Module ret = null;
+			// exists module
 			do {
-				if (_modulesMap.TryGetValue(moduleName, out ret)) {
+				if (!_modulesMap.TryGetValue(moduleName, out var module)) {
 					break;
 				}
-				Executer executer = null;
+				if (module == null) {
+					RemoveModule(moduleName);
+					break;
+				}
+				if (!module.IsExecuted()) {
+					if (!module.Execute()) {
+						RemoveModule(moduleName);
+						break;
+					}
+				}
+				return module;
+			} while (false);
 
-				var filename = GetFilenameOfModule(moduleName);
-				executer = _CreateExecuter(filename);
-				if (executer == null) {
-					executer = _CreateExecuter(moduleName);
+			// create new module
+			var executer = _CreateExecuter(moduleName);
+
+			if (executer == null) {
+				if (_moduleToFilesMap.TryGetValue(moduleName, out var filename)) {
+					executer = _CreateExecuter(filename);
 				}
 
 				if (executer == null) {
 					return null;
 				}
-				ret = new Module(moduleName, executer);
-				_modulesMap.Add(moduleName, ret);
-			} while (false);
-
-			bool bExecuted = IsExecuted(moduleName);
-
-			if (!bExecuted) {
-				if (ret.Execute()) {
-					_executedSet.Add(moduleName);
-				} else {
-					_modulesMap.Remove(moduleName);
-					ret = null;
-				}
 			}
-			return ret;
-		}
 
-		public bool IsExecuted(string moduleName) {
-			return _executedSet.Contains(moduleName);
+			var ret = new Module(moduleName, executer);
+			if (ret.Execute()) {
+				_modulesMap.Add(moduleName, ret);
+			} else {
+				ret = null;
+			}
+
+			return ret;
 		}
 	}
 

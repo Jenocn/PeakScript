@@ -20,14 +20,12 @@ public:
 	void AddSearchDir(const std::string& dir);
 	void RemoveSearchDir(const std::string& dir);
 
-	bool AddModule(const std::string& moduleName, std::shared_ptr<Module> module, bool bExecuted);
+	bool AddModule(const std::string& moduleName, std::shared_ptr<Module> module);
 	void RemoveModule(const std::string& moduleName);
 	bool AddModuleFilename(const std::string& moduleName, const std::string& filename);
 	const std::string& GetFilenameOfModule(const std::string& moduleName) const;
 
 	std::shared_ptr<Module> UseModule(const std::string& moduleName);
-
-	bool IsExecuted(const std::string& moduleName) const;
 
 private:
 	std::shared_ptr<Executer> _CreateExecuter(const std::string& filename) const;
@@ -35,7 +33,6 @@ private:
 private:
 	std::unordered_map<std::string, std::string> _moduleToFilesMap;
 	std::unordered_map<std::string, std::shared_ptr<Module>> _modulesMap;
-	std::set<std::string> _executedSet;
 	std::set<std::string> _searchDirs;
 };
 
