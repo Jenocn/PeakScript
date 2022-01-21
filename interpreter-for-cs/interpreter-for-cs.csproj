@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>peak.interpreter</RootNamespace>
     <AssemblyName>Peak</AssemblyName>
+    <CONFIGURATION>Release</CONFIGURATION>
   </PropertyGroup>
 
 </Project>

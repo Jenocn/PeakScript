@@ -15,8 +15,8 @@ namespace peak.interpreter {
 			_args = args;
 		}
 		public override ExpressionType GetExpressionType() { return ExpressionType.Function; }
-		public override ExecuteResult Execute(Space space) {
-			var variable = space.FindVariable(_name);
+		public ExecuteResult ExecuteFromInside(Space objSpace, Space space) {
+			var variable = objSpace.FindVariable(_name);
 			if (!variable) {
 				ErrorLogger.LogRuntimeError(_name);
 				ErrorLogger.LogRuntimeError(ErrorRuntimeCode.FunctionCall, "Can't found function \"" + _name + "\"!");
@@ -38,7 +38,7 @@ namespace peak.interpreter {
 				var arg = expression.value;
 				args.Add(arg);
 			}
-			var result = (value as ValueFunction).Call(args, space);
+			var result = (value as ValueFunction).Call(args, objSpace);
 			if (!result) {
 				ErrorLogger.LogRuntimeError(_name);
 				ErrorLogger.LogRuntimeError(ErrorRuntimeCode.FunctionCall, "The function \"" + _name + "\" execute failed!");
@@ -46,6 +46,9 @@ namespace peak.interpreter {
 			}
 			SetValue(result);
 			return ExecuteResult.Successed;
+		}
+		public override ExecuteResult Execute(Space space) {
+			return ExecuteFromInside(space, space);
 		}
 	}
 } // namespace peak.interpreter

@@ -32,7 +32,14 @@ namespace peak.interpreter {
 					return ExecuteResult.Failed;
 				}
 				var objSpace = (tempValue as ValueObject).space;
-				if (!Sentence.IsSuccess(expression.Execute(objSpace))) {
+				var expType = expression.GetExpressionType();
+				var executeRet = ExecuteResult.Failed;
+				if (expType == ExpressionType.Function) {
+					executeRet = (expression as SentenceExpressionFunctionCall).ExecuteFromInside(objSpace, space);
+				} else {
+					executeRet = expression.Execute(objSpace);
+				}
+				if (!Sentence.IsSuccess(executeRet)) {
 					ErrorLogger.LogRuntimeError(ErrorRuntimeCode.Inside, "The inside expression execute failed!");
 					return ExecuteResult.Failed;
 				}
