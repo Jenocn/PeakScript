@@ -8,8 +8,8 @@ SentenceExpressionFunctionCall::SentenceExpressionFunctionCall(const std::string
 	: _name(name), _args(args) {
 }
 
-ExecuteResult SentenceExpressionFunctionCall::Execute(std::shared_ptr<Space> space) {
-	auto variable = space->FindVariable(_name);
+ExecuteResult ExecuteFromInside(std::shared_ptr<Space> objSpace, std::shared_ptr<Space> space) {
+	auto variable = objSpace->FindVariable(_name);
 	if (!variable) {
 		ErrorLogger::LogRuntimeError(_name);
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionCall, "Can't found function \"" + _name + "\"!");
@@ -31,7 +31,7 @@ ExecuteResult SentenceExpressionFunctionCall::Execute(std::shared_ptr<Space> spa
 		auto arg = expression->GetValue();
 		args.emplace_back(arg);
 	}
-	auto result = std::static_pointer_cast<ValueFunction>(value)->Call(args, space);
+	auto result = std::static_pointer_cast<ValueFunction>(value)->Call(args, objSpace);
 	if (!result) {
 		ErrorLogger::LogRuntimeError(_name);
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionCall, "The function \"" + _name + "\" execute failed!");
@@ -40,7 +40,9 @@ ExecuteResult SentenceExpressionFunctionCall::Execute(std::shared_ptr<Space> spa
 	SetValue(result);
 	return ExecuteResult::Successed;
 }
-
+ExecuteResult SentenceExpressionFunctionCall::Execute(std::shared_ptr<Space> space) {
+	return ExecuteFromInside(space, space);
+}
 const std::string& SentenceExpressionFunctionCall::GetFunctionName() const {
 	return _name;
 }

@@ -13,6 +13,8 @@ namespace interpreter {
 class SentenceExpressionFunctionCall : public SentenceExpression {
 public:
 	SentenceExpressionFunctionCall(const std::string& name, const std::vector<std::shared_ptr<SentenceExpression>>& args);
+
+	ExecuteResult ExecuteFromInside(std::shared_ptr<Space> objSpace, std::shared_ptr<Space> space);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 
 	virtual ExpressionType GetExpressionType() const { return ExpressionType::Function; }

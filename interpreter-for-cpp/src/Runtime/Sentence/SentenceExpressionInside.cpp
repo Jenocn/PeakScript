@@ -24,7 +24,14 @@ ExecuteResult SentenceExpressionInside::Execute(std::shared_ptr<Space> space) {
 			return ExecuteResult::Failed;
 		}
 		auto objSpace = std::static_pointer_cast<ValueObject>(tempValue)->GetSpace();
-		if (!Sentence::IsSuccess(expression->Execute(objSpace))) {
+		auto expType = expression->GetExpressionType();
+		auto executeRet = ExecuteResult::Failed;
+		if (expType == ExpressionType::Function) {
+			executeRet = std::static_pointer_cast<SentenceExpressionFunctionCall>(expression)->ExecuteFromInside(objSpace, space);
+		} else {
+			executeRet = expression->Execute(objSpace);
+		}
+		if (!Sentence::IsSuccess(executeRet)) {
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Inside, "The inside expression execute failed!");
 			return ExecuteResult::Failed;
 		}
