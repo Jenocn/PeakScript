@@ -8,7 +8,7 @@ SentenceExpressionFunctionCall::SentenceExpressionFunctionCall(const std::string
 	: _name(name), _args(args) {
 }
 
-ExecuteResult ExecuteFromInside(std::shared_ptr<Space> objSpace, std::shared_ptr<Space> space) {
+ExecuteResult SentenceExpressionFunctionCall::ExecuteFromInside(std::shared_ptr<Space> objSpace, std::shared_ptr<Space> space) {
 	auto variable = objSpace->FindVariable(_name);
 	if (!variable) {
 		ErrorLogger::LogRuntimeError(_name);

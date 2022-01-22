@@ -1,6 +1,7 @@
 #include "SentenceExpressionInside.h"
 #include "../Value/ValueTool.h"
 #include "SentenceExpressionVariable.h"
+#include "SentenceExpressionFunctionCall.h"
 
 using namespace peak::interpreter;
 
