@@ -4,6 +4,8 @@
 #include "ModulePool.h"
 #include "Value/Value.h"
 #include "Variable.h"
+#include "Value/ValueTool.h"
+#include "Value/ValueFunction.h"
 
 using namespace peak::interpreter;
 
@@ -69,7 +71,13 @@ bool Space::AddVariable(std::shared_ptr<Variable> value) {
 	if (!value) {
 		return false;
 	}
-	if (_variables.find(value->GetName()) != _variables.end()) {
+	auto findIte = _variables.find(value->GetName());
+	if (findIte != _variables.end()) {
+		if (ValueTool::IsFunction(findIte->second->GetValue()) && ValueTool::IsFunction(value->GetValue())) {
+			if (std::static_pointer_cast<ValueFunction>(findIte->second->GetValue())->AddFunction(std::static_pointer_cast<ValueFunction>(value->GetValue()))) {
+				return true;
+			}
+		}
 		ErrorLogger::LogRuntimeError(value->GetName());
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Space, "The variable \"" + value->GetName() + "\" is exist!");
 		return false;

@@ -26,6 +26,9 @@ public:
 
 	bool AddFunction(std::size_t paramSize, FunctionType func);
 	bool AddFunction(const std::vector<std::string>& params, FunctionType func);
+	bool AddFunction(std::shared_ptr<ValueFunction> valueFunc);
+
+	std::map<std::size_t, std::pair<std::vector<std::string>, FunctionType>>& GetFunctionMap();
 
 private:
 	ValueFunction();

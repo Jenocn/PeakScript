@@ -68,7 +68,12 @@ namespace peak.interpreter {
 			if (!value) {
 				return false;
 			}
-			if (_variables.ContainsKey(value.name)) {
+			if (_variables.TryGetValue(value.name, out var findValue)) {
+				if (ValueTool.IsFunction(findValue.value) && ValueTool.IsFunction(value.value)) {
+					if ((findValue.value as ValueFunction).AddFunction(value.value as ValueFunction)) {
+						return true;
+					}
+				}
 				ErrorLogger.LogRuntimeError(value.name);
 				ErrorLogger.LogRuntimeError(ErrorRuntimeCode.Space, "The variable \"" + value.name + "\" is exist!");
 				return false;

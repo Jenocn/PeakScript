@@ -67,6 +67,17 @@ namespace peak.interpreter {
 			}
 			return false;
 		}
+		public bool AddFunction(ValueFunction valueFunc) {
+			foreach (var item in valueFunc._functionMap) {
+				if (_functionMap.ContainsKey(item.Key)) {
+					return false;
+				}
+			}
+			foreach (var item in valueFunc._functionMap) {
+				_functionMap.Add(item.Key, item.Value);
+			}
+			return true;
+		}
 
 	}
 } // namespace peak.interpreter

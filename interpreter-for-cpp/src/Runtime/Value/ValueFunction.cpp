@@ -34,6 +34,24 @@ bool ValueFunction::AddFunction(const std::vector<std::string>& params, Function
 	return false;
 }
 
+bool ValueFunction::AddFunction(std::shared_ptr<ValueFunction> valueFunc) {
+	auto& functionMap = valueFunc->GetFunctionMap();
+	for (auto& item : functionMap) {
+		if (_functionMap.find(item.first) != _functionMap.end()) {
+			return false;
+		}
+	}
+	for (auto& item : functionMap) {
+		_functionMap.emplace(item.first, item.second);
+	}
+	functionMap.clear();
+	return true;
+}
+
+std::map<std::size_t, std::pair<std::vector<std::string>, ValueFunction::FunctionType>>& ValueFunction::GetFunctionMap() {
+	return _functionMap;
+}
+
 std::shared_ptr<Value> ValueFunction::Call(const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> space) {
 	auto ite = _functionMap.find(args.size());
 	if (ite == _functionMap.end()) {
