@@ -40,7 +40,7 @@ namespace peak.interpreter {
 
 		// grammar
 		private static readonly HashSet<char> SET_STRING_SIGN = new HashSet<char>() { '\"', '\'', '`' };
-		private static readonly HashSet<char> SET_END_SIGN = new HashSet<char>() { '\n', '\r', ';' };
+		private static readonly HashSet<char> SET_END_SIGN = new HashSet<char>() { '\n', '\r', ';', '\0' };
 		private static readonly HashSet<string> SET_VARIABLE_DEFINE_SIGN = new HashSet<string>() { "var", "the" };
 		private static readonly HashSet<string> SET_ASSIGN_SIGN = new HashSet<string>() { "=", "is", "as" };
 		private static readonly HashSet<string> SET_BOOL_TRUE_SIGN = new HashSet<string>() { "true", "yes" };
