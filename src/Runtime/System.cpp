@@ -6,14 +6,19 @@ std::function<void(const std::string&)> System::_funcEcho = [](const std::string
 	std::cout << msg << std::endl;
 };
 std::function<std::string(const std::string&)> System::_funcOpenSrc = [](const std::string& filename) -> std::string {
-	std::ifstream in(filename);
+	std::ifstream in(filename, std::ios::ate);
 	if (!in.is_open()) {
 		return "";
 	}
-	std::stringstream buffer;
-	buffer << in.rdbuf();
-	in.close();
-	return buffer.str();
+	auto size { in.tellg() };
+	if (size == 0) {
+		return "";
+	}
+	in.seekg(0);
+	std::string buffer;
+	buffer.resize(size);
+	in.read(buffer.data(), size);
+	return buffer;
 };
 
 void System::LocateEcho(std::function<void(const std::string&)> func) {

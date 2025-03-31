@@ -8,7 +8,7 @@ static const std::set<char> SET_TEXT_NEW_LINE = {'\n', '\r'};
 
 // grammar
 static const std::set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
-static const std::set<char> SET_END_SIGN = {'\n', '\r', ';'};
+static const std::set<char> SET_END_SIGN = {'\n', '\r', ';', '\0'};
 static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "the"};
 static const std::set<std::string> SET_ASSIGN_SIGN = {"=", "is", "as"};
 static const std::set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
