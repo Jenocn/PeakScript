@@ -1,7 +1,7 @@
-#include "Module.h"
-#include "Executer.h"
+#include "module.h"
+#include "executer.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 Module::Module(const std::string& name, std::shared_ptr<Executer> executer)
 	: _name(name),

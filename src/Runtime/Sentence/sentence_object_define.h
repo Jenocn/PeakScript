@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "Sentence.h"
+#include "sentence.h"
 
 namespace peak {
-namespace interpreter {
+
 
 class SentenceObjectDefine : public Sentence {
 public:
@@ -21,5 +21,5 @@ private:
 	std::list<std::shared_ptr<Sentence>> _sentenceList;
 };
 
-} // namespace interpreter
+
 } // namespace peak

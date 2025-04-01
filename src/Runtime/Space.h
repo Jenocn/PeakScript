@@ -5,11 +5,9 @@
 
 #pragma once
 
-#include "../Base/CommonInclude.h"
-#include "../Base/ErrorLogger.h"
+#include "base/error_logger.h"
 
 namespace peak {
-namespace interpreter {
 
 class Variable;
 class Module;
@@ -39,7 +37,9 @@ public:
 	std::shared_ptr<Variable> FindVariableFromTop(const std::string& name) const;
 
 	SpaceType GetSpaceType() const;
-
+#include <list>
+#include <memory>
+#include <unordered_map>
 private:
 	SpaceType _spaceType{SpaceType::None};
 	std::shared_ptr<Space> _parent{nullptr};
@@ -48,5 +48,4 @@ private:
 	std::unordered_map<std::string, std::shared_ptr<Module>> _importModules;
 	std::set<std::string> _exportModulesNameSet;
 };
-} // namespace interpreter
 } // namespace peak

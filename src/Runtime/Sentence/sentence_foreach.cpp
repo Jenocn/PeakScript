@@ -1,9 +1,9 @@
-#include "SentenceForeach.h"
-#include "../Value/ValueTool.h"
-#include "../Variable.h"
-#include "SentenceExpression.h"
+#include "sentence_foreach.h"
+#include "runtime/value/value_tool.h"
+#include "runtime/variable.h"
+#include "sentence_expression.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceForeach::SentenceForeach(const std::string& name, std::shared_ptr<SentenceExpression> expression, std::shared_ptr<Sentence> sentence)
 	: _name(name), _expression(expression), _sentence(sentence) {

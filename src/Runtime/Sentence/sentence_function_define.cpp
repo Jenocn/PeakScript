@@ -1,16 +1,16 @@
-#include "SentenceFunctionDefine.h"
-#include "../Sentence/SentenceReturn.h"
-#include "../Value/ValueFunction.h"
-#include "../Value/ValueTool.h"
-#include "../Variable.h"
+#include "sentence_function_define.h"
+#include "runtime/sentence/sentence_return.h"
+#include "runtime/value/value_function.h"
+#include "runtime/value/value_tool.h"
+#include "runtime/variable.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceFunctionDefine::SentenceFunctionDefine(const std::string& name, const std::vector<std::string>& params, std::shared_ptr<Sentence> content)
 	: _name(name), _params(params), _content(content) {
 }
 ExecuteResult SentenceFunctionDefine::Execute(std::shared_ptr<Space> space) {
-	auto func = [this](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> space) -> std::shared_ptr<Value> {
+	auto func = [this](const std::vector<std::shared_ptr<Value>>&, std::shared_ptr<Space> space) -> std::shared_ptr<Value> {
 		auto result = _content->Execute(space);
 		if (!IsSuccess(result)) {
 			return nullptr;

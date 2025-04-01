@@ -1,6 +1,6 @@
-#include "ValueBool.h"
+#include "value_bool.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 const std::shared_ptr<ValueBool> ValueBool::TRUE = std::shared_ptr<ValueBool>(new ValueBool(true));
 const std::shared_ptr<ValueBool> ValueBool::FALSE = std::shared_ptr<ValueBool>(new ValueBool(false));

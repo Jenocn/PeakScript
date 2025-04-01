@@ -1,8 +1,8 @@
-#include "SentenceDoWhile.h"
-#include "../Value/ValueTool.h"
-#include "SentenceExpression.h"
+#include "sentence_do_while.h"
+#include "runtime/value/value_tool.h"
+#include "sentence_expression.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceDoWhile::SentenceDoWhile(std::shared_ptr<SentenceExpression> expression, std::shared_ptr<Sentence> sentence)
 	: _expression(expression), _sentence(sentence) {

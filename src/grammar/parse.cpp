@@ -1,40 +1,40 @@
-#include "ParseTool.h"
-#include "../Runtime/Sentence/Analysis/ExpressionVariableAnalysisInstance.h"
-#include "../Runtime/Sentence/SentenceBlock.h"
-#include "../Runtime/Sentence/SentenceCondition.h"
-#include "../Runtime/Sentence/SentenceDoWhile.h"
-#include "../Runtime/Sentence/SentenceEcho.h"
-#include "../Runtime/Sentence/SentenceEnumDefine.h"
-#include "../Runtime/Sentence/SentenceExport.h"
-#include "../Runtime/Sentence/SentenceExpressionDouble.h"
-#include "../Runtime/Sentence/SentenceExpressionFunctionCall.h"
-#include "../Runtime/Sentence/SentenceExpressionInside.h"
-#include "../Runtime/Sentence/SentenceExpressionMath.h"
-#include "../Runtime/Sentence/SentenceExpressionNew.h"
-#include "../Runtime/Sentence/SentenceExpressionNot.h"
-#include "../Runtime/Sentence/SentenceExpressionSelfAssign.h"
-#include "../Runtime/Sentence/SentenceExpressionValueArray.h"
-#include "../Runtime/Sentence/SentenceExpressionVariable.h"
-#include "../Runtime/Sentence/SentenceFor.h"
-#include "../Runtime/Sentence/SentenceForeach.h"
-#include "../Runtime/Sentence/SentenceFunctionDefine.h"
-#include "../Runtime/Sentence/SentenceImport.h"
-#include "../Runtime/Sentence/SentenceLoop.h"
-#include "../Runtime/Sentence/SentenceLoopControl.h"
-#include "../Runtime/Sentence/SentenceObjectDefine.h"
-#include "../Runtime/Sentence/SentenceReturn.h"
-#include "../Runtime/Sentence/SentenceTryCatchFinally.h"
-#include "../Runtime/Sentence/SentenceVariableAssign.h"
-#include "../Runtime/Sentence/SentenceVariableDefine.h"
-#include "../Runtime/Sentence/SentenceVariableSet.h"
-#include "../Runtime/Sentence/SentenceWhile.h"
-#include "../Runtime/Value/ValueCalculateInstance.h"
-#include "../Runtime/Value/ValueTool.h"
-#include "../Runtime/Variable.h"
+#include "parse.h"
+#include "runtime/sentence/analysis/expression_variable_analysis.h"
+#include "runtime/sentence/sentence_block.h"
+#include "runtime/sentence/sentence_condition.h"
+#include "runtime/sentence/sentence_do_while.h"
+#include "runtime/sentence/sentence_echo.h"
+#include "runtime/sentence/sentence_enum_define.h"
+#include "runtime/sentence/sentence_export.h"
+#include "runtime/sentence/sentence_expression_double.h"
+#include "runtime/sentence/sentence_expression_function_call.h"
+#include "runtime/sentence/sentence_expression_inside.h"
+#include "runtime/sentence/sentence_expression_math.h"
+#include "runtime/sentence/sentence_expression_new.h"
+#include "runtime/sentence/sentence_expression_not.h"
+#include "runtime/sentence/sentence_expression_self_assign.h"
+#include "runtime/sentence/sentence_expression_value_array.h"
+#include "runtime/sentence/sentence_expression_variable.h"
+#include "runtime/sentence/sentence_for.h"
+#include "runtime/sentence/sentence_foreach.h"
+#include "runtime/sentence/sentence_function_define.h"
+#include "runtime/sentence/sentence_import.h"
+#include "runtime/sentence/sentence_loop.h"
+#include "runtime/sentence/sentence_loop_control.h"
+#include "runtime/sentence/sentence_object_define.h"
+#include "runtime/sentence/sentence_return.h"
+#include "runtime/sentence/sentence_try_catch_finally.h"
+#include "runtime/sentence/sentence_variable_assign.h"
+#include "runtime/sentence/sentence_variable_define.h"
+#include "runtime/sentence/sentence_variable_set.h"
+#include "runtime/sentence/sentence_while.h"
+#include "runtime/value/value_calculate.h"
+#include "runtime/value/value_tool.h"
+#include "runtime/variable.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
-ParseTool::SentenceParseList ParseTool::_sentenceParseList = {
+Parse::SentenceParseList Parse::_sentenceParseList = {
 	_ParseVariableAssign,
 	_ParseVariableDefine,
 	_ParseVariableSet,
@@ -56,7 +56,7 @@ ParseTool::SentenceParseList ParseTool::_sentenceParseList = {
 	_ParseTryCatchFinally,
 	_ParseExpressionToEnd,
 };
-ParseTool::ExpressionParseList ParseTool::_sentenceValueParseList = {
+Parse::ExpressionParseList Parse::_sentenceValueParseList = {
 	_ParseString,
 	_ParseNumber,
 	_ParseBool,
@@ -72,21 +72,21 @@ ParseTool::ExpressionParseList ParseTool::_sentenceValueParseList = {
 };
 
 // target = value;
-ParseTool::ExpressionParseList ParseTool::_sentenceVariableParseList = {
+Parse::ExpressionParseList Parse::_sentenceVariableParseList = {
 	_ParseInside,
 	_ParseArrayItem,
 	_ParseVariableName,
 };
 
 // target[]
-ParseTool::ExpressionParseList ParseTool::__sentenceArrayItemParseList = {
+Parse::ExpressionParseList Parse::__sentenceArrayItemParseList = {
 	_ParseArray,
 	_ParseFunctioCall,
 	_ParseVariableName,
 };
 
 // target.
-ParseTool::ExpressionParseList ParseTool::__sentenceInsideHeaderParseList = {
+Parse::ExpressionParseList Parse::__sentenceInsideHeaderParseList = {
 	_ParseNew,
 	_ParseFunctioCall,
 	_ParseArrayItem,
@@ -94,13 +94,13 @@ ParseTool::ExpressionParseList ParseTool::__sentenceInsideHeaderParseList = {
 };
 
 // .target
-ParseTool::ExpressionParseList ParseTool::__sentenceInsideAppendParseList = {
+Parse::ExpressionParseList Parse::__sentenceInsideAppendParseList = {
 	_ParseArrayItem,
 	_ParseFunctioCall,
 	_ParseVariableName,
 };
 
-std::shared_ptr<ParseData> ParseTool::Load(const std::string& src) {
+std::shared_ptr<ParseData> Parse::Load(const std::string& src) {
 	auto retData = std::shared_ptr<ParseData>(new ParseData());
 	retData->bSuccess = true;
 	std::size_t pos = 0;
@@ -121,7 +121,7 @@ std::shared_ptr<ParseData> ParseTool::Load(const std::string& src) {
 	return retData;
 }
 
-bool ParseTool::Jump(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Parse::Jump(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	bool bJump = false;
 	bool bRet = false;
 	do {
@@ -135,7 +135,7 @@ bool ParseTool::Jump(const std::string& src, std::size_t size, std::size_t pos, 
 	return bRet;
 }
 
-bool ParseTool::JumpEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Parse::JumpEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	bool bJump = false;
 	bool bRet = false;
 	do {
@@ -147,16 +147,16 @@ bool ParseTool::JumpEnd(const std::string& src, std::size_t size, std::size_t po
 		bRet |= bEnd;
 	} while (bJump);
 	*nextPos = pos;
-	if (Grammar::IsGrammarEndSign('\n')) {
+	if (Syntax::IsGrammarEndSign('\n')) {
 		bRet |= (pos >= size);
 	}
 	return bRet;
 }
 
-bool ParseTool::JumpTextSpace(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Parse::JumpTextSpace(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	auto beginPos = pos;
 	while (pos < size) {
-		if (!Grammar::IsTextSpace(src[pos])) {
+		if (!Syntax::IsTextSpace(src[pos])) {
 			break;
 		}
 		++pos;
@@ -164,12 +164,12 @@ bool ParseTool::JumpTextSpace(const std::string& src, std::size_t size, std::siz
 	*nextPos = pos;
 	return pos != beginPos;
 }
-bool ParseTool::JumpTextSpaceAndEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Parse::JumpTextSpaceAndEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	bool bRet = false;
 	while (pos < size) {
 		char ch = src[pos];
-		bool bEnd = Grammar::IsGrammarEndSign(ch);
-		if (!bEnd && !Grammar::IsTextSpace(ch)) {
+		bool bEnd = Syntax::IsGrammarEndSign(ch);
+		if (!bEnd && !Syntax::IsTextSpace(ch)) {
 			break;
 		}
 		bRet |= bEnd;
@@ -178,10 +178,10 @@ bool ParseTool::JumpTextSpaceAndEnd(const std::string& src, std::size_t size, st
 	*nextPos = pos;
 	return bRet;
 }
-bool ParseTool::JumpComment(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (Grammar::MatchComment(src, size, pos, &pos)) {
+bool Parse::JumpComment(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (Syntax::MatchComment(src, size, pos, &pos)) {
 		while (pos <= size) {
-			if ((pos == size) || Grammar::IsTextNewLine(src[pos])) {
+			if ((pos == size) || Syntax::IsTextNewLine(src[pos])) {
 				*nextPos = pos;
 				return true;
 			}
@@ -191,15 +191,15 @@ bool ParseTool::JumpComment(const std::string& src, std::size_t size, std::size_
 	return false;
 }
 
-bool ParseTool::JumpCommentBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Parse::JumpCommentBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	int findBegin = 0;
-	if (Grammar::MatchCommentBlockBegin(src, size, pos, &pos)) {
+	if (Syntax::MatchCommentBlockBegin(src, size, pos, &pos)) {
 		while (pos < size) {
-			if (Grammar::MatchCommentBlockBegin(src, size, pos, &pos)) {
+			if (Syntax::MatchCommentBlockBegin(src, size, pos, &pos)) {
 				++findBegin;
 				continue;
 			}
-			if (Grammar::MatchCommentBlockEnd(src, size, pos, &pos)) {
+			if (Syntax::MatchCommentBlockEnd(src, size, pos, &pos)) {
 				if (findBegin == 0) {
 					*nextPos = pos;
 					return true;
@@ -213,7 +213,7 @@ bool ParseTool::JumpCommentBlock(const std::string& src, std::size_t size, std::
 	return false;
 }
 
-std::shared_ptr<Sentence> ParseTool::ParseSentence(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<Sentence> Parse::ParseSentence(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto func : _sentenceParseList) {
 		auto parseData = func(src, size, pos, nextPos);
 		if (parseData) {
@@ -223,11 +223,11 @@ std::shared_ptr<Sentence> ParseTool::ParseSentence(const std::string& src, std::
 	return nullptr;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> Parse::_ParseExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return _ParseExpressionMath(src, size, pos, nextPos);
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> Parse::_ParseExpressionValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto func : _sentenceValueParseList) {
 		auto value = func(src, size, pos, nextPos);
 		if (value) {
@@ -237,7 +237,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionValue(const std::
 	return nullptr;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> Parse::_ParseVariable(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto func : _sentenceVariableParseList) {
 		auto value = func(src, size, pos, nextPos);
 		if (value) {
@@ -247,7 +247,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseVariable(const std::string&
 	return nullptr;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::__ParseExpressionValueForArrayValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> Parse::__ParseExpressionValueForArrayValue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto func : __sentenceArrayItemParseList) {
 		auto value = func(src, size, pos, nextPos);
 		if (value) {
@@ -257,7 +257,7 @@ std::shared_ptr<SentenceExpression> ParseTool::__ParseExpressionValueForArrayVal
 	return nullptr;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::__ParseExpressionInsideHeader(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> Parse::__ParseExpressionInsideHeader(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto func : __sentenceInsideHeaderParseList) {
 		auto value = func(src, size, pos, nextPos);
 		if (value) {
@@ -267,7 +267,7 @@ std::shared_ptr<SentenceExpression> ParseTool::__ParseExpressionInsideHeader(con
 	return nullptr;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::__ParseExpressionInsideAppend(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> Parse::__ParseExpressionInsideAppend(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto func : __sentenceInsideAppendParseList) {
 		auto value = func(src, size, pos, nextPos);
 		if (value) {
@@ -277,8 +277,8 @@ std::shared_ptr<SentenceExpression> ParseTool::__ParseExpressionInsideAppend(con
 	return nullptr;
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseImport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchImport(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseImport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchImport(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -287,11 +287,11 @@ std::shared_ptr<Sentence> ParseTool::_ParseImport(const std::string& src, std::s
 		return nullptr;
 	}
 	char sign = src[pos];
-	if (!Grammar::IsGrammarStringSign(sign)) {
+	if (!Syntax::IsGrammarStringSign(sign)) {
 		return nullptr;
 	}
 	std::string moduleName;
-	if (!Grammar::MatchPair(sign, sign, src, size, pos, &pos, &moduleName)) {
+	if (!Syntax::MatchPair(sign, sign, src, size, pos, &pos, &moduleName)) {
 		return nullptr;
 	}
 
@@ -301,8 +301,8 @@ std::shared_ptr<Sentence> ParseTool::_ParseImport(const std::string& src, std::s
 	*nextPos = pos;
 	return std::shared_ptr<Sentence>(new SentenceImport(moduleName));
 }
-std::shared_ptr<Sentence> ParseTool::_ParseExport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchExport(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseExport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchExport(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -311,11 +311,11 @@ std::shared_ptr<Sentence> ParseTool::_ParseExport(const std::string& src, std::s
 		return nullptr;
 	}
 	char sign = src[pos];
-	if (!Grammar::IsGrammarStringSign(sign)) {
+	if (!Syntax::IsGrammarStringSign(sign)) {
 		return nullptr;
 	}
 	std::string moduleName;
-	if (!Grammar::MatchPair(sign, sign, src, size, pos, &pos, &moduleName)) {
+	if (!Syntax::MatchPair(sign, sign, src, size, pos, &pos, &moduleName)) {
 		return nullptr;
 	}
 
@@ -326,8 +326,8 @@ std::shared_ptr<Sentence> ParseTool::_ParseExport(const std::string& src, std::s
 	return std::shared_ptr<Sentence>(new SentenceExport(moduleName));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchReturn(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchReturn(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	if (!Jump(src, size, pos, &pos)) {
@@ -346,30 +346,30 @@ std::shared_ptr<Sentence> ParseTool::_ParseReturn(const std::string& src, std::s
 	*nextPos = pos;
 	return std::shared_ptr<Sentence>(new SentenceReturn(expression));
 }
-std::shared_ptr<Sentence> ParseTool::_ParseFunctionDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (Grammar::MatchFunction(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseFunctionDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (Syntax::MatchFunction(src, size, pos, &pos)) {
 		Jump(src, size, pos, &pos);
 	}
 	std::string name;
-	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+	if (!Syntax::MatchName(src, size, pos, &pos, &name)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	if (!Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
+	if (!Syntax::MatchLeftBrcket(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
 	std::vector<std::string> params;
 	std::string paramName;
-	while (Grammar::MatchName(src, size, pos, &pos, &paramName)) {
+	while (Syntax::MatchName(src, size, pos, &pos, &paramName)) {
 		params.emplace_back(paramName);
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchSplitSymbol(src, size, pos, &pos)) {
+		if (!Syntax::MatchSplitSymbol(src, size, pos, &pos)) {
 			break;
 		}
 		Jump(src, size, pos, &pos);
 	}
-	if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+	if (!Syntax::MatchRightBrcket(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -381,19 +381,19 @@ std::shared_ptr<Sentence> ParseTool::_ParseFunctionDefine(const std::string& src
 	return std::shared_ptr<Sentence>(new SentenceFunctionDefine(name, params, contentSentence));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseEnumDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchEnum(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseEnumDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchEnum(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	if (!Jump(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	std::string name;
-	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+	if (!Syntax::MatchName(src, size, pos, &pos, &name)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	if (!Grammar::MatchObjectBegin(src, size, pos, &pos)) {
+	if (!Syntax::MatchObjectBegin(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	std::set<std::string> checkNameSet;
@@ -405,17 +405,17 @@ std::shared_ptr<Sentence> ParseTool::_ParseEnumDefine(const std::string& src, st
 			return nullptr;
 		}
 		Jump(src, size, pos, &pos);
-		if (Grammar::MatchObjectEnd(src, size, pos, &pos)) {
+		if (Syntax::MatchObjectEnd(src, size, pos, &pos)) {
 			break;
 		}
 		std::string valueName = "";
-		if (!Grammar::MatchName(src, size, pos, &pos, &valueName)) {
+		if (!Syntax::MatchName(src, size, pos, &pos, &valueName)) {
 			return nullptr;
 		}
 		Jump(src, size, pos, &pos);
-		if (Grammar::MatchAssign(src, size, pos, &pos)) {
+		if (Syntax::MatchAssign(src, size, pos, &pos)) {
 			Jump(src, size, pos, &pos);
-			if (!Grammar::MatchNumber(src, size, pos, &pos, &indexValue)) {
+			if (!Syntax::MatchNumber(src, size, pos, &pos, &indexValue)) {
 				return nullptr;
 			}
 			Jump(src, size, pos, &pos);
@@ -437,8 +437,8 @@ std::shared_ptr<Sentence> ParseTool::_ParseEnumDefine(const std::string& src, st
 		valueList.emplace_back(valueName, valueNumber);
 
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchSplitSymbol(src, size, pos, &pos)) {
-			if (Grammar::MatchObjectEnd(src, size, pos, &pos)) {
+		if (!Syntax::MatchSplitSymbol(src, size, pos, &pos)) {
+			if (Syntax::MatchObjectEnd(src, size, pos, &pos)) {
 				break;
 			}
 			return nullptr;
@@ -450,27 +450,27 @@ std::shared_ptr<Sentence> ParseTool::_ParseEnumDefine(const std::string& src, st
 	return std::shared_ptr<Sentence>(new SentenceEnumDefine(name, valueList));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseObjectDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (Grammar::MatchObject(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseObjectDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (Syntax::MatchObject(src, size, pos, &pos)) {
 		if (!Jump(src, size, pos, &pos)) {
 			return nullptr;
 		}
 	}
 	std::string name;
-	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+	if (!Syntax::MatchName(src, size, pos, &pos, &name)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
 	std::string parentName = "";
-	if (Grammar::MatchExtends(src, size, pos, &pos)) {
+	if (Syntax::MatchExtends(src, size, pos, &pos)) {
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchName(src, size, pos, &pos, &parentName)) {
+		if (!Syntax::MatchName(src, size, pos, &pos, &parentName)) {
 			return nullptr;
 		}
 		Jump(src, size, pos, &pos);
 	}
 
-	if (!Grammar::MatchObjectBegin(src, size, pos, &pos)) {
+	if (!Syntax::MatchObjectBegin(src, size, pos, &pos)) {
 		return nullptr;
 	}
 
@@ -480,7 +480,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseObjectDefine(const std::string& src, 
 			return nullptr;
 		}
 		Jump(src, size, pos, &pos);
-		if (Grammar::MatchObjectEnd(src, size, pos, &pos)) {
+		if (Syntax::MatchObjectEnd(src, size, pos, &pos)) {
 			break;
 		}
 		auto sentence = ParseSentence(src, size, pos, &pos);
@@ -493,12 +493,12 @@ std::shared_ptr<Sentence> ParseTool::_ParseObjectDefine(const std::string& src, 
 	return std::shared_ptr<Sentence>(new SentenceObjectDefine(name, parentName, sentenceList));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	bool bConst = Grammar::MatchConst(src, size, pos, &pos);
+std::shared_ptr<Sentence> Parse::_ParseVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	bool bConst = Syntax::MatchConst(src, size, pos, &pos);
 	if (bConst && !Jump(src, size, pos, &pos)) {
 		return nullptr;
 	}
-	if (Grammar::MatchVariableDefine(src, size, pos, &pos)) {
+	if (Syntax::MatchVariableDefine(src, size, pos, &pos)) {
 		if (!Jump(src, size, pos, &pos)) {
 			return nullptr;
 		}
@@ -509,7 +509,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src
 	}
 
 	std::string name;
-	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+	if (!Syntax::MatchName(src, size, pos, &pos, &name)) {
 		return nullptr;
 	}
 
@@ -518,7 +518,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src
 
 	auto attribute = bConst ? VariableAttribute::Const : VariableAttribute::None;
 
-	if (!Grammar::MatchAssign(src, size, pos, &pos)) {
+	if (!Syntax::MatchAssign(src, size, pos, &pos)) {
 		pos = beginPos;
 		if (bConst) {
 			return nullptr;
@@ -543,14 +543,14 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableDefine(const std::string& src
 	return std::shared_ptr<Sentence>(new SentenceVariableDefine(name, attribute, expression));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseVariableAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<Sentence> Parse::_ParseVariableAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	auto variableExpression = _ParseVariable(src, size, pos, &pos);
 	if (!variableExpression) {
 		return nullptr;
 	}
 
 	Jump(src, size, pos, &pos);
-	if (!Grammar::MatchAssign(src, size, pos, &pos)) {
+	if (!Syntax::MatchAssign(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -565,8 +565,8 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableAssign(const std::string& src
 	return std::shared_ptr<Sentence>(new SentenceVariableAssign(variableExpression, expression));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseVariableSet(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchVariableSet(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseVariableSet(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchVariableSet(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	if (!Jump(src, size, pos, &pos)) {
@@ -574,14 +574,14 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableSet(const std::string& src, s
 	}
 
 	std::string name;
-	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+	if (!Syntax::MatchName(src, size, pos, &pos, &name)) {
 		return nullptr;
 	}
 
 	auto beginPos = pos;
 	Jump(src, size, pos, &pos);
 
-	if (!Grammar::MatchAssign(src, size, pos, &pos)) {
+	if (!Syntax::MatchAssign(src, size, pos, &pos)) {
 		pos = beginPos;
 		if (!JumpEnd(src, size, pos, &pos)) {
 			return nullptr;
@@ -603,7 +603,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseVariableSet(const std::string& src, s
 	return std::shared_ptr<Sentence>(new SentenceVariableSet(name, expression));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseExpressionToEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<Sentence> Parse::_ParseExpressionToEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	auto expression = _ParseExpression(src, size, pos, &pos);
 	if (!expression) {
 		return nullptr;
@@ -615,12 +615,12 @@ std::shared_ptr<Sentence> ParseTool::_ParseExpressionToEnd(const std::string& sr
 	return expression;
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchConditionIf(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseCondition(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchConditionIf(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	bool bBracket = Grammar::MatchLeftBrcket(src, size, pos, &pos);
+	bool bBracket = Syntax::MatchLeftBrcket(src, size, pos, &pos);
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 	}
@@ -630,7 +630,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std
 	}
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+		if (!Syntax::MatchRightBrcket(src, size, pos, &pos)) {
 			return nullptr;
 		}
 	}
@@ -640,10 +640,10 @@ std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std
 		return nullptr;
 	}
 
-	std::shared_ptr<Sentence> sentenceElse{nullptr};
+	std::shared_ptr<Sentence> sentenceElse { nullptr };
 
 	Jump(src, size, pos, &pos);
-	if (Grammar::MatchConditionElse(src, size, pos, &pos)) {
+	if (Syntax::MatchConditionElse(src, size, pos, &pos)) {
 		Jump(src, size, pos, &pos);
 		sentenceElse = _ParseCondition(src, size, pos, &pos);
 		if (!sentenceElse) {
@@ -658,25 +658,25 @@ std::shared_ptr<Sentence> ParseTool::_ParseCondition(const std::string& src, std
 	return std::shared_ptr<Sentence>(new SentenceCondition(expression, sentence, sentenceElse));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchLoop(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchLoop(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
 
-	bool bBracket = Grammar::MatchLeftBrcket(src, size, pos, &pos);
+	bool bBracket = Syntax::MatchLeftBrcket(src, size, pos, &pos);
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 	}
 
 	std::string name;
 	auto savePos = pos;
-	bool bMatchName = Grammar::MatchName(src, size, pos, &pos, &name);
+	bool bMatchName = Syntax::MatchName(src, size, pos, &pos, &name);
 	if (bMatchName) {
 		Jump(src, size, pos, &pos);
 	}
 
-	if (Grammar::MatchForeachIn(src, size, pos, &pos)) {
+	if (Syntax::MatchForeachIn(src, size, pos, &pos)) {
 		Jump(src, size, pos, &pos);
 	} else {
 		if (bMatchName) {
@@ -692,7 +692,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseLoop(const std::string& src, std::siz
 
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+		if (!Syntax::MatchRightBrcket(src, size, pos, &pos)) {
 			return nullptr;
 		}
 	}
@@ -706,12 +706,12 @@ std::shared_ptr<Sentence> ParseTool::_ParseLoop(const std::string& src, std::siz
 	return std::shared_ptr<Sentence>(new SentenceLoop(name, condition, sentence));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchFor(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseFor(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchFor(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	bool bBracket = Grammar::MatchLeftBrcket(src, size, pos, &pos);
+	bool bBracket = Syntax::MatchLeftBrcket(src, size, pos, &pos);
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 	}
@@ -720,7 +720,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size
 	if (!sentence0) {
 		sentence0 = _ParseExpression(src, size, pos, &pos);
 		Jump(src, size, pos, &pos);
-		if ((pos >= size) || !Grammar::IsGrammarEndSign(src[pos])) {
+		if ((pos >= size) || !Syntax::IsGrammarEndSign(src[pos])) {
 			return nullptr;
 		}
 		++pos;
@@ -728,7 +728,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size
 	auto expression0 = _ParseExpression(src, size, pos, &pos);
 	{
 		Jump(src, size, pos, &pos);
-		if ((pos >= size) || !Grammar::IsGrammarEndSign(src[pos])) {
+		if ((pos >= size) || !Syntax::IsGrammarEndSign(src[pos])) {
 			return nullptr;
 		}
 		++pos;
@@ -736,7 +736,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size
 	auto expression1 = _ParseExpression(src, size, pos, &pos);
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+		if (!Syntax::MatchRightBrcket(src, size, pos, &pos)) {
 			return nullptr;
 		}
 	}
@@ -750,28 +750,28 @@ std::shared_ptr<Sentence> ParseTool::_ParseFor(const std::string& src, std::size
 	return std::shared_ptr<Sentence>(new SentenceFor(sentence0, expression0, expression1, content));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseForeach(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchForeach(src, size, pos, &pos)) {
-		if (!Grammar::MatchFor(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseForeach(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchForeach(src, size, pos, &pos)) {
+		if (!Syntax::MatchFor(src, size, pos, &pos)) {
 			return nullptr;
 		}
 	}
 	Jump(src, size, pos, &pos);
 
-	bool bBracket = Grammar::MatchLeftBrcket(src, size, pos, &pos);
+	bool bBracket = Syntax::MatchLeftBrcket(src, size, pos, &pos);
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 	}
 
-	if (Grammar::MatchVariableDefine(src, size, pos, &pos)) {
+	if (Syntax::MatchVariableDefine(src, size, pos, &pos)) {
 		Jump(src, size, pos, &pos);
 	}
 	std::string name;
-	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+	if (!Syntax::MatchName(src, size, pos, &pos, &name)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	if (!Grammar::MatchForeachIn(src, size, pos, &pos)) {
+	if (!Syntax::MatchForeachIn(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -782,7 +782,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseForeach(const std::string& src, std::
 
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+		if (!Syntax::MatchRightBrcket(src, size, pos, &pos)) {
 			return nullptr;
 		}
 	}
@@ -795,12 +795,12 @@ std::shared_ptr<Sentence> ParseTool::_ParseForeach(const std::string& src, std::
 	return std::shared_ptr<Sentence>(new SentenceForeach(name, expression, sentence));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchWhile(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchWhile(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	bool bBracket = Grammar::MatchLeftBrcket(src, size, pos, &pos);
+	bool bBracket = Syntax::MatchLeftBrcket(src, size, pos, &pos);
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 	}
@@ -810,7 +810,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseWhile(const std::string& src, std::si
 	}
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+		if (!Syntax::MatchRightBrcket(src, size, pos, &pos)) {
 			return nullptr;
 		}
 	}
@@ -823,8 +823,8 @@ std::shared_ptr<Sentence> ParseTool::_ParseWhile(const std::string& src, std::si
 	return std::shared_ptr<Sentence>(new SentenceWhile(expression, sentence));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseDoWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchDo(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseDoWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchDo(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -834,12 +834,12 @@ std::shared_ptr<Sentence> ParseTool::_ParseDoWhile(const std::string& src, std::
 	}
 
 	Jump(src, size, pos, &pos);
-	if (!Grammar::MatchWhile(src, size, pos, &pos)) {
+	if (!Syntax::MatchWhile(src, size, pos, &pos)) {
 		return nullptr;
 	}
 
 	Jump(src, size, pos, &pos);
-	bool bBracket = Grammar::MatchLeftBrcket(src, size, pos, &pos);
+	bool bBracket = Syntax::MatchLeftBrcket(src, size, pos, &pos);
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
 	}
@@ -850,7 +850,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseDoWhile(const std::string& src, std::
 	}
 	if (bBracket) {
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+		if (!Syntax::MatchRightBrcket(src, size, pos, &pos)) {
 			return nullptr;
 		}
 	}
@@ -861,8 +861,8 @@ std::shared_ptr<Sentence> ParseTool::_ParseDoWhile(const std::string& src, std::
 	return std::shared_ptr<Sentence>(new SentenceDoWhile(expression, sentence));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchBlockBegin(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseBlock(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchBlockBegin(src, size, pos, &pos)) {
 		return nullptr;
 	}
 
@@ -872,7 +872,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseBlock(const std::string& src, std::si
 			return nullptr;
 		}
 		JumpEnd(src, size, pos, &pos);
-		if (Grammar::MatchBlockEnd(src, size, pos, &pos)) {
+		if (Syntax::MatchBlockEnd(src, size, pos, &pos)) {
 			break;
 		}
 
@@ -887,8 +887,8 @@ std::shared_ptr<Sentence> ParseTool::_ParseBlock(const std::string& src, std::si
 	return sentenceBlock;
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchEcho(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchEcho(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	if (!Jump(src, size, pos, &pos)) {
@@ -908,8 +908,8 @@ std::shared_ptr<Sentence> ParseTool::_ParseEcho(const std::string& src, std::siz
 	return std::shared_ptr<Sentence>(new SentenceEcho(expression));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseTryCatchFinally(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchTry(src, size, pos, &pos)) {
+std::shared_ptr<Sentence> Parse::_ParseTryCatchFinally(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchTry(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -920,7 +920,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseTryCatchFinally(const std::string& sr
 	Jump(src, size, pos, &pos);
 
 	decltype(sentence) catchSentence = nullptr;
-	if (Grammar::MatchCatch(src, size, pos, &pos)) {
+	if (Syntax::MatchCatch(src, size, pos, &pos)) {
 		Jump(src, size, pos, &pos);
 		catchSentence = ParseSentence(src, size, pos, &pos);
 		if (!catchSentence) {
@@ -929,7 +929,7 @@ std::shared_ptr<Sentence> ParseTool::_ParseTryCatchFinally(const std::string& sr
 		Jump(src, size, pos, &pos);
 	}
 	decltype(sentence) finallySentence = nullptr;
-	if (Grammar::MatchFinally(src, size, pos, &pos)) {
+	if (Syntax::MatchFinally(src, size, pos, &pos)) {
 		Jump(src, size, pos, &pos);
 		finallySentence = ParseSentence(src, size, pos, &pos);
 		if (!finallySentence) {
@@ -940,14 +940,14 @@ std::shared_ptr<Sentence> ParseTool::_ParseTryCatchFinally(const std::string& sr
 	return std::shared_ptr<Sentence>(new SentenceTryCatchFinally(sentence, catchSentence, finallySentence));
 }
 
-std::shared_ptr<Sentence> ParseTool::_ParseLoopControl(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<Sentence> Parse::_ParseLoopControl(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	std::shared_ptr<Sentence> sentence = nullptr;
 	do {
-		if (Grammar::MatchContinue(src, size, pos, &pos)) {
+		if (Syntax::MatchContinue(src, size, pos, &pos)) {
 			sentence = std::shared_ptr<Sentence>(new SentenceLoopControlContinue());
 			break;
 		}
-		if (Grammar::MatchBreak(src, size, pos, &pos)) {
+		if (Syntax::MatchBreak(src, size, pos, &pos)) {
 			sentence = std::shared_ptr<Sentence>(new SentenceLoopControlBreak());
 			break;
 		}
@@ -960,43 +960,43 @@ std::shared_ptr<Sentence> ParseTool::_ParseLoopControl(const std::string& src, s
 	return sentence;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> Parse::_ParseString(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	char sign = src[pos];
-	if (!Grammar::IsGrammarStringSign(sign)) {
+	if (!Syntax::IsGrammarStringSign(sign)) {
 		return nullptr;
 	}
 	std::string temp;
-	if (Grammar::MatchPair(sign, sign, src, size, pos, &pos, &temp)) {
+	if (Syntax::MatchPair(sign, sign, src, size, pos, &pos, &temp)) {
 		*nextPos = pos;
 		return std::shared_ptr<SentenceExpression>(new SentenceExpression(std::shared_ptr<Value>(new ValueString(temp))));
 	}
 	return nullptr;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	double temp{0};
-	if (Grammar::MatchNumber(src, size, pos, nextPos, &temp)) {
+std::shared_ptr<SentenceExpression> Parse::_ParseNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	double temp { 0 };
+	if (Syntax::MatchNumber(src, size, pos, nextPos, &temp)) {
 		return std::shared_ptr<SentenceExpression>(new SentenceExpression(std::shared_ptr<Value>(new ValueNumber(temp))));
 	}
 	return nullptr;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	bool temp{false};
-	if (Grammar::MatchBool(src, size, pos, nextPos, &temp)) {
+std::shared_ptr<SentenceExpression> Parse::_ParseBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	bool temp { false };
+	if (Syntax::MatchBool(src, size, pos, nextPos, &temp)) {
 		return std::shared_ptr<SentenceExpression>(new SentenceExpression(std::shared_ptr<Value>(new ValueBool(temp))));
 	}
 	return nullptr;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (Grammar::MatchNull(src, size, pos, nextPos)) {
+std::shared_ptr<SentenceExpression> Parse::_ParseNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (Syntax::MatchNull(src, size, pos, nextPos)) {
 		return std::shared_ptr<SentenceExpression>(new SentenceExpression(std::shared_ptr<Value>(new ValueNull())));
 	}
 	return nullptr;
 }
-std::shared_ptr<SentenceExpression> ParseTool::_ParseArray(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchArrayBegin(src, size, pos, &pos)) {
+std::shared_ptr<SentenceExpression> Parse::_ParseArray(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchArrayBegin(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	std::vector<std::shared_ptr<SentenceExpression>> temp;
@@ -1008,19 +1008,19 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArray(const std::string& sr
 		}
 		temp.emplace_back(expression);
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchSplitSymbol(src, size, pos, &pos)) {
+		if (!Syntax::MatchSplitSymbol(src, size, pos, &pos)) {
 			break;
 		}
 	}
-	if (!Grammar::MatchArrayEnd(src, size, pos, &pos)) {
+	if (!Syntax::MatchArrayEnd(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	*nextPos = pos;
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionValueArray(temp));
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::SearchNextArray(src, size, pos)) {
+std::shared_ptr<SentenceExpression> Parse::_ParseArrayItem(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::SearchNextArray(src, size, pos)) {
 		return nullptr;
 	}
 	auto valueExpression = __ParseExpressionValueForArrayValue(src, size, pos, &pos);
@@ -1028,7 +1028,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	if (!Grammar::MatchArrayBegin(src, size, pos, &pos)) {
+	if (!Syntax::MatchArrayBegin(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	std::vector<std::shared_ptr<SentenceExpression>> indexExpressionVec;
@@ -1039,14 +1039,14 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string
 			return nullptr;
 		}
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchArrayEnd(src, size, pos, &pos)) {
+		if (!Syntax::MatchArrayEnd(src, size, pos, &pos)) {
 			return nullptr;
 		}
 		indexExpressionVec.emplace_back(indexExpression);
 
 		auto savePos = pos;
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchArrayBegin(src, size, pos, &pos)) {
+		if (!Syntax::MatchArrayBegin(src, size, pos, &pos)) {
 			pos = savePos;
 			break;
 		}
@@ -1060,22 +1060,22 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseArrayItem(const std::string
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionVariable(analysis));
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseVariableName(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> Parse::_ParseVariableName(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	std::string name;
-	if (Grammar::MatchName(src, size, pos, nextPos, &name)) {
+	if (Syntax::MatchName(src, size, pos, nextPos, &name)) {
 		auto analysis = std::shared_ptr<IExpressionVariableAnalysis>(new ExpressionVariableAnalysisName(name));
 		return std::shared_ptr<SentenceExpression>(new SentenceExpressionVariable(analysis));
 	}
 	return nullptr;
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseFunctioCall(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> Parse::_ParseFunctioCall(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	std::string name;
-	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+	if (!Syntax::MatchName(src, size, pos, &pos, &name)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	if (!Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
+	if (!Syntax::MatchLeftBrcket(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
@@ -1087,27 +1087,27 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseFunctioCall(const std::stri
 		}
 		args.emplace_back(argExpression);
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchSplitSymbol(src, size, pos, &pos)) {
+		if (!Syntax::MatchSplitSymbol(src, size, pos, &pos)) {
 			break;
 		}
 		Jump(src, size, pos, &pos);
 	}
-	if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+	if (!Syntax::MatchRightBrcket(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	*nextPos = pos;
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionFunctionCall(name, args));
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseDoubleExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> Parse::_ParseDoubleExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	DoubleSymbol symbol;
-	bool bDouble = Grammar::MatchDoubleSymbol(src, size, pos, &pos, &symbol);
+	bool bDouble = Syntax::MatchDoubleSymbol(src, size, pos, &pos, &symbol);
 	bool bLast = !bDouble;
 	auto variableSentence = _ParseVariable(src, size, pos, &pos);
 	if (!variableSentence) {
 		return nullptr;
 	}
-	if (!bDouble && !Grammar::MatchDoubleSymbol(src, size, pos, &pos, &symbol)) {
+	if (!bDouble && !Syntax::MatchDoubleSymbol(src, size, pos, &pos, &symbol)) {
 		return nullptr;
 	}
 	auto calculate = _GetCalculate(symbol);
@@ -1118,13 +1118,13 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseDoubleExpression(const std:
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionDouble(variableSentence, calculate, bLast));
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseNotExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchNotSymbol(src, size, pos, &pos)) {
+std::shared_ptr<SentenceExpression> Parse::_ParseNotExpression(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchNotSymbol(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	auto expression = _ParseExpressionValue(src, size, pos, &pos);
 	if (!expression) {
-		if (!Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
+		if (!Syntax::MatchLeftBrcket(src, size, pos, &pos)) {
 			return nullptr;
 		}
 		expression = _ParseExpressionMathBracket(src, size, pos, &pos, true);
@@ -1136,21 +1136,21 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseNotExpression(const std::st
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionNot(expression));
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::MatchNew(src, size, pos, &pos)) {
+std::shared_ptr<SentenceExpression> Parse::_ParseNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::MatchNew(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	if (!Jump(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	std::string name;
-	if (!Grammar::MatchName(src, size, pos, &pos, &name)) {
+	if (!Syntax::MatchName(src, size, pos, &pos, &name)) {
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	if (Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
+	if (Syntax::MatchLeftBrcket(src, size, pos, &pos)) {
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+		if (!Syntax::MatchRightBrcket(src, size, pos, &pos)) {
 			return nullptr;
 		}
 	}
@@ -1158,8 +1158,8 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseNew(const std::string& src,
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionNew(name));
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseInside(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Grammar::SearchNextInside(src, size, pos)) {
+std::shared_ptr<SentenceExpression> Parse::_ParseInside(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	if (!Syntax::SearchNextInside(src, size, pos)) {
 		return nullptr;
 	}
 	auto header = __ParseExpressionInsideHeader(src, size, pos, &pos);
@@ -1167,7 +1167,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseInside(const std::string& s
 		return nullptr;
 	}
 	Jump(src, size, pos, &pos);
-	if (!Grammar::MatchInsideSymbol(src, size, pos, &pos)) {
+	if (!Syntax::MatchInsideSymbol(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	std::vector<std::shared_ptr<SentenceExpression>> insides;
@@ -1182,7 +1182,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseInside(const std::string& s
 
 		auto savePos = pos;
 		Jump(src, size, pos, &pos);
-		if (!Grammar::MatchInsideSymbol(src, size, pos, &pos)) {
+		if (!Syntax::MatchInsideSymbol(src, size, pos, &pos)) {
 			bTailCall = (append->GetExpressionType() == ExpressionType::Function);
 			pos = savePos;
 			break;
@@ -1199,18 +1199,18 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseInside(const std::string& s
 	return std::shared_ptr<SentenceExpression>(new SentenceExpressionVariable(analysis));
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMath(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+std::shared_ptr<SentenceExpression> Parse::_ParseExpressionMath(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return _ParseExpressionMathBracket(src, size, pos, nextPos, false);
 }
 
-std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool bBracket) {
+std::shared_ptr<SentenceExpression> Parse::_ParseExpressionMathBracket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool bBracket) {
 	std::stack<std::shared_ptr<SentenceExpression>> expressionStack;
 	std::stack<MathSymbol> symbolStack;
 
 	static const auto calcLoopFunc = [](MathSymbol symbol, decltype(expressionStack)* stack0, decltype(symbolStack)* stack1) {
-		int level = Grammar::GetMathSymbolLevel(symbol);
+		int level = Syntax::GetMathSymbolLevel(symbol);
 		while (!stack1->empty()) {
-			int preLevel = Grammar::GetMathSymbolLevel(stack1->top());
+			int preLevel = Syntax::GetMathSymbolLevel(stack1->top());
 			if (preLevel < level) {
 				break;
 			}
@@ -1227,8 +1227,8 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 			if (!calculate) {
 				return false;
 			}
-			std::shared_ptr<SentenceExpressionMath> expression{nullptr};
-			if (Grammar::IsVariableSelfAssignSymbol(topSymbol)) {
+			std::shared_ptr<SentenceExpressionMath> expression { nullptr };
+			if (Syntax::IsVariableSelfAssignSymbol(topSymbol)) {
 				expression = std::shared_ptr<SentenceExpressionSelfAssign>(new SentenceExpressionSelfAssign(vl, vr, calculate));
 			} else {
 				expression = std::shared_ptr<SentenceExpressionMath>(new SentenceExpressionMath(vl, vr, calculate));
@@ -1236,12 +1236,12 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 			stack0->emplace(expression);
 		}
 		return true;
-	};
+		};
 
 	while (true) {
 		bool bRet = false;
 		Jump(src, size, pos, &pos);
-		if (Grammar::MatchLeftBrcket(src, size, pos, &pos)) {
+		if (Syntax::MatchLeftBrcket(src, size, pos, &pos)) {
 			Jump(src, size, pos, &pos);
 			auto priorityExpression = _ParseExpressionMathBracket(src, size, pos, &pos, true);
 			if (!priorityExpression) {
@@ -1268,12 +1268,12 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 			break;
 		}
 
-		if (bBracket && Grammar::MatchRightBrcket(src, size, pos, &pos)) {
+		if (bBracket && Syntax::MatchRightBrcket(src, size, pos, &pos)) {
 			break;
 		}
 
 		auto symbol = MathSymbol::None;
-		if (Grammar::MatchMathSymbol(src, size, pos, &pos, &symbol)) {
+		if (Syntax::MatchMathSymbol(src, size, pos, &pos, &symbol)) {
 			bRet = false;
 			if (!calcLoopFunc(symbol, &expressionStack, &symbolStack)) {
 				return nullptr;
@@ -1301,7 +1301,7 @@ std::shared_ptr<SentenceExpression> ParseTool::_ParseExpressionMathBracket(const
 	return expressionStack.top();
 }
 
-IValueCalculate* ParseTool::_GetCalculate(MathSymbol symbol) {
+IValueCalculate* Parse::_GetCalculate(MathSymbol symbol) {
 	switch (symbol) {
 	case MathSymbol::Mul:
 		return ValueCalculateMul::GetInstance();
@@ -1339,6 +1339,8 @@ IValueCalculate* ParseTool::_GetCalculate(MathSymbol symbol) {
 		return ValueCalculateDiv::GetInstance();
 	case MathSymbol::AssignMod:
 		return ValueCalculateMod::GetInstance();
+	case MathSymbol::None:
+		break;
 	default:
 		break;
 	}
@@ -1346,7 +1348,7 @@ IValueCalculate* ParseTool::_GetCalculate(MathSymbol symbol) {
 	return nullptr;
 }
 
-IValueCalculate* ParseTool::_GetCalculate(DoubleSymbol symbol) {
+IValueCalculate* Parse::_GetCalculate(DoubleSymbol symbol) {
 	switch (symbol) {
 	case DoubleSymbol::AddAdd:
 		return ValueCalculateAdd::GetInstance();

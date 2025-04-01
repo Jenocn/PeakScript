@@ -5,11 +5,9 @@
 
 #pragma once
 
-#include "../Base/CommonInclude.h"
-#include "../Base/ErrorLogger.h"
+#include "base/error_logger.h"
 
 namespace peak { 
-namespace interpreter {
 
 class Value;
 
@@ -33,5 +31,4 @@ private:
 	VariableAttribute _attribute{VariableAttribute::None};
 	std::shared_ptr<Value> _value{nullptr};
 };
-} // namespace interpreter
 } // namespace peak

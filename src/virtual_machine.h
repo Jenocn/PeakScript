@@ -5,15 +5,15 @@
 
 #pragma once
 
-#include "Base/CommonInclude.h"
+#include "base/error_logger.h"
 
 namespace peak {
 
 class VirtualJourney;
 
-namespace interpreter {
+
 class ModulePool;
-} // namespace interpreter
+
 
 class VirtualMachine {
 public:
@@ -24,6 +24,6 @@ public:
 	static void LocateLogger(std::function<void(const std::string&)> echo, std::function<void(const std::string&)> errorLogger);
 	static void LocateOpenSrc(std::function<std::string(const std::string&)> func);
 
-	static interpreter::ModulePool* GetModulePool();
+	static ModulePool* GetModulePool();
 };
 } // namespace peak

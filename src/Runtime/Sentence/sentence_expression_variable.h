@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "SentenceExpression.h"
+#include "sentence_expression.h"
 
 namespace peak { 
-namespace interpreter {
 
 class Variable;
 class IExpressionVariableAnalysis;
@@ -25,5 +24,5 @@ private:
 	std::shared_ptr<IExpressionVariableAnalysis> _analysis{nullptr};
 	std::shared_ptr<Variable> _variable{nullptr};
 };
-} // namespace interpreter
+
 } // namespace peak

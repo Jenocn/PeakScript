@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "Value.h"
+#include "value.h"
 
 namespace peak { 
-namespace interpreter {
 
 class Variable;
 	
@@ -28,5 +27,5 @@ public:
 private:
 	std::vector<std::shared_ptr<Variable>> _value;
 };
-} // namespace interpreter
+
 } // namespace peak

@@ -1,7 +1,5 @@
 #include <iostream>
-#include <VirtualMachine.h>
-#include <VirtualJourney.h>
-#include <VirtualTool.h>
+#include <peak.h>
 
 int main(int argc, char** argv) {
 	std::shared_ptr<peak::VirtualJourney> script { nullptr };

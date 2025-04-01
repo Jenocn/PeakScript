@@ -1,9 +1,9 @@
-#include "SentenceLoop.h"
-#include "../Value/ValueTool.h"
-#include "../Variable.h"
-#include "SentenceExpression.h"
+#include "sentence_loop.h"
+#include "runtime/value/value_tool.h"
+#include "runtime/variable.h"
+#include "sentence_expression.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceLoop::SentenceLoop(const std::string& indexParam, std::shared_ptr<SentenceExpression> condition, std::shared_ptr<Sentence> sentence)
 	: _indexParam(indexParam), _condition(condition), _sentence(sentence) {

@@ -1,13 +1,13 @@
-#include "Space.h"
-#include "BuiltInFunction.h"
-#include "Module.h"
-#include "ModulePool.h"
-#include "Value/Value.h"
-#include "Variable.h"
-#include "Value/ValueTool.h"
-#include "Value/ValueFunction.h"
+#include "space.h"
+#include "builtin_function.h"
+#include "module.h"
+#include "module_pool.h"
+#include "value/value.h"
+#include "variable.h"
+#include "value/value_tool.h"
+#include "value/value_function.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 Space::Space(SpaceType spaceType)
 	: _spaceType(spaceType) {

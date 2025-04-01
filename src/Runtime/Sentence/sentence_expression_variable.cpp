@@ -1,8 +1,8 @@
-#include "SentenceExpressionVariable.h"
-#include "../Variable.h"
-#include "Analysis/IExpressionVariableAnalysis.h"
+#include "sentence_expression_variable.h"
+#include "runtime/variable.h"
+#include "analysis/expression_variable_analysis.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceExpressionVariable::SentenceExpressionVariable(std::shared_ptr<IExpressionVariableAnalysis> variableAnalysis)
 	: _analysis(variableAnalysis) {

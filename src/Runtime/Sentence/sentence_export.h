@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "Sentence.h"
+#include "sentence.h"
 
 namespace peak {
-namespace interpreter {
+
 
 class SentenceExport : public Sentence {
 public:
@@ -20,5 +20,5 @@ private:
 	std::string _moduleName;
 };
 
-} // namespace interpreter
+
 } // namespace peak

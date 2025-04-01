@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "../Base/CommonInclude.h"
+#include "base/error_logger.h"
 
 namespace peak {
-namespace interpreter {
 
 class Variable;
 
@@ -24,5 +23,4 @@ private:
 private:
 	std::unordered_map<std::string, std::shared_ptr<Variable>> _variables;
 };
-} // namespace interpreter
 } // namespace peak

@@ -1,10 +1,10 @@
-#include "SentenceExpressionDouble.h"
-#include "../Value/IValueCalculate.h"
-#include "../Value/ValueTool.h"
-#include "../Variable.h"
-#include "SentenceExpressionVariable.h"
+#include "sentence_expression_double.h"
+#include "runtime/value/value_calculate.h"
+#include "runtime/value/value_tool.h"
+#include "runtime/variable.h"
+#include "sentence_expression_variable.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceExpressionDouble::SentenceExpressionDouble(std::shared_ptr<SentenceExpression> variableExpresison, IValueCalculate* calculate, bool last)
 	: _variableExpresison(variableExpresison), _calculate(calculate), _bLast(last) {

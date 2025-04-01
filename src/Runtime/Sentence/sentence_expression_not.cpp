@@ -1,7 +1,7 @@
-#include "SentenceExpressionNot.h"
-#include "../Value/ValueTool.h"
+#include "sentence_expression_not.h"
+#include "runtime/value/value_tool.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceExpressionNot::SentenceExpressionNot(std::shared_ptr<SentenceExpression> expression)
 	: _expression(expression) {

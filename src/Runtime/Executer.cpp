@@ -1,15 +1,15 @@
-#include "Executer.h"
-#include "../Grammar/ParseTool.h"
-#include "Sentence/Sentence.h"
-#include "Space.h"
+#include "executer.h"
+#include "grammar/parse.h"
+#include "sentence/sentence.h"
+#include "space.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 std::shared_ptr<Executer> Executer::Create(const std::string& src) {
 	if (src.empty()) {
 		return nullptr;
 	}
-	auto parseData = ParseTool::Load(src);
+	auto parseData = Parse::Load(src);
 	if (!parseData->bSuccess) {
 		return nullptr;
 	}

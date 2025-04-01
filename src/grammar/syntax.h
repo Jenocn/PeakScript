@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "../Base/CommonInclude.h"
+#include <string>
 
 namespace peak { 
-namespace interpreter {
 
 enum class MathSymbol : char {
 	None,
@@ -37,7 +36,7 @@ enum class DoubleSymbol : char {
 	SubSub, // --
 };
 
-class Grammar {
+class Syntax {
 public:
 	static bool IsTextSpace(char ch);
 	static bool IsTextNewLine(char ch);
@@ -110,5 +109,4 @@ public:
 
 public:
 };
-} // namespace interpreter
 } // namespace peak

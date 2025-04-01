@@ -5,11 +5,10 @@
 
 #pragma once
 
-#include "../Variable.h"
-#include "Sentence.h"
+#include "runtime/variable.h"
+#include "sentence.h"
 
 namespace peak { 
-namespace interpreter {
 
 class SentenceExpression;
 
@@ -24,5 +23,5 @@ private:
 	std::shared_ptr<Variable> _variable{nullptr};
 	std::shared_ptr<SentenceExpression> _expression{nullptr};
 };
-} // namespace interpreter
+
 } // namespace peak

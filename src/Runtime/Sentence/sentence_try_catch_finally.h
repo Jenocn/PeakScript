@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "Sentence.h"
+#include "sentence.h"
 
 namespace peak { 
-namespace interpreter {
+
 class SentenceTryCatchFinally : public Sentence {
 public:
 	SentenceTryCatchFinally(std::shared_ptr<Sentence> senTry, std::shared_ptr<Sentence> senCatch, std::shared_ptr<Sentence> senFinally);
@@ -19,5 +19,5 @@ private:
 	std::shared_ptr<Sentence> _senCatch{nullptr};
 	std::shared_ptr<Sentence> _senFinally{nullptr};
 };
-} // namespace interpreter
+
 } // namespace peak

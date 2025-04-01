@@ -1,7 +1,7 @@
-#include "SentenceExpressionValueArray.h"
-#include "../Value/ValueArray.h"
+#include "sentence_expression_value_array.h"
+#include "runtime/value/value_array.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceExpressionValueArray::SentenceExpressionValueArray(const std::vector<std::shared_ptr<SentenceExpression>>& valueExpressionArray)
 	: _expressionArray(valueExpressionArray) {

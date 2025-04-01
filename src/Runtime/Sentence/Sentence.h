@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "../Space.h"
+#include "runtime/space.h"
 
 namespace peak { 
-namespace interpreter {
 
 class Value;
 
@@ -28,10 +27,6 @@ public:
 	static bool IsSuccess(ExecuteResult value) {
 		return value != ExecuteResult::Failed;
 	}
-
-private:
-	Sentence(const Sentence&);
-	Sentence& operator=(const Sentence&);
 };
-} // namespace interpreter
+
 } // namespace peak

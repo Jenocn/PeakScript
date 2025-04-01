@@ -1,12 +1,12 @@
-#include "ErrorLogger.h"
+#include "error_logger.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 std::function<void(const std::string&)> ErrorLogger::_logger = [](const std::string& message) {
 	std::cout << message << std::endl;
 };
 
-std::map<ErrorRuntimeCode, std::string> ErrorLogger::_errorCodeNameMap = {
+std::unordered_map<ErrorRuntimeCode, std::string> ErrorLogger::_errorCodeNameMap = {
 	{ErrorRuntimeCode::Space, "Space"},
 	{ErrorRuntimeCode::Variable, "Variable"},
 	{ErrorRuntimeCode::Block, "Block, \"{ }\""},

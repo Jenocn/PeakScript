@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "Sentence.h"
+#include "sentence.h"
 
 namespace peak {
-namespace interpreter {
+
 
 class Variable;
 
@@ -22,5 +22,5 @@ private:
 	std::vector<std::string> _params;
 	std::shared_ptr<Sentence> _content{nullptr};
 };
-} // namespace interpreter
+
 } // namespace peak

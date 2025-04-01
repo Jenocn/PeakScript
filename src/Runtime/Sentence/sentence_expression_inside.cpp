@@ -1,9 +1,9 @@
-#include "SentenceExpressionInside.h"
-#include "../Value/ValueTool.h"
-#include "SentenceExpressionVariable.h"
-#include "SentenceExpressionFunctionCall.h"
+#include "sentence_expression_inside.h"
+#include "runtime/value/value_tool.h"
+#include "sentence_expression_variable.h"
+#include "sentence_expression_function_call.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceExpressionInside::SentenceExpressionInside(std::shared_ptr<SentenceExpression> header, std::vector<std::shared_ptr<SentenceExpression>> insides)
 	: _header(header), _insides(insides) {

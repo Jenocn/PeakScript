@@ -1,14 +1,14 @@
 
-#include "VirtualMachine.h"
-#include "Base/ErrorLogger.h"
-#include "Runtime/Executer.h"
-#include "Runtime/ModulePool.h"
-#include "Runtime/System.h"
-#include "VirtualJourney.h"
-#include "VirtualTool.h"
+#include "virtual_machine.h"
+#include "base/error_logger.h"
+#include "runtime/Executer.h"
+#include "runtime/module_pool.h"
+#include "runtime/system.h"
+#include "virtual_journey.h"
+#include "virtual_tool.h"
 
 using namespace peak;
-using namespace peak::interpreter;
+using namespace peak;
 
 std::shared_ptr<VirtualJourney> VirtualMachine::Load(const std::string& src) {
 	auto executer = Executer::Create(src);

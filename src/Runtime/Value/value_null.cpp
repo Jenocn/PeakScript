@@ -1,6 +1,6 @@
-#include "ValueNull.h"
+#include "value_null.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 const std::shared_ptr<ValueNull> ValueNull::DEFAULT_VALUE = std::shared_ptr<ValueNull>(new ValueNull());
 

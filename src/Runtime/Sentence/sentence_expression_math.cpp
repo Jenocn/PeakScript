@@ -1,7 +1,7 @@
-#include "SentenceExpressionMath.h"
-#include "../Value/IValueCalculate.h"
+#include "sentence_expression_math.h"
+#include "runtime/value/value_calculate.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceExpressionMath::SentenceExpressionMath(std::shared_ptr<SentenceExpression> left,
 											   std::shared_ptr<SentenceExpression> right,

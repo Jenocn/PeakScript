@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "Sentence.h"
+#include "sentence.h"
 
 namespace peak { 
-namespace interpreter {
 
 class SentenceExpression;
 
@@ -21,5 +20,5 @@ private:
 	std::string _name;
 	std::shared_ptr<SentenceExpression> _expression{nullptr};
 };
-} // namespace interpreter
+
 } // namespace peak

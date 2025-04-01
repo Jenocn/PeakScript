@@ -1,6 +1,6 @@
-#include "ValueTool.h"
+#include "value_tool.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 static const std::unordered_map<int, std::string> TypeStringMap = {
 	{ValueNull::Type(), "null"},

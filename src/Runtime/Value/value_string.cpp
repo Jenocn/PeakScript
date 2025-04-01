@@ -1,6 +1,6 @@
-#include "ValueString.h"
+#include "value_string.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 ValueString::ValueString(const std::string& value)
 	: _value(value) {

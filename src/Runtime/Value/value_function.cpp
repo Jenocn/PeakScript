@@ -1,9 +1,9 @@
-#include "ValueFunction.h"
-#include "../Space.h"
-#include "../Variable.h"
-#include "ValueTool.h"
+#include "value_function.h"
+#include "runtime/space.h"
+#include "runtime/variable.h"
+#include "value_tool.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 ValueFunction::ValueFunction(std::size_t paramSize, FunctionType func) {
 	AddFunction(paramSize, func);

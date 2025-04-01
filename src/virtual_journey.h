@@ -5,31 +5,31 @@
 
 #pragma once
 
-#include "Base/CommonInclude.h"
+#include "base/error_logger.h"
 
 namespace peak {
 
-namespace interpreter {
+
 class Variable;
 class Executer;
 class Space;
 class Value;
-} // namespace interpreter
+
 
 class VirtualJourney {
 public:
-	VirtualJourney(std::shared_ptr<interpreter::Executer> executer);
+	VirtualJourney(std::shared_ptr<Executer> executer);
 	bool Execute();
-	std::shared_ptr<interpreter::Space> GetSpace() const;
+	std::shared_ptr<Space> GetSpace() const;
 
 public:
-	std::shared_ptr<interpreter::Variable> FindVariable(const std::string& name) const;
-	bool AddVariable(std::shared_ptr<interpreter::Variable> variable);
+	std::shared_ptr<Variable> FindVariable(const std::string& name) const;
+	bool AddVariable(std::shared_ptr<Variable> variable);
 
-	std::shared_ptr<interpreter::Value> ExecuteFunction(const std::string& name, const std::vector<std::shared_ptr<interpreter::Value>>& args);
-	std::shared_ptr<interpreter::Value> ExecuteFunction(const std::string& name);
+	std::shared_ptr<Value> ExecuteFunction(const std::string& name, const std::vector<std::shared_ptr<Value>>& args);
+	std::shared_ptr<Value> ExecuteFunction(const std::string& name);
 
 private:
-	std::shared_ptr<interpreter::Executer> _executer{nullptr};
+	std::shared_ptr<Executer> _executer{nullptr};
 };
 } // namespace peak

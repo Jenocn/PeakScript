@@ -1,6 +1,6 @@
-#include "SentenceTryCatchFinally.h"
+#include "sentence_try_catch_finally.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceTryCatchFinally::SentenceTryCatchFinally(std::shared_ptr<Sentence> senTry,
 												 std::shared_ptr<Sentence> senCatch,

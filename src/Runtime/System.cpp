@@ -1,6 +1,6 @@
-#include "System.h"
+#include "system.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 std::function<void(const std::string&)> System::_funcEcho = [](const std::string& msg) {
 	std::cout << msg << std::endl;
@@ -16,7 +16,7 @@ std::function<std::string(const std::string&)> System::_funcOpenSrc = [](const s
 	}
 	in.seekg(0);
 	std::string buffer;
-	buffer.resize(size);
+	buffer.resize(static_cast<std::size_t>(size));
 	in.read(buffer.data(), size);
 	return buffer;
 };

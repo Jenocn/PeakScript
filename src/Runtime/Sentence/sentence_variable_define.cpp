@@ -1,8 +1,8 @@
 
-#include "SentenceVariableDefine.h"
-#include "SentenceExpression.h"
+#include "sentence_variable_define.h"
+#include "sentence_expression.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceVariableDefine::SentenceVariableDefine(const std::string& name, VariableAttribute attribute, std::shared_ptr<SentenceExpression> expression)
 	: _name(name), _attribute(attribute), _expression(expression) {

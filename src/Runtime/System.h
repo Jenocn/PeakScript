@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "../Base/CommonInclude.h"
+#include "base/error_logger.h"
 
 namespace peak {
-namespace interpreter {
 
 class System {
 public:
@@ -23,5 +22,4 @@ private:
 	static std::function<void(const std::string&)> _funcEcho;
 	static std::function<std::string(const std::string&)> _funcOpenSrc;
 };
-} // namespace interpreter
 } // namespace peak

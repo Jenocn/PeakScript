@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "../Base/CommonInclude.h"
+#include "base/error_logger.h"
 
 namespace peak {
-namespace interpreter {
 
 struct ParseData;
 class Space;
@@ -35,5 +34,4 @@ private:
 	std::shared_ptr<Space> _outsideSpace{nullptr};
 };
 
-} // namespace interpreter
 } // namespace peak

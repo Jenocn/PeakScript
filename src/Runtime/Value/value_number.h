@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "Value.h"
+#include "value.h"
 
 namespace peak { 
-namespace interpreter {
+
 class ValueNumber : public TypeValue<ValueNumber> {
 public:
 	ValueNumber(double value);
@@ -19,5 +19,5 @@ public:
 private:
 	double _value{0};
 };
-} // namespace interpreter
+
 } // namespace peak

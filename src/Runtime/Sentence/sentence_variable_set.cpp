@@ -1,8 +1,8 @@
-#include "SentenceVariableSet.h"
-#include "../Variable.h"
-#include "SentenceExpression.h"
+#include "sentence_variable_set.h"
+#include "runtime/variable.h"
+#include "sentence_expression.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceVariableSet::SentenceVariableSet(const std::string& name, std::shared_ptr<SentenceExpression> expression)
 	: _name(name), _expression(expression) {

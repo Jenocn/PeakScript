@@ -1,8 +1,8 @@
-#include "SentenceExpressionFunctionCall.h"
-#include "../Value/ValueTool.h"
-#include "../Variable.h"
+#include "sentence_expression_function_call.h"
+#include "runtime/value/value_tool.h"
+#include "runtime/variable.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceExpressionFunctionCall::SentenceExpressionFunctionCall(const std::string& name, const std::vector<std::shared_ptr<SentenceExpression>>& args)
 	: _name(name), _args(args) {

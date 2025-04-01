@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "Value.h"
+#include "value.h"
 
 namespace peak {
-namespace interpreter {
+
 
 class Variable;
 class Space;
@@ -36,5 +36,5 @@ private:
 private:
 	std::map<std::size_t, std::pair<std::vector<std::string>, FunctionType>> _functionMap;
 };
-} // namespace interpreter
+
 } // namespace peak

@@ -1,7 +1,7 @@
-#include "ValueCalculateInstance.h"
-#include "ValueTool.h"
+#include "value_calculate.h"
+#include "value_tool.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 std::shared_ptr<Value> ValueCalculateAdd::Calculate(std::shared_ptr<Value> left, std::shared_ptr<Value> right) const {
 	if (ValueTool::IsString(left) || ValueTool::IsString(right)) {

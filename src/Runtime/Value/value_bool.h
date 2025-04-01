@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "Value.h"
+#include "value.h"
 
 namespace peak { 
-namespace interpreter {
+
 class ValueBool : public TypeValue<ValueBool> {
 public:
 	static const std::shared_ptr<ValueBool> TRUE;
@@ -22,5 +22,5 @@ public:
 private:
 	bool _value{false};
 };
-} // namespace interpreter
+
 } // namespace peak

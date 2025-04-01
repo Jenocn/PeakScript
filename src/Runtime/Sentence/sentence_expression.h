@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "Sentence.h"
+#include "sentence.h"
 
 namespace peak { 
-namespace interpreter {
 
 class Value;
 
@@ -38,5 +37,5 @@ protected:
 private:
 	std::shared_ptr<Value> _value{nullptr};
 };
-} // namespace interpreter
+
 } // namespace peak

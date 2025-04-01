@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "../Base/CommonInclude.h"
+#include "base/error_logger.h"
 
 namespace peak {
-namespace interpreter {
 
 class Executer;
 class Space;
@@ -31,5 +30,4 @@ private:
 	bool _bExecuted{false};
 };
 
-} // namespace interpreter
 } // namespace peak

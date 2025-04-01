@@ -1,7 +1,7 @@
-#include "ValueArray.h"
-#include "../Variable.h"
+#include "value_array.h"
+#include "runtime/variable.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 ValueArray::ValueArray() {
 }

@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "../../Base/CommonInclude.h"
+#include "base/error_logger.h"
 
 namespace peak { 
-namespace interpreter {
+
 class Value {
 public:
 	virtual ~Value() {}
@@ -45,5 +45,5 @@ private:
 template <typename T>
 TypeValueCount TypeValue<T>::_count;
 
-} // namespace interpreter
+
 } // namespace peak

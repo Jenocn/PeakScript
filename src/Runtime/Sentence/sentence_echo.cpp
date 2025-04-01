@@ -1,9 +1,9 @@
-#include "SentenceEcho.h"
-#include "../System.h"
-#include "../Value/ValueTool.h"
-#include "SentenceExpression.h"
+#include "sentence_echo.h"
+#include "runtime/system.h"
+#include "runtime/value/value_tool.h"
+#include "sentence_expression.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceEcho::SentenceEcho(std::shared_ptr<SentenceExpression> expression)
 	: _expression(expression) {

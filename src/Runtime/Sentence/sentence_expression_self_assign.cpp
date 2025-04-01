@@ -1,9 +1,9 @@
-#include "SentenceExpressionSelfAssign.h"
-#include "../Value/IValueCalculate.h"
-#include "../Variable.h"
-#include "SentenceExpressionVariable.h"
+#include "sentence_expression_self_assign.h"
+#include "runtime/value/value_calculate.h"
+#include "runtime/variable.h"
+#include "sentence_expression_variable.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 ExecuteResult SentenceExpressionSelfAssign::Execute(std::shared_ptr<Space> space) {
 	if (_left->GetExpressionType() != ExpressionType::Variable) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::SelfAssign, "The expression target isn't a variable!");

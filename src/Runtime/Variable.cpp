@@ -1,7 +1,7 @@
-#include "Variable.h"
-#include "Value/ValueNull.h"
+#include "variable.h"
+#include "value/value_null.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 Variable::Variable(const std::string& name, VariableAttribute attribute, std::shared_ptr<Value> value)
 	: _name(name), _attribute(attribute) {

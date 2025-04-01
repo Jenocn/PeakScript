@@ -5,11 +5,12 @@
 
 #pragma once
 
-#include "../Base/ErrorLogger.h"
-#include "Grammar.h"
+#include <memory>
+#include <list>
+#include "base/error_logger.h"
+#include "syntax.h"
 
 namespace peak {
-namespace interpreter {
 
 class Sentence;
 class SentenceExpression;
@@ -20,7 +21,7 @@ struct ParseData {
 	std::list<std::shared_ptr<Sentence>> sentenceList;
 };
 
-class ParseTool {
+class Parse {
 public:
 	static std::shared_ptr<ParseData> Load(const std::string& src);
 
@@ -98,5 +99,4 @@ private:
 	static ExpressionParseList __sentenceInsideHeaderParseList;
 	static ExpressionParseList __sentenceInsideAppendParseList;
 };
-} // namespace interpreter
 } // namespace peak

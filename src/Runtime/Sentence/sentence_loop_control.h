@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "Sentence.h"
+#include "sentence.h"
 
 namespace peak { 
-namespace interpreter {
+
 class SentenceLoopControlContinue : public Sentence {
 public:
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
@@ -17,5 +17,5 @@ class SentenceLoopControlBreak : public Sentence {
 public:
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 };
-} // namespace interpreter
+
 } // namespace peak

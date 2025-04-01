@@ -1,10 +1,10 @@
 
-#include "SentenceVariableAssign.h"
-#include "../Variable.h"
-#include "SentenceExpression.h"
-#include "SentenceExpressionVariable.h"
+#include "sentence_variable_assign.h"
+#include "runtime/variable.h"
+#include "sentence_expression.h"
+#include "sentence_expression_variable.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceVariableAssign::SentenceVariableAssign(std::shared_ptr<SentenceExpression> variableExpression, std::shared_ptr<SentenceExpression> expression)
 	: _variableExpression(variableExpression), _expression(expression) {

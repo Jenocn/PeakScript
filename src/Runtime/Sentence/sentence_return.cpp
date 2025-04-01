@@ -1,7 +1,7 @@
-#include "SentenceReturn.h"
-#include "SentenceExpression.h"
+#include "sentence_return.h"
+#include "sentence_expression.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceReturn::SentenceReturn() {
 }

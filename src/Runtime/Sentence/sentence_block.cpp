@@ -1,7 +1,7 @@
 
-#include "SentenceBlock.h"
+#include "sentence_block.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 ExecuteResult SentenceBlock::Execute(std::shared_ptr<Space> space) {
 	auto tempSpace = std::shared_ptr<Space>(new Space(space->GetSpaceType(), space));

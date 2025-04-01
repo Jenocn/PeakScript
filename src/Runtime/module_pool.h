@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "../Base/CommonInclude.h"
+#include "base/error_logger.h"
 
 namespace peak {
-namespace interpreter {
 
 class Module;
 class Executer;
@@ -36,5 +35,4 @@ private:
 	std::set<std::string> _searchDirs;
 };
 
-} // namespace interpreter
 } // namespace peak

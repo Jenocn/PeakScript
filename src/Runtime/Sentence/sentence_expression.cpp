@@ -1,7 +1,7 @@
-#include "SentenceExpression.h"
-#include "../Value/Value.h"
+#include "sentence_expression.h"
+#include "runtime/value/value.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceExpression::SentenceExpression()
 	: _value(nullptr) {

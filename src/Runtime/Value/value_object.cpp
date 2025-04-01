@@ -1,7 +1,7 @@
-#include "ValueObject.h"
-#include "../Space.h"
+#include "value_object.h"
+#include "runtime/space.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 ValueObject::ValueObject(std::shared_ptr<Space> indexSpace, std::shared_ptr<ValueObject> parent) {
 	decltype(_space) parentSpace = parent ? parent->GetSpace()->CopySpace() : nullptr;

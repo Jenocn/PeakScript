@@ -1,8 +1,8 @@
-#include "SentenceImport.h"
-#include "../Module.h"
-#include "../ModulePool.h"
+#include "sentence_import.h"
+#include "runtime/module.h"
+#include "runtime/module_pool.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceImport::SentenceImport(const std::string& moduleName)
 	: _moduleName(moduleName) {

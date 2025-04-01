@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "Value.h"
+#include "value.h"
 
 namespace peak {
-namespace interpreter {
+
 
 class Space;
 
@@ -22,5 +22,5 @@ public:
 private:
 	std::shared_ptr<Space> _space{nullptr};
 };
-} // namespace interpreter
+
 } // namespace peak

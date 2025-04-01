@@ -1,8 +1,8 @@
-#include "SentenceExpressionNew.h"
-#include "../Value/ValueTool.h"
-#include "../Variable.h"
+#include "sentence_expression_new.h"
+#include "runtime/value/value_tool.h"
+#include "runtime/variable.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceExpressionNew::SentenceExpressionNew(const std::string& name)
 	: _name(name) {

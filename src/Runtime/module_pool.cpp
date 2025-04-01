@@ -1,9 +1,9 @@
-#include "ModulePool.h"
-#include "Executer.h"
-#include "Module.h"
-#include "System.h"
+#include "module_pool.h"
+#include "executer.h"
+#include "module.h"
+#include "system.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 ModulePool* ModulePool::GetInstance() {
 	static ModulePool _ins;
@@ -89,8 +89,7 @@ std::shared_ptr<Module> ModulePool::UseModule(const std::string& moduleName) {
 }
 
 std::shared_ptr<Executer> ModulePool::_CreateExecuter(const std::string& filename) const {
-	const auto& src = System::OpenSrc(filename);
-	if (!src.empty()) {
+	if (const auto& src = System::OpenSrc(filename); !src.empty()) {
 		auto ret = Executer::Create(src);
 		if (ret) {
 			return ret;

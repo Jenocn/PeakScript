@@ -5,10 +5,21 @@
 
 #pragma once
 
-#include "CommonInclude.h"
+#include <algorithm>
+#include <functional>
+#include <iostream>
+#include <list>
+#include <map>
+#include <memory>
+#include <set>
+#include <stack>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+#include <fstream>
 
 namespace peak {
-namespace interpreter {
 
 enum class ErrorRuntimeCode {
 	None = 0,
@@ -57,8 +68,7 @@ public:
 
 private:
 	static std::function<void(const std::string&)> _logger;
-	static std::map<ErrorRuntimeCode, std::string> _errorCodeNameMap;
+	static std::unordered_map<ErrorRuntimeCode, std::string> _errorCodeNameMap;
 };
 
-} // namespace interpreter
 } // namespace peak

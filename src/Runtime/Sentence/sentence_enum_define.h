@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "Sentence.h"
+#include "sentence.h"
 
 namespace peak {
-namespace interpreter {
+
 
 class ValueNumber;
 	
@@ -21,5 +21,5 @@ private:
 	std::string _name;
 	std::list<std::pair<std::string, std::shared_ptr<ValueNumber>>> _valueList;
 };
-} // namespace interpreter
+
 } // namespace peak

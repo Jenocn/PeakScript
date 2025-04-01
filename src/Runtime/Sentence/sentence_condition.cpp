@@ -1,8 +1,8 @@
-#include "SentenceCondition.h"
-#include "../Value/ValueTool.h"
-#include "SentenceExpression.h"
+#include "sentence_condition.h"
+#include "runtime/value/value_tool.h"
+#include "sentence_expression.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceCondition::SentenceCondition(std::shared_ptr<SentenceExpression> expression, std::shared_ptr<Sentence> sentenceTrue, std::shared_ptr<Sentence> sentenceFalse)
 	: _expression(expression), _sentenceTrue(sentenceTrue), _sentenceFalse(sentenceFalse) {

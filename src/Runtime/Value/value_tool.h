@@ -5,17 +5,17 @@
 
 #pragma once
 
-#include "Value.h"
-#include "ValueArray.h"
-#include "ValueBool.h"
-#include "ValueFunction.h"
-#include "ValueNull.h"
-#include "ValueNumber.h"
-#include "ValueObject.h"
-#include "ValueString.h"
+#include "value.h"
+#include "value_array.h"
+#include "value_bool.h"
+#include "value_function.h"
+#include "value_null.h"
+#include "value_number.h"
+#include "value_object.h"
+#include "value_string.h"
 
 namespace peak {
-namespace interpreter {
+
 class Value;
 
 class ValueTool {
@@ -35,5 +35,5 @@ public:
 
 	static bool IsInteger(std::shared_ptr<Value> value);
 };
-} // namespace interpreter
+
 } // namespace peak

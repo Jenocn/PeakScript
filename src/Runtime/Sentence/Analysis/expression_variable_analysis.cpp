@@ -1,9 +1,9 @@
-#include "ExpressionVariableAnalysisInstance.h"
-#include "../../Value/ValueTool.h"
-#include "../../Variable.h"
-#include "../SentenceExpressionVariable.h"
+#include "expression_variable_analysis.h"
+#include "runtime/value/value_tool.h"
+#include "runtime/variable.h"
+#include "runtime/sentence/sentence_expression_variable.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 ExpressionVariableAnalysisName::ExpressionVariableAnalysisName(const std::string& name)
 	: _name(name) {

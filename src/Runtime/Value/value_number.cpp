@@ -1,6 +1,6 @@
-#include "ValueNumber.h"
+#include "value_number.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 ValueNumber::ValueNumber(double value)
 	: _value(value) {

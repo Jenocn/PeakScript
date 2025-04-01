@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "SentenceReturn.h"
+#include "sentence_return.h"
 
 namespace peak { 
-namespace interpreter {
+
 	
 class SentenceBlock : public SentenceReturn {
 public:
@@ -18,5 +18,5 @@ public:
 private:
 	std::list<std::shared_ptr<Sentence>> _list;
 };
-} // namespace interpreter
+
 } // namespace peak

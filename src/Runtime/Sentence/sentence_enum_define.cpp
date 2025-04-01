@@ -1,8 +1,8 @@
-#include "SentenceEnumDefine.h"
-#include "../Value/ValueTool.h"
-#include "../Variable.h"
+#include "sentence_enum_define.h"
+#include "runtime/value/value_tool.h"
+#include "runtime/variable.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceEnumDefine::SentenceEnumDefine(const std::string& name, const std::list<std::pair<std::string, std::shared_ptr<ValueNumber>>>& valueList)
 	: _name(name), _valueList(valueList) {

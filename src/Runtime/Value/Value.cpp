@@ -1,6 +1,6 @@
-#include "Value.h"
+#include "value.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 int TypeValueCount::_count{0};
 

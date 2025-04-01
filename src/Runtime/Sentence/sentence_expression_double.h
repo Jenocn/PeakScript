@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "SentenceExpression.h"
+#include "sentence_expression.h"
 
 namespace peak { 
-namespace interpreter {
+
 
 class SentenceExpressionVariable;
 class IValueCalculate;
@@ -25,5 +25,5 @@ private:
 	IValueCalculate* _calculate{nullptr};
 	bool _bLast{false};
 };
-} // namespace interpreter
+
 } // namespace peak

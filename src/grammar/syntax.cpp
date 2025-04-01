@@ -1,25 +1,27 @@
-#include "Grammar.h"
+#include "syntax.h"
+#include <unordered_set>
+#include <unordered_map>
 
-using namespace peak::interpreter;
+using namespace peak;
 
 // text
-static const std::set<char> SET_TEXT_SPACE = {' ', '\n', '\r', '\t'};
-static const std::set<char> SET_TEXT_NEW_LINE = {'\n', '\r'};
+static const std::unordered_set<char> SET_TEXT_SPACE = {' ', '\n', '\r', '\t'};
+static const std::unordered_set<char> SET_TEXT_NEW_LINE = {'\n', '\r'};
 
 // grammar
-static const std::set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
-static const std::set<char> SET_END_SIGN = {'\n', '\r', ';', '\0'};
-static const std::set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "the"};
-static const std::set<std::string> SET_ASSIGN_SIGN = {"=", "is", "as"};
-static const std::set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
-static const std::set<std::string> SET_BOOL_FALSE_SIGN = {"false", "no"};
-static const std::set<std::string> SET_CONDITION_IF_SIGN = {"if"};
-static const std::set<std::string> SET_CONDITION_ELSE_SIGN = {"else"};
-static const std::set<std::string> SET_BLOCK_BEGIN = {"{", "begin"};
-static const std::set<std::string> SET_BLOCK_END = {"}", "end"};
-static const std::set<std::string> SET_COMMENT_SIGN = {"//", "#"};
-static const std::set<std::string> SET_EXTENDS_SIGN = {":", "extends"};
-static const std::map<MathSymbol, std::pair<int, std::set<std::string>>> MAP_SET_MATH_SYMBOL = {
+static const std::unordered_set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
+static const std::unordered_set<char> SET_END_SIGN = {'\n', '\r', ';', '\0'};
+static const std::unordered_set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "the"};
+static const std::unordered_set<std::string> SET_ASSIGN_SIGN = {"=", "is", "as"};
+static const std::unordered_set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
+static const std::unordered_set<std::string> SET_BOOL_FALSE_SIGN = {"false", "no"};
+static const std::unordered_set<std::string> SET_CONDITION_IF_SIGN = {"if"};
+static const std::unordered_set<std::string> SET_CONDITION_ELSE_SIGN = {"else"};
+static const std::unordered_set<std::string> SET_BLOCK_BEGIN = {"{", "begin"};
+static const std::unordered_set<std::string> SET_BLOCK_END = {"}", "end"};
+static const std::unordered_set<std::string> SET_COMMENT_SIGN = {"//", "#"};
+static const std::unordered_set<std::string> SET_EXTENDS_SIGN = {":", "extends"};
+static const std::unordered_map<MathSymbol, std::pair<int, std::unordered_set<std::string>>> MAP_SET_MATH_SYMBOL = {
 	{MathSymbol::AssignMul, {110, {"*="}}},
 	{MathSymbol::AssignDiv, {110, {"/="}}},
 	{MathSymbol::AssignMod, {110, {"%="}}},
@@ -39,7 +41,7 @@ static const std::map<MathSymbol, std::pair<int, std::set<std::string>>> MAP_SET
 	{MathSymbol::LogicAnd, {60, {"&&", "and"}}},
 	{MathSymbol::LogicOr, {60, {"||", "or"}}},
 };
-static const std::map<DoubleSymbol, std::string> MAP_DOUBLE_SYMBOL = {
+static const std::unordered_map<DoubleSymbol, std::string> MAP_DOUBLE_SYMBOL = {
 	{DoubleSymbol::AddAdd, "++"},
 	{DoubleSymbol::SubSub, "--"},
 };
@@ -76,27 +78,27 @@ static const char CHAR_ARRAY_BEGIN = '[';
 static const char CHAR_ARRAY_END = ']';
 static const char CHAR_INSIDE_SYMBOL = '.';
 
-bool Grammar::IsTextSpace(char ch) {
+bool Syntax::IsTextSpace(char ch) {
 	return (SET_TEXT_SPACE.find(ch) != SET_TEXT_SPACE.end());
 }
-bool Grammar::IsTextNewLine(char ch) {
+bool Syntax::IsTextNewLine(char ch) {
 	return (SET_TEXT_NEW_LINE.find(ch) != SET_TEXT_NEW_LINE.end());
 }
-bool Grammar::IsTextSpecialChar(char ch) {
+bool Syntax::IsTextSpecialChar(char ch) {
 	return (ch >= 0 && ch <= 47) || (ch >= 58 && ch <= 64) || (ch >= 91 && ch <= 94) || (ch == 96) || (ch >= 123 && ch <= 127);
 }
-bool Grammar::IsTextNumber(char ch) {
+bool Syntax::IsTextNumber(char ch) {
 	return ch >= '0' && ch <= '9';
 }
-bool Grammar::IsGrammarStringSign(char ch) {
+bool Syntax::IsGrammarStringSign(char ch) {
 	return (SET_STRING_SIGN.find(ch) != SET_STRING_SIGN.end());
 }
 
-bool Grammar::IsGrammarEndSign(char ch) {
+bool Syntax::IsGrammarEndSign(char ch) {
 	return (SET_END_SIGN.find(ch) != SET_END_SIGN.end());
 }
 
-bool Grammar::IsSpecialSign(const std::string& value) {
+bool Syntax::IsSpecialSign(const std::string& value) {
 	std::size_t pos = 0;
 	std::size_t size = value.size();
 	do {
@@ -186,7 +188,7 @@ bool Grammar::IsSpecialSign(const std::string& value) {
 
 	return pos >= size || IsTextSpecialChar(value[pos]);
 }
-int Grammar::GetMathSymbolLevel(MathSymbol value) {
+int Syntax::GetMathSymbolLevel(MathSymbol value) {
 	auto ite = MAP_SET_MATH_SYMBOL.find(value);
 	if (ite != MAP_SET_MATH_SYMBOL.end()) {
 		return ite->second.first;
@@ -194,15 +196,15 @@ int Grammar::GetMathSymbolLevel(MathSymbol value) {
 	return 0;
 }
 
-bool Grammar::IsLeftBrcket(char ch) {
+bool Syntax::IsLeftBrcket(char ch) {
 	return ch == CHAR_LEFT_BRACKET;
 }
-bool Grammar::IsRightBrcket(char ch) {
+bool Syntax::IsRightBrcket(char ch) {
 	return ch == CHAR_RIGHT_BRACKET;
 }
 
-bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
-	static const std::set<MathSymbol> selfAssignSymbol = {
+bool Syntax::IsVariableSelfAssignSymbol(MathSymbol value) {
+	static const std::unordered_set<MathSymbol> selfAssignSymbol = {
 		MathSymbol::AssignAdd,
 		MathSymbol::AssignDiv,
 		MathSymbol::AssignSub,
@@ -211,7 +213,7 @@ bool Grammar::IsVariableSelfAssignSymbol(MathSymbol value) {
 	};
 	return selfAssignSymbol.find(value) != selfAssignSymbol.end();
 }
-bool Grammar::IsWordValidSymbol(char ch) {
+bool Syntax::IsWordValidSymbol(char ch) {
 	if (!IsTextSpecialChar(ch)) {
 		return true;
 	}
@@ -224,7 +226,7 @@ bool Grammar::IsWordValidSymbol(char ch) {
 		   (ch == CHAR_INSIDE_SYMBOL);
 }
 
-bool Grammar::SearchNextInside(const std::string& src, std::size_t size, std::size_t pos) {
+bool Syntax::SearchNextInside(const std::string& src, std::size_t size, std::size_t pos) {
 	for (auto i = pos; i < size; ++i) {
 		if (MatchInsideSymbol(src, size, i, &i)) {
 			return true;
@@ -240,7 +242,7 @@ bool Grammar::SearchNextInside(const std::string& src, std::size_t size, std::si
 	return false;
 }
 
-bool Grammar::SearchNextArray(const std::string& src, std::size_t size, std::size_t pos) {
+bool Syntax::SearchNextArray(const std::string& src, std::size_t size, std::size_t pos) {
 	for (auto i = pos; i < size; ++i) {
 		if (MatchArrayBegin(src, size, i, &i)) {
 			return true;
@@ -256,17 +258,17 @@ bool Grammar::SearchNextArray(const std::string& src, std::size_t size, std::siz
 	return false;
 }
 
-bool Grammar::MatchImport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchImport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_IMPORT_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchExport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchExport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_EXPORT_SIGN, src, size, pos, nextPos);
 }
 
-bool Grammar::MatchEnum(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchEnum(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_ENUM_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchExtends(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchExtends(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (auto& sign : SET_EXTENDS_SIGN) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {
 			return true;
@@ -274,29 +276,29 @@ bool Grammar::MatchExtends(const std::string& src, std::size_t size, std::size_t
 	}
 	return false;
 }
-bool Grammar::MatchObject(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchObject(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_OBJECT_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchInsideSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchInsideSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_INSIDE_SYMBOL, src, size, pos, nextPos);
 }
 
-bool Grammar::MatchNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchNew(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_NEW_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchObjectBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchObjectBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchBlockBegin(src, size, pos, nextPos);
 }
-bool Grammar::MatchObjectEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchObjectEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchBlockEnd(src, size, pos, nextPos);
 }
-bool Grammar::MatchArrayBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchArrayBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_ARRAY_BEGIN, src, size, pos, nextPos);
 }
-bool Grammar::MatchArrayEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchArrayEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_ARRAY_END, src, size, pos, nextPos);
 }
-bool Grammar::MatchDoubleSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, DoubleSymbol* symbol) {
+bool Syntax::MatchDoubleSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, DoubleSymbol* symbol) {
 	for (auto& pair : MAP_DOUBLE_SYMBOL) {
 		if (MatchSign(pair.second, src, size, pos, nextPos)) {
 			*symbol = pair.first;
@@ -305,42 +307,42 @@ bool Grammar::MatchDoubleSymbol(const std::string& src, std::size_t size, std::s
 	}
 	return false;
 }
-bool Grammar::MatchNotSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchNotSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_NOT_SYMBOL, src, size, pos, nextPos);
 }
-bool Grammar::MatchConst(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchConst(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_CONST_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_RETURN_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchSplitSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchSplitSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_SPLIT_SYMBOL, src, size, pos, nextPos);
 }
-bool Grammar::MatchFunction(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchFunction(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_FUNCTION_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchBreak(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchBreak(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_BREAK_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchContinue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchContinue(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_CONTINUE_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchTry(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchTry(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_TRY_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchCatch(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchCatch(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_CATCH_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchFinally(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchFinally(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_FINALLY_SIGN, src, size, pos, nextPos);
 }
 
-bool Grammar::MatchEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_ECHO_SIGN, src, size, pos, nextPos);
 }
 
-bool Grammar::MatchBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (const auto& sign : SET_BLOCK_BEGIN) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {
 			return true;
@@ -348,7 +350,7 @@ bool Grammar::MatchBlockBegin(const std::string& src, std::size_t size, std::siz
 	}
 	return false;
 }
-bool Grammar::MatchBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (const auto& sign : SET_BLOCK_END) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {
 			return true;
@@ -357,7 +359,7 @@ bool Grammar::MatchBlockEnd(const std::string& src, std::size_t size, std::size_
 	return false;
 }
 
-bool Grammar::MatchConditionIf(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchConditionIf(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (const auto& sign : SET_CONDITION_IF_SIGN) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {
 			return true;
@@ -365,7 +367,7 @@ bool Grammar::MatchConditionIf(const std::string& src, std::size_t size, std::si
 	}
 	return false;
 }
-bool Grammar::MatchConditionElse(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchConditionElse(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (const auto& sign : SET_CONDITION_ELSE_SIGN) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {
 			return true;
@@ -374,33 +376,33 @@ bool Grammar::MatchConditionElse(const std::string& src, std::size_t size, std::
 	return false;
 }
 
-bool Grammar::MatchFor(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchFor(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_FOR_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchForeach(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchForeach(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_FOREACH_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchForeachIn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchForeachIn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_FOREACH_IN_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchWhile(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_WHILE_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchDo(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchDo(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_DO_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_LOOP_SIGN, src, size, pos, nextPos);
 }
 
-bool Grammar::MatchLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_LEFT_BRACKET, src, size, pos, nextPos);
 }
-bool Grammar::MatchRightBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchRightBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_RIGHT_BRACKET, src, size, pos, nextPos);
 }
 
-bool Grammar::MatchMathSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, MathSymbol* symbol) {
+bool Syntax::MatchMathSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, MathSymbol* symbol) {
 	for (auto& pair : MAP_SET_MATH_SYMBOL) {
 		const auto& setPair = pair.second;
 		const auto& signSet = setPair.second;
@@ -414,11 +416,11 @@ bool Grammar::MatchMathSymbol(const std::string& src, std::size_t size, std::siz
 	return false;
 }
 
-bool Grammar::MatchNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_NULL_SIGN, src, size, pos, nextPos);
 }
 
-bool Grammar::MatchBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool* value) {
+bool Syntax::MatchBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool* value) {
 	for (const auto& sign : SET_BOOL_TRUE_SIGN) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {
 			*value = true;
@@ -434,7 +436,7 @@ bool Grammar::MatchBool(const std::string& src, std::size_t size, std::size_t po
 	return false;
 }
 
-bool Grammar::MatchNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, double* number) {
+bool Syntax::MatchNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, double* number) {
 	if (pos >= size) {
 		return false;
 	}
@@ -482,7 +484,7 @@ bool Grammar::MatchNumber(const std::string& src, std::size_t size, std::size_t 
 	if (tempSize < checkSize) {
 		return false;
 	}
-	auto tempStr = std::move(src.substr(beginPos, tempSize));
+	auto tempStr = src.substr(beginPos, tempSize);
 	if (bPoint) {
 		tempStr.insert(p, 1, '0');
 	}
@@ -491,7 +493,7 @@ bool Grammar::MatchNumber(const std::string& src, std::size_t size, std::size_t 
 	return true;
 }
 
-bool Grammar::MatchName(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* name) {
+bool Syntax::MatchName(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* name) {
 	if (pos >= size) {
 		return false;
 	}
@@ -512,7 +514,7 @@ bool Grammar::MatchName(const std::string& src, std::size_t size, std::size_t po
 		return false;
 	}
 	auto tempSize = pos - beginPos;
-	auto tempName = std::move(src.substr(beginPos, tempSize));
+	auto tempName = src.substr(beginPos, tempSize);
 	if (IsSpecialSign(tempName)) {
 		return false;
 	}
@@ -521,7 +523,7 @@ bool Grammar::MatchName(const std::string& src, std::size_t size, std::size_t po
 	return true;
 }
 
-bool Grammar::MatchAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (const auto& sign : SET_ASSIGN_SIGN) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {
 			return true;
@@ -530,7 +532,7 @@ bool Grammar::MatchAssign(const std::string& src, std::size_t size, std::size_t 
 	return false;
 }
 
-bool Grammar::MatchComment(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchComment(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (const auto& sign : SET_COMMENT_SIGN) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {
 			return true;
@@ -538,13 +540,13 @@ bool Grammar::MatchComment(const std::string& src, std::size_t size, std::size_t
 	}
 	return false;
 }
-bool Grammar::MatchCommentBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchCommentBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_COMMENT_BLOCK_BEGIN_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchCommentBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchCommentBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_COMMENT_BLOCK_END_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	for (const auto& sign : SET_VARIABLE_DEFINE_SIGN) {
 		if (MatchSign(sign, src, size, pos, nextPos)) {
 			return true;
@@ -552,10 +554,10 @@ bool Grammar::MatchVariableDefine(const std::string& src, std::size_t size, std:
 	}
 	return false;
 }
-bool Grammar::MatchVariableSet(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchVariableSet(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_SET_SIGN, src, size, pos, nextPos);
 }
-bool Grammar::MatchSign(const std::string& sign, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchSign(const std::string& sign, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	auto signSize = sign.size();
 	if (pos + signSize > size) {
 		return false;
@@ -568,7 +570,7 @@ bool Grammar::MatchSign(const std::string& sign, const std::string& src, std::si
 	*nextPos = pos + signSize;
 	return true;
 }
-bool Grammar::MatchSign(char sign, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+bool Syntax::MatchSign(char sign, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	if (pos >= size) {
 		return false;
 	}
@@ -579,7 +581,7 @@ bool Grammar::MatchSign(char sign, const std::string& src, std::size_t size, std
 	return false;
 }
 
-bool Grammar::MatchPair(const std::string& signLeft, const std::string& signRight, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* result) {
+bool Syntax::MatchPair(const std::string& signLeft, const std::string& signRight, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* result) {
 	if (!MatchSign(signLeft, src, size, pos, &pos)) {
 		return false;
 	}
@@ -605,7 +607,7 @@ bool Grammar::MatchPair(const std::string& signLeft, const std::string& signRigh
 	}
 	return false;
 }
-bool Grammar::MatchPair(char signLeft, char signRight, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* result) {
+bool Syntax::MatchPair(char signLeft, char signRight, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, std::string* result) {
 	if (src[pos] != signLeft) {
 		return false;
 	}

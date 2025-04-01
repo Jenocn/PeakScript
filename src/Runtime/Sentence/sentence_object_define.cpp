@@ -1,8 +1,8 @@
-#include "SentenceObjectDefine.h"
-#include "../Value/ValueTool.h"
-#include "../Variable.h"
+#include "sentence_object_define.h"
+#include "runtime/value/value_tool.h"
+#include "runtime/variable.h"
 
-using namespace peak::interpreter;
+using namespace peak;
 
 SentenceObjectDefine::SentenceObjectDefine(const std::string& name, const std::string& parentName, std::list<std::shared_ptr<Sentence>>& sentenceList)
 	: _name(name), _parentName(parentName), _sentenceList(sentenceList) {

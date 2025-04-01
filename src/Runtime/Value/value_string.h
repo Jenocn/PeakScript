@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "Value.h"
+#include "value.h"
 
 namespace peak { 
-namespace interpreter {
+
 class ValueString : public TypeValue<ValueString> {
 public:
 	ValueString(const std::string& value);
@@ -19,5 +19,5 @@ public:
 private:
 	std::string _value;
 };
-} // namespace interpreter
+
 } // namespace peak

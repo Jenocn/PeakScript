@@ -5,10 +5,9 @@
 
 #pragma once
 
-#include "SentenceExpression.h"
+#include "sentence_expression.h"
 
 namespace peak { 
-namespace interpreter {
 
 class IValueCalculate;
 
@@ -23,5 +22,5 @@ protected:
 	std::shared_ptr<SentenceExpression> _right{nullptr};
 	IValueCalculate* _calculate{nullptr};
 };
-} // namespace interpreter
+
 } // namespace peak
