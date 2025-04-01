@@ -55,20 +55,21 @@ Parse::SentenceParseList Parse::_sentenceParseList = {
 	_ParseExport,
 	_ParseTryCatchFinally,
 	_ParseExpressionToEnd,
+	_ParseFunctioCall,
 };
 Parse::ExpressionParseList Parse::_sentenceValueParseList = {
 	_ParseString,
 	_ParseNumber,
-	_ParseBool,
-	_ParseNull,
 	_ParseInside,
 	_ParseArrayItem,
 	_ParseArray,
-	_ParseNew,
-	_ParseFunctioCall,
 	_ParseDoubleExpression,
 	_ParseNotExpression,
+	_ParseFunctioCall,
 	_ParseVariableName,
+	_ParseNew,
+	_ParseBool,
+	_ParseNull,
 };
 
 // target = value;

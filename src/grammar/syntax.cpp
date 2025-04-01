@@ -599,7 +599,7 @@ bool Syntax::MatchPair(const std::string& signLeft, const std::string& signRight
 				continue;
 			}
 			auto tempSize = pos - signRight.size() - beginPos;
-			*result = std::move(src.substr(beginPos, tempSize));
+			*result = src.substr(beginPos, tempSize);
 			*nextPos = pos;
 			return true;
 		}
@@ -632,7 +632,7 @@ bool Syntax::MatchPair(char signLeft, char signRight, const std::string& src, st
 					break;
 				}
 				auto tempSize = pos - beginPos;
-				*result = std::move(src.substr(beginPos, tempSize));
+				*result = src.substr(beginPos, tempSize);
 				*nextPos = pos + 1;
 				return true;
 			}

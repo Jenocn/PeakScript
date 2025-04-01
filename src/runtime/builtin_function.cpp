@@ -27,7 +27,7 @@ BuiltInFunction::BuiltInFunction() {
 	};
 
 	// print
-	_Emplace("print", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("print", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		std::string ret = "";
 		for (auto arg : args) {
 			ret += ValueTool::ToString(arg);
@@ -36,14 +36,14 @@ BuiltInFunction::BuiltInFunction() {
 		return ValueNull::DEFAULT_VALUE;
 	});
 	// type
-	_Emplace("type", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("type", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		if (args.empty()) {
 			return nullptr;
 		}
 		return std::shared_ptr<Value>(new ValueString(ValueTool::ToTypeString(args[0])));
 	});
 	// is_null
-	_Emplace("is_null", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("is_null", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		if (args.empty()) {
 			return nullptr;
 		}
@@ -54,7 +54,7 @@ BuiltInFunction::BuiltInFunction() {
 		return std::shared_ptr<Value>(new ValueBool(ret));
 	});
 	// is_number
-	_Emplace("is_number", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("is_number", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		if (args.empty()) {
 			return nullptr;
 		}
@@ -65,7 +65,7 @@ BuiltInFunction::BuiltInFunction() {
 		return std::shared_ptr<Value>(new ValueBool(ret));
 	});
 	// is_bool
-	_Emplace("is_bool", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("is_bool", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		if (args.empty()) {
 			return nullptr;
 		}
@@ -76,7 +76,7 @@ BuiltInFunction::BuiltInFunction() {
 		return std::shared_ptr<Value>(new ValueBool(ret));
 	});
 	// is_string
-	_Emplace("is_string", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("is_string", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		if (args.empty()) {
 			return nullptr;
 		}
@@ -87,7 +87,7 @@ BuiltInFunction::BuiltInFunction() {
 		return std::shared_ptr<Value>(new ValueBool(ret));
 	});
 	// is_array
-	_Emplace("is_array", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("is_array", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		if (args.empty()) {
 			return nullptr;
 		}
@@ -98,7 +98,7 @@ BuiltInFunction::BuiltInFunction() {
 		return std::shared_ptr<Value>(new ValueBool(ret));
 	});
 	// is_function
-	_Emplace("is_function", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("is_function", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		if (args.empty()) {
 			return nullptr;
 		}
@@ -109,7 +109,7 @@ BuiltInFunction::BuiltInFunction() {
 		return std::shared_ptr<Value>(new ValueBool(ret));
 	});
 	// is_object
-	_Emplace("is_object", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("is_object", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		if (args.empty()) {
 			return nullptr;
 		}
@@ -120,7 +120,7 @@ BuiltInFunction::BuiltInFunction() {
 		return std::shared_ptr<Value>(new ValueBool(ret));
 	});
 	// len
-	_Emplace("len", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("len", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		if (args.empty()) {
 			return nullptr;
 		}
@@ -133,7 +133,7 @@ BuiltInFunction::BuiltInFunction() {
 		return ValueNull::DEFAULT_VALUE;
 	});
 	// to_string
-	_Emplace("to_string", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("to_string", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		if (args.empty()) {
 			return nullptr;
 		}
@@ -141,7 +141,7 @@ BuiltInFunction::BuiltInFunction() {
 		return std::shared_ptr<Value>(new ValueString(ValueTool::ToString(value)));
 	});
 	// to_number
-	_Emplace("to_number", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> s) -> std::shared_ptr<Value> {
+	_Emplace("to_number", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		if (args.empty()) {
 			return nullptr;
 		}
