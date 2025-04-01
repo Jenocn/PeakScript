@@ -37,20 +37,21 @@ namespace peak.interpreter {
 			_ParseExport,
 			_ParseTryCatchFinally,
 			_ParseExpressionToEnd,
+			_ParseFunctioCall,
 		};
 		private static List<SentenceExpressionParseFunc> _sentenceValueParseList = new List<SentenceExpressionParseFunc>() {
 			_ParseString,
 			_ParseNumber,
-			_ParseBool,
-			_ParseNull,
 			_ParseInside,
 			_ParseArrayItem,
 			_ParseArray,
-			_ParseNew,
-			_ParseFunctioCall,
 			_ParseDoubleExpression,
 			_ParseNotExpression,
+			_ParseFunctioCall,
 			_ParseVariableName,
+			_ParseNew,
+			_ParseBool,
+			_ParseNull,
 		};
 		private static List<SentenceExpressionParseFunc> _sentenceVariableParseList = new List<SentenceExpressionParseFunc>() {
 			_ParseInside,
