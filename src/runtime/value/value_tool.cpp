@@ -12,74 +12,74 @@ static const std::unordered_map<int, std::string> TypeStringMap = {
 	{ValueObject::Type(), "object"},
 };
 
-bool ValueTool::IsNull(std::shared_ptr<Value> value) {
+bool ValueTool::IsNull(Value* value) {
 	return !value || (value->GetType() == ValueNull::Type());
 }
-bool ValueTool::IsBool(std::shared_ptr<Value> value) {
+bool ValueTool::IsBool(Value* value) {
 	return value && (value->GetType() == ValueBool::Type());
 }
-bool ValueTool::IsNumber(std::shared_ptr<Value> value) {
+bool ValueTool::IsNumber(Value* value) {
 	return value && (value->GetType() == ValueNumber::Type());
 }
-bool ValueTool::IsString(std::shared_ptr<Value> value) {
+bool ValueTool::IsString(Value* value) {
 	return value && (value->GetType() == ValueString::Type());
 }
-bool ValueTool::IsFunction(std::shared_ptr<Value> value) {
+bool ValueTool::IsFunction(Value* value) {
 	return value && (value->GetType() == ValueFunction::Type());
 }
-bool ValueTool::IsArray(std::shared_ptr<Value> value) {
+bool ValueTool::IsArray(Value* value) {
 	return value && (value->GetType() == ValueArray::Type());
 }
-bool ValueTool::IsObject(std::shared_ptr<Value> value) {
+bool ValueTool::IsObject(Value* value) {
 	return value && (value->GetType() == ValueObject::Type());
 }
 
-std::string ValueTool::ToString(std::shared_ptr<Value> value) {
+std::string ValueTool::ToString(Value* value) {
 	if (!value) {
 		return ValueNull::DEFAULT_VALUE->ToString();
 	}
 	return value->ToString();
 }
 
-std::string ValueTool::ToTypeString(std::shared_ptr<Value> value) {
+std::string ValueTool::ToTypeString(Value* value) {
 	if (!value) {
-		return ToTypeString(ValueNull::DEFAULT_VALUE);
+		return ToTypeString(ValueNull::DEFAULT_VALUE.get());
 	}
 	auto ite = TypeStringMap.find(value->GetType());
 	if (ite != TypeStringMap.end()) {
 		return ite->second;
 	}
-	return "";
+	return "unknown";
 }
 
-bool ValueTool::ToLogic(std::shared_ptr<Value> value) {
+bool ValueTool::ToLogic(Value* value) {
 	if (IsNull(value)) {
 		return false;
 	}
 	if (IsNumber(value)) {
-		return std::static_pointer_cast<ValueNumber>(value)->GetValue() != 0;
+		return static_cast<ValueNumber*>(value)->GetValue() != 0;
 	}
 	if (IsBool(value)) {
-		return std::static_pointer_cast<ValueBool>(value)->GetValue();
+		return static_cast<ValueBool*>(value)->GetValue();
 	}
 	return true;
 }
 
-bool ValueTool::Equal(std::shared_ptr<Value> a, std::shared_ptr<Value> b) {
+bool ValueTool::Equal(Value* a, Value* b) {
 	if (a->GetType() != b->GetType()) {
 		return false;
 	}
 	if (IsBool(a)) {
-		return std::static_pointer_cast<ValueBool>(a)->GetValue() ==
-			   std::static_pointer_cast<ValueBool>(b)->GetValue();
+		return static_cast<ValueBool*>(a)->GetValue() ==
+			   static_cast<ValueBool*>(b)->GetValue();
 	}
 	if (IsNumber(a)) {
-		return std::static_pointer_cast<ValueNumber>(a)->GetValue() ==
-			   std::static_pointer_cast<ValueNumber>(b)->GetValue();
+		return static_cast<ValueNumber*>(a)->GetValue() ==
+			   static_cast<ValueNumber*>(b)->GetValue();
 	}
 	if (IsString(a)) {
-		return std::static_pointer_cast<ValueString>(a)->GetValue() ==
-			   std::static_pointer_cast<ValueString>(b)->GetValue();
+		return static_cast<ValueString*>(a)->GetValue() ==
+			   static_cast<ValueString*>(b)->GetValue();
 	}
 	if (IsNull(a)) {
 		return true;
@@ -87,22 +87,21 @@ bool ValueTool::Equal(std::shared_ptr<Value> a, std::shared_ptr<Value> b) {
 	return false;
 }
 
-bool ValueTool::More(std::shared_ptr<Value> a, std::shared_ptr<Value> b) {
+bool ValueTool::More(Value* a, Value* b) {
 	if (a->GetType() != b->GetType()) {
 		return false;
 	}
 	if (IsNumber(a)) {
-		return std::static_pointer_cast<ValueNumber>(a)->GetValue() >
-			   std::static_pointer_cast<ValueNumber>(b)->GetValue();
+		return static_cast<ValueNumber*>(a)->GetValue() >
+			   static_cast<ValueNumber*>(b)->GetValue();
 	}
 	return false;
 }
 
-bool ValueTool::IsInteger(std::shared_ptr<Value> value) {
+bool ValueTool::IsInteger(Value* value) {
 	if (!IsNumber(value)) {
 		return false;
 	}
-	auto d = std::static_pointer_cast<ValueNumber>(value)->GetValue();
-	auto ll = static_cast<long long>(d);
-	return (static_cast<double>(ll) == d);
+	auto d = static_cast<ValueNumber*>(value)->GetValue();
+	return std::trunc(d) == d;
 }

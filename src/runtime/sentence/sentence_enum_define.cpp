@@ -9,8 +9,8 @@ SentenceEnumDefine::SentenceEnumDefine(const std::string& name, const std::list<
 }
 
 ExecuteResult SentenceEnumDefine::Execute(std::shared_ptr<Space> space) {
-	auto valueObject = std::shared_ptr<ValueObject>(new ValueObject());
-	auto variable = std::shared_ptr<Variable>(new Variable(_name, VariableAttribute::Const, valueObject));
+	auto valueObject = std::make_shared<ValueObject>();
+	auto variable = std::make_shared<Variable>(_name, VariableAttribute::Const, valueObject);
 	if (!space->AddVariable(variable)) {
 		ErrorLogger::LogRuntimeError(_name);
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::EnumDefine, "The enum name \"" + _name + "\" is exist!");
@@ -18,7 +18,7 @@ ExecuteResult SentenceEnumDefine::Execute(std::shared_ptr<Space> space) {
 	}
 	auto valueSpace = valueObject->GetSpace();
 	for (auto& pair : _valueList) {
-		auto valueVariable = std::shared_ptr<Variable>(new Variable(pair.first, VariableAttribute::Const, pair.second));
+		auto valueVariable = std::make_shared<Variable>(pair.first, VariableAttribute::Const, pair.second);
 		if (!valueSpace->AddVariable(valueVariable)) {
 			ErrorLogger::LogRuntimeError(pair.first);
 			ErrorLogger::LogRuntimeError(_name);

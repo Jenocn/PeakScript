@@ -79,7 +79,7 @@ std::shared_ptr<Module> ModulePool::UseModule(const std::string& moduleName) {
 		}
 	}
 
-	auto ret = std::shared_ptr<Module>(new Module(moduleName, executer));
+	auto ret = std::make_shared<Module>(moduleName, executer);
 	if (ret->Execute()) {
 		_modulesMap.emplace(moduleName, ret);
 	} else {

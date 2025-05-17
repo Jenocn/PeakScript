@@ -13,10 +13,10 @@ ExecuteResult SentenceCondition::Execute(std::shared_ptr<Space> space) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Condition, "The condition expression execute failed!");
 		return ExecuteResult::Failed;
 	}
-	bool bTrue = ValueTool::ToLogic(_expression->GetValue());
+	bool bTrue = ValueTool::ToLogic(_expression->GetValue().get());
 	auto tempSentence = bTrue ? _sentenceTrue : _sentenceFalse;
 	if (tempSentence) {
-		auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Condition, space));
+		auto tempSpace = std::make_shared<Space>(SpaceType::Condition, space);
 		auto executeRet = tempSentence->Execute(tempSpace);
 		if (!IsSuccess(executeRet)) {
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Condition, bTrue ? "The 'true' code sentence execute failed!" : "The 'false' code sentence execute failed!");

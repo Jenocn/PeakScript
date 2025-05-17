@@ -16,7 +16,7 @@ ExecuteResult SentenceExpressionFunctionCall::ExecuteFromInside(std::shared_ptr<
 		return ExecuteResult::Failed;
 	}
 	auto value = variable->GetValue();
-	if (!ValueTool::IsFunction(value)) {
+	if (!ValueTool::IsFunction(value.get())) {
 		ErrorLogger::LogRuntimeError(_name);
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionCall, "Can't found function \"" + _name + "\"!");
 		return ExecuteResult::Failed;

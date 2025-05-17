@@ -7,7 +7,7 @@ SentenceExpressionValueArray::SentenceExpressionValueArray(const std::vector<std
 	: _expressionArray(valueExpressionArray) {
 }
 ExecuteResult SentenceExpressionValueArray::Execute(std::shared_ptr<Space> space) {
-	auto valueArray = std::shared_ptr<ValueArray>(new ValueArray());
+	auto valueArray = std::make_shared<ValueArray>();
 	if (!_expressionArray.empty()) {
 		valueArray->Reserve(_expressionArray.size());
 		for (auto i = 0u; i < _expressionArray.size(); ++i) {

@@ -5,22 +5,22 @@
 using namespace peak;
 
 // text
-static const std::unordered_set<char> SET_TEXT_SPACE = {' ', '\n', '\r', '\t'};
-static const std::unordered_set<char> SET_TEXT_NEW_LINE = {'\n', '\r'};
+static const std::unordered_set<char> SET_TEXT_SPACE = { ' ', '\n', '\r', '\t' };
+static const std::unordered_set<char> SET_TEXT_NEW_LINE = { '\n', '\r' };
 
 // grammar
-static const std::unordered_set<char> SET_STRING_SIGN = {'\"', '\'', '`'};
-static const std::unordered_set<char> SET_END_SIGN = {'\n', '\r', ';', '\0'};
-static const std::unordered_set<std::string> SET_VARIABLE_DEFINE_SIGN = {"var", "the"};
-static const std::unordered_set<std::string> SET_ASSIGN_SIGN = {"=", "is", "as"};
-static const std::unordered_set<std::string> SET_BOOL_TRUE_SIGN = {"true", "yes"};
-static const std::unordered_set<std::string> SET_BOOL_FALSE_SIGN = {"false", "no"};
-static const std::unordered_set<std::string> SET_CONDITION_IF_SIGN = {"if"};
-static const std::unordered_set<std::string> SET_CONDITION_ELSE_SIGN = {"else"};
-static const std::unordered_set<std::string> SET_BLOCK_BEGIN = {"{", "begin"};
-static const std::unordered_set<std::string> SET_BLOCK_END = {"}", "end"};
-static const std::unordered_set<std::string> SET_COMMENT_SIGN = {"//", "#"};
-static const std::unordered_set<std::string> SET_EXTENDS_SIGN = {":", "extends"};
+static const std::unordered_set<char> SET_STRING_SIGN = { '\"', '\'', '`' };
+static const std::unordered_set<char> SET_END_SIGN = { ';' };
+static const std::unordered_set<std::string> SET_VARIABLE_DEFINE_SIGN = { "var", "the" };
+static const std::unordered_set<std::string> SET_ASSIGN_SIGN = { "=" };
+static const std::unordered_set<std::string> SET_BOOL_TRUE_SIGN = { "true", "yes" };
+static const std::unordered_set<std::string> SET_BOOL_FALSE_SIGN = { "false", "no" };
+static const std::unordered_set<std::string> SET_CONDITION_IF_SIGN = { "if" };
+static const std::unordered_set<std::string> SET_CONDITION_ELSE_SIGN = { "else" };
+static const std::unordered_set<std::string> SET_BLOCK_BEGIN = { "{", "begin" };
+static const std::unordered_set<std::string> SET_BLOCK_END = { "}", "end" };
+static const std::unordered_set<std::string> SET_COMMENT_SIGN = { "//", "#" };
+static const std::unordered_set<std::string> SET_EXTENDS_SIGN = { ":", "extends" };
 static const std::unordered_map<MathSymbol, std::pair<int, std::unordered_set<std::string>>> MAP_SET_MATH_SYMBOL = {
 	{MathSymbol::AssignMul, {110, {"*="}}},
 	{MathSymbol::AssignDiv, {110, {"/="}}},
@@ -47,6 +47,7 @@ static const std::unordered_map<DoubleSymbol, std::string> MAP_DOUBLE_SYMBOL = {
 };
 static const std::string STRING_COMMENT_BLOCK_BEGIN_SIGN = "/*";
 static const std::string STRING_COMMENT_BLOCK_END_SIGN = "*/";
+
 static const std::string STRING_NULL_SIGN = "null";
 static const std::string STRING_ECHO_SIGN = "echo";
 static const std::string STRING_FOR_SIGN = "for";
@@ -218,12 +219,12 @@ bool Syntax::IsWordValidSymbol(char ch) {
 		return true;
 	}
 	return IsTextSpace(ch) ||
-		   (ch == CHAR_LEFT_BRACKET) ||
-		   (ch == CHAR_RIGHT_BRACKET) ||
-		   (ch == CHAR_SPLIT_SYMBOL) ||
-		   (ch == CHAR_ARRAY_BEGIN) ||
-		   (ch == CHAR_ARRAY_END) ||
-		   (ch == CHAR_INSIDE_SYMBOL);
+		(ch == CHAR_LEFT_BRACKET) ||
+		(ch == CHAR_RIGHT_BRACKET) ||
+		(ch == CHAR_SPLIT_SYMBOL) ||
+		(ch == CHAR_ARRAY_BEGIN) ||
+		(ch == CHAR_ARRAY_END) ||
+		(ch == CHAR_INSIDE_SYMBOL);
 }
 
 bool Syntax::SearchNextInside(const std::string& src, std::size_t size, std::size_t pos) {
@@ -269,12 +270,7 @@ bool Syntax::MatchEnum(const std::string& src, std::size_t size, std::size_t pos
 	return MatchSign(STRING_ENUM_SIGN, src, size, pos, nextPos);
 }
 bool Syntax::MatchExtends(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	for (auto& sign : SET_EXTENDS_SIGN) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			return true;
-		}
-	}
-	return false;
+	return MatchSignSet(SET_EXTENDS_SIGN, src, size, pos, nextPos);
 }
 bool Syntax::MatchObject(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_OBJECT_SIGN, src, size, pos, nextPos);
@@ -299,13 +295,19 @@ bool Syntax::MatchArrayEnd(const std::string& src, std::size_t size, std::size_t
 	return MatchSign(CHAR_ARRAY_END, src, size, pos, nextPos);
 }
 bool Syntax::MatchDoubleSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, DoubleSymbol* symbol) {
+	std::size_t signSize = 0;
+	std::size_t tmpNextPos;
 	for (auto& pair : MAP_DOUBLE_SYMBOL) {
-		if (MatchSign(pair.second, src, size, pos, nextPos)) {
+		if (pair.second.size() <= signSize) {
+			continue;
+		}
+		if (MatchSign(pair.second, src, size, pos, &tmpNextPos)) {
+			signSize = pair.second.size();
+			*nextPos = tmpNextPos;
 			*symbol = pair.first;
-			return true;
 		}
 	}
-	return false;
+	return signSize > 0;
 }
 bool Syntax::MatchNotSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_NOT_SYMBOL, src, size, pos, nextPos);
@@ -337,45 +339,21 @@ bool Syntax::MatchCatch(const std::string& src, std::size_t size, std::size_t po
 bool Syntax::MatchFinally(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_FINALLY_SIGN, src, size, pos, nextPos);
 }
-
 bool Syntax::MatchEcho(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_ECHO_SIGN, src, size, pos, nextPos);
 }
-
 bool Syntax::MatchBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	for (const auto& sign : SET_BLOCK_BEGIN) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			return true;
-		}
-	}
-	return false;
+	return MatchSignSet(SET_BLOCK_BEGIN, src, size, pos, nextPos);
 }
 bool Syntax::MatchBlockEnd(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	for (const auto& sign : SET_BLOCK_END) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			return true;
-		}
-	}
-	return false;
+	return MatchSignSet(SET_BLOCK_END, src, size, pos, nextPos);
 }
-
 bool Syntax::MatchConditionIf(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	for (const auto& sign : SET_CONDITION_IF_SIGN) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			return true;
-		}
-	}
-	return false;
+	return MatchSignSet(SET_CONDITION_IF_SIGN, src, size, pos, nextPos);
 }
 bool Syntax::MatchConditionElse(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	for (const auto& sign : SET_CONDITION_ELSE_SIGN) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			return true;
-		}
-	}
-	return false;
+	return MatchSignSet(SET_CONDITION_ELSE_SIGN, src, size, pos, nextPos);
 }
-
 bool Syntax::MatchFor(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_FOR_SIGN, src, size, pos, nextPos);
 }
@@ -394,26 +372,30 @@ bool Syntax::MatchDo(const std::string& src, std::size_t size, std::size_t pos, 
 bool Syntax::MatchLoop(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_LOOP_SIGN, src, size, pos, nextPos);
 }
-
 bool Syntax::MatchLeftBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_LEFT_BRACKET, src, size, pos, nextPos);
 }
 bool Syntax::MatchRightBrcket(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(CHAR_RIGHT_BRACKET, src, size, pos, nextPos);
 }
-
 bool Syntax::MatchMathSymbol(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, MathSymbol* symbol) {
+	std::size_t signSize = 0;
+	std::size_t tmpNextPos;
 	for (auto& pair : MAP_SET_MATH_SYMBOL) {
 		const auto& setPair = pair.second;
 		const auto& signSet = setPair.second;
 		for (auto& sign : signSet) {
-			if (MatchSign(sign, src, size, pos, nextPos)) {
+			if (sign.size() <= signSize) {
+				continue;
+			}
+			if (MatchSign(sign, src, size, pos, &tmpNextPos)) {
+				signSize = sign.size();
 				*symbol = pair.first;
-				return true;
+				*nextPos = tmpNextPos;
 			}
 		}
 	}
-	return false;
+	return signSize > 0;
 }
 
 bool Syntax::MatchNull(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
@@ -421,19 +403,29 @@ bool Syntax::MatchNull(const std::string& src, std::size_t size, std::size_t pos
 }
 
 bool Syntax::MatchBool(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, bool* value) {
+	std::size_t signSize = 0;
+	std::size_t tmpNextPos;
 	for (const auto& sign : SET_BOOL_TRUE_SIGN) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
+		if (sign.size() <= signSize) {
+			continue;
+		}
+		if (MatchSign(sign, src, size, pos, &tmpNextPos)) {
+			signSize = sign.size();
+			*nextPos = tmpNextPos;
 			*value = true;
-			return true;
 		}
 	}
 	for (const auto& sign : SET_BOOL_FALSE_SIGN) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
+		if (sign.size() <= signSize) {
+			continue;
+		}
+		if (MatchSign(sign, src, size, pos, &tmpNextPos)) {
+			signSize = sign.size();
+			*nextPos = tmpNextPos;
 			*value = false;
-			return true;
 		}
 	}
-	return false;
+	return signSize > 0;
 }
 
 bool Syntax::MatchNumber(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos, double* number) {
@@ -524,21 +516,11 @@ bool Syntax::MatchName(const std::string& src, std::size_t size, std::size_t pos
 }
 
 bool Syntax::MatchAssign(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	for (const auto& sign : SET_ASSIGN_SIGN) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			return true;
-		}
-	}
-	return false;
+	return MatchSignSet(SET_ASSIGN_SIGN, src, size, pos, nextPos);
 }
 
 bool Syntax::MatchComment(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	for (const auto& sign : SET_COMMENT_SIGN) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			return true;
-		}
-	}
-	return false;
+	return MatchSignSet(SET_COMMENT_SIGN, src, size, pos, nextPos);
 }
 bool Syntax::MatchCommentBlockBegin(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_COMMENT_BLOCK_BEGIN_SIGN, src, size, pos, nextPos);
@@ -547,15 +529,24 @@ bool Syntax::MatchCommentBlockEnd(const std::string& src, std::size_t size, std:
 	return MatchSign(STRING_COMMENT_BLOCK_END_SIGN, src, size, pos, nextPos);
 }
 bool Syntax::MatchVariableDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	for (const auto& sign : SET_VARIABLE_DEFINE_SIGN) {
-		if (MatchSign(sign, src, size, pos, nextPos)) {
-			return true;
-		}
-	}
-	return false;
+	return MatchSignSet(SET_VARIABLE_DEFINE_SIGN, src, size, pos, nextPos);
 }
 bool Syntax::MatchVariableSet(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_SET_SIGN, src, size, pos, nextPos);
+}
+bool Syntax::MatchSignSet(const std::unordered_set<std::string>& sign, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	std::size_t signSize = 0;
+	std::size_t tmpNextPos;
+	for (const auto& item : sign) {
+		if (item.size() <= signSize) {
+			continue;
+		}
+		if (MatchSign(item, src, size, pos, &tmpNextPos)) {
+			signSize = item.size();
+			*nextPos = tmpNextPos;
+		}
+	}
+	return signSize > 0;
 }
 bool Syntax::MatchSign(const std::string& sign, const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	auto signSize = sign.size();

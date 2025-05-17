@@ -1,18 +1,21 @@
 #include "value_object.h"
 #include "runtime/space.h"
+#include "runtime/variable.h"
 
 using namespace peak;
 
 ValueObject::ValueObject(std::shared_ptr<Space> indexSpace, std::shared_ptr<ValueObject> parent) {
-	decltype(_space) parentSpace = parent ? parent->GetSpace()->CopySpace() : nullptr;
-	_space = std::shared_ptr<Space>(new Space(SpaceType::Object, parentSpace));
+	auto parentSpace = parent ? parent->GetSpace()->CopySpace() : nullptr;
+	_space = std::make_shared<Space>(SpaceType::Object, parentSpace);
 	if (indexSpace) {
 		_space->AddSpaceOfUsing(indexSpace);
 	}
 }
 
 std::shared_ptr<Value> ValueObject::Clone() const {
-	return std::shared_ptr<Value>(new ValueObject(_space->CopySpace()));
+	auto ret = std::make_shared<ValueObject>();
+	ret->_space = _space->CopySpace();
+	return ret;
 }
 
 std::shared_ptr<Space> ValueObject::GetSpace() const {
@@ -20,5 +23,18 @@ std::shared_ptr<Space> ValueObject::GetSpace() const {
 }
 
 std::string ValueObject::ToString() const {
-	return "<object>";
+	std::string ret = "object { ";
+	const auto& variables = _space->GetVariables();
+	auto index = 0u;
+	for (auto& item : variables) {
+		ret += item.second->GetName();
+		ret += "=";
+		ret += item.second->GetValue()->ToString();
+		if (index < variables.size() - 1) {
+			ret += ", ";
+		}
+		index += 1;
+	}
+	ret += " }";
+	return ret;
 }

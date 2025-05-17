@@ -9,7 +9,6 @@
 
 namespace peak {
 
-
 class Space;
 
 class ValueObject : public TypeValue<ValueObject> {

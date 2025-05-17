@@ -5,84 +5,51 @@
 
 using namespace peak;
 
-ValueFunction::ValueFunction(std::size_t paramSize, FunctionType func) {
-	AddFunction(paramSize, func);
+ValueFunction::ValueFunction(std::size_t paramSize, FunctionType func)
+	: _params(paramSize), _function(func) {
+	for (auto i = 0u; i < paramSize; ++i) {
+		_params[i] = std::string("%") + std::to_string(i);
+	}
 }
-ValueFunction::ValueFunction(const std::vector<std::string>& params, FunctionType func) {
-	AddFunction(params, func);
+ValueFunction::ValueFunction(const std::vector<std::string>& params, FunctionType func)
+	: _params(params), _function(func) {
 }
 
 ValueFunction::ValueFunction() {
 }
 
-bool ValueFunction::AddFunction(std::size_t paramSize, FunctionType func) {
-	auto ite = _functionMap.find(paramSize);
-	if (ite == _functionMap.end()) {
-		_functionMap.emplace(paramSize, std::make_pair(std::vector<std::string>(), func));
-		return true;
-	}
-	return false;
-}
-
-bool ValueFunction::AddFunction(const std::vector<std::string>& params, FunctionType func) {
-	auto size = params.size();
-	auto ite = _functionMap.find(size);
-	if (ite == _functionMap.end()) {
-		_functionMap.emplace(size, std::make_pair(params, func));
-		return true;
-	}
-	return false;
-}
-
-bool ValueFunction::AddFunction(std::shared_ptr<ValueFunction> valueFunc) {
-	auto& functionMap = valueFunc->GetFunctionMap();
-	for (auto& item : functionMap) {
-		if (_functionMap.find(item.first) != _functionMap.end()) {
-			return false;
-		}
-	}
-	for (auto& item : functionMap) {
-		_functionMap.emplace(item.first, item.second);
-	}
-	functionMap.clear();
-	return true;
-}
-
-std::map<std::size_t, std::pair<std::vector<std::string>, ValueFunction::FunctionType>>& ValueFunction::GetFunctionMap() {
-	return _functionMap;
-}
-
 std::shared_ptr<Value> ValueFunction::Call(const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> space) {
-	auto ite = _functionMap.find(args.size());
-	if (ite == _functionMap.end()) {
+	if (args.size() != _params.size()) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionCall, "The function (" + std::to_string(args.size()) + " params) not found!");
 		return nullptr;
 	}
-	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Function, space));
-	const auto& params = ite->second.first;
-	auto func = ite->second.second;
-	auto paramSize = params.size();
+
+	auto tempSpace = std::make_shared<Space>(SpaceType::Function, space);
 	for (std::size_t i = 0; i < args.size(); ++i) {
-		if (i >= paramSize) {
-			break;
-		}
-		auto tempVariable = std::shared_ptr<Variable>(new Variable(params[i], VariableAttribute::None));
+		auto tempVariable = std::make_shared<Variable>(_params[i], VariableAttribute::None);
 		if (!tempSpace->AddVariable(tempVariable)) {
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionCall, "The function params name is exist!");
 			return nullptr;
 		}
 		tempVariable->SetValue(args[i]);
 	}
-	auto result = func(args, tempSpace);
+	auto result = _function(args, tempSpace);
 	tempSpace->Clear();
 	return result;
 }
 
 std::string ValueFunction::ToString() const {
-	return "<function>";
+	std::string ret = "function (";
+	for (auto i = 0u; i < _params.size(); ++i) {
+		ret += _params[i];
+		if (i < _params.size() - 1) {
+			ret += ", ";
+		}
+	}
+	ret += ")";
+	return ret;
 }
 std::shared_ptr<Value> ValueFunction::Clone() const {
-	auto valueFunc = new ValueFunction();
-	valueFunc->_functionMap = _functionMap;
-	return std::shared_ptr<Value>(valueFunc);
+	return std::make_unique<ValueFunction>(_params, _function);
+
 }

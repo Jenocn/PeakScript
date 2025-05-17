@@ -8,7 +8,7 @@ SentenceDoWhile::SentenceDoWhile(std::shared_ptr<SentenceExpression> expression,
 	: _expression(expression), _sentence(sentence) {
 }
 ExecuteResult SentenceDoWhile::Execute(std::shared_ptr<Space> space) {
-	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
+	auto tempSpace = std::make_shared<Space>(SpaceType::Loop, space);
 	while (true) {
 		tempSpace->Clear();
 		auto ret = _sentence->Execute(tempSpace);
@@ -31,7 +31,7 @@ ExecuteResult SentenceDoWhile::Execute(std::shared_ptr<Space> space) {
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::DoWhile, "The condition expression execute failed!");
 			return ExecuteResult::Failed;
 		}
-		if (!ValueTool::ToLogic(_expression->GetValue())) {
+		if (!ValueTool::ToLogic(_expression->GetValue().get())) {
 			break;
 		}
 	}

@@ -13,13 +13,13 @@ std::shared_ptr<Executer> Executer::Create(const std::string& src) {
 	if (!parseData->bSuccess) {
 		return nullptr;
 	}
-	return std::shared_ptr<Executer>(new Executer(parseData));
+	return std::make_shared<Executer>(parseData);
 }
 
 Executer::Executer(std::shared_ptr<ParseData> data)
 	: _parseData(data) {
-	_space = std::shared_ptr<Space>(new Space(SpaceType::None));
-	_outsideSpace = std::shared_ptr<Space>(new Space(SpaceType::None));
+	_space = std::make_shared<Space>(SpaceType::None);
+	_outsideSpace = std::make_shared<Space>(SpaceType::None);
 }
 
 Executer::~Executer() {

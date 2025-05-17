@@ -11,7 +11,7 @@ SentenceVariableSet::SentenceVariableSet(const std::string& name, std::shared_pt
 ExecuteResult SentenceVariableSet::Execute(std::shared_ptr<Space> space) {
 	auto variable = space->FindVariable(_name);
 	if (!variable) {
-		variable = std::shared_ptr<Variable>(new Variable(_name, VariableAttribute::None));
+		variable = std::make_shared<Variable>(_name, VariableAttribute::None);
 		space->AddVariable(variable);
 	}
 	if (_expression) {

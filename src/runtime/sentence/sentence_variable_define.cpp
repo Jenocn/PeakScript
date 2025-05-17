@@ -24,7 +24,7 @@ ExecuteResult SentenceVariableDefine::Execute(std::shared_ptr<Space> space) {
 			return ExecuteResult::Failed;
 		}
 	}
-	_variable = std::shared_ptr<Variable>(new Variable(_name, _attribute, value));
+	_variable = std::make_shared<Variable>(_name, _attribute, value);
 	if (!space->AddVariable(_variable)) {
 		ErrorLogger::LogRuntimeError(_name);
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableDefine, "The variable \"" + _name + "\" is exist!");

@@ -27,7 +27,7 @@ bool VirtualJourney::AddVariable(std::shared_ptr<Variable> variable) {
 }
 std::shared_ptr<Value> VirtualJourney::ExecuteFunction(const std::string& name, const std::vector<std::shared_ptr<Value>>& args) {
 	auto variable = _executer->FindVariable(name);
-	if (variable && ValueTool::IsFunction(variable->GetValue())) {
+	if (variable && ValueTool::IsFunction(variable->GetValue().get())) {
 		auto valueFunc = std::static_pointer_cast<ValueFunction>(variable->GetValue());
 		return valueFunc->Call(args, GetSpace());
 	}

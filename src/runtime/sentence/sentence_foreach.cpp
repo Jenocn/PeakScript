@@ -13,7 +13,7 @@ ExecuteResult SentenceForeach::Execute(std::shared_ptr<Space> space) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Foreach, "The expression execute failed!");
 		return ExecuteResult::Failed;
 	}
-	if (!ValueTool::IsArray(_expression->GetValue())) {
+	if (!ValueTool::IsArray(_expression->GetValue().get())) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Foreach, "The expression isn't a array!");
 		return ExecuteResult::Failed;
 	}
@@ -22,14 +22,14 @@ ExecuteResult SentenceForeach::Execute(std::shared_ptr<Space> space) {
 		return ExecuteResult::Successed;
 	}
 
-	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
-	auto itemVariable = std::shared_ptr<Variable>(new Variable(_name, VariableAttribute::None));
+	auto tempSpace = std::make_shared<Space>(SpaceType::Loop, space);
+	auto itemVariable = std::make_shared<Variable>(_name, VariableAttribute::None);
 	if (!tempSpace->AddVariable(itemVariable)) {
 		ErrorLogger::LogRuntimeError(_name);
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Foreach, "The variable \"" + _name + "\" execute failed!");
 		return ExecuteResult::Failed;
 	}
-	auto contentSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, tempSpace));
+	auto contentSpace = std::make_shared<Space>(SpaceType::Loop, tempSpace);
 	for (auto item : arr) {
 		itemVariable->SetValue(item->GetValue());
 		contentSpace->Clear();

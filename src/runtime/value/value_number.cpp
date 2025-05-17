@@ -17,5 +17,5 @@ std::string ValueNumber::ToString() const {
 }
 
 std::shared_ptr<Value> ValueNumber::Clone() const {
-	return std::shared_ptr<Value>(new ValueNumber(_value));
+	return std::make_shared<ValueNumber>(_value);
 }

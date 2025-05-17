@@ -15,7 +15,7 @@ ExecuteResult SentenceEcho::Execute(std::shared_ptr<Space> space) {
 		return ExecuteResult::Failed;
 	}
 	auto value = _expression->GetValue();
-	System::Echo(ValueTool::ToString(value));
+	System::Echo(ValueTool::ToString(value.get()));
 
 	return ExecuteResult::Successed;
 }

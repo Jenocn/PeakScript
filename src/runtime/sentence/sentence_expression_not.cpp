@@ -12,8 +12,8 @@ ExecuteResult SentenceExpressionNot::Execute(std::shared_ptr<Space> space) {
 		return ExecuteResult::Failed;
 	}
 
-	auto ret = ValueTool::ToLogic(_expression->GetValue());
-	SetValue(std::shared_ptr<Value>(new ValueBool(!ret)));
+	auto ret = ValueTool::ToLogic(_expression->GetValue().get());
+	SetValue(std::make_shared<ValueBool>(!ret));
 
 	return ExecuteResult::Successed;
 }

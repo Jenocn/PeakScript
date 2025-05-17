@@ -19,7 +19,7 @@ ExecuteResult SentenceObjectDefine::Execute(std::shared_ptr<Space> space) {
 			return ExecuteResult::Failed;
 		}
 		auto parentValue = parentVariable->GetValue();
-		if (!ValueTool::IsObject(parentValue)) {
+		if (!ValueTool::IsObject(parentValue.get())) {
 			ErrorLogger::LogRuntimeError(_parentName);
 			ErrorLogger::LogRuntimeError(_name);
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::ObjectDefine, "The variable \"" + _parentName + "\" isn't a object!");
@@ -27,7 +27,7 @@ ExecuteResult SentenceObjectDefine::Execute(std::shared_ptr<Space> space) {
 		}
 		parentObject = std::static_pointer_cast<ValueObject>(parentValue);
 	}
-	auto valueObject = std::shared_ptr<ValueObject>(new ValueObject(space, parentObject));
+	auto valueObject = std::make_shared<ValueObject>(space, parentObject);
 	auto objectSpace = valueObject->GetSpace();
 	for (auto sentence : _sentenceList) {
 		if (!IsSuccess(sentence->Execute(objectSpace))) {
@@ -37,7 +37,7 @@ ExecuteResult SentenceObjectDefine::Execute(std::shared_ptr<Space> space) {
 		}
 	}
 
-	if (!space->AddVariable(std::shared_ptr<Variable>(new Variable(_name, VariableAttribute::None, valueObject)))) {
+	if (!space->AddVariable(std::make_shared<Variable>(_name, VariableAttribute::None, valueObject))) {
 		ErrorLogger::LogRuntimeError(_name);
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::ObjectDefine, "The object \"" + _name + "\" is exist!");
 		return ExecuteResult::Failed;

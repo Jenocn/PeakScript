@@ -21,11 +21,12 @@ ExecuteResult SentenceExpressionDouble::Execute(std::shared_ptr<Space> space) {
 	}
 	auto variable = std::static_pointer_cast<SentenceExpressionVariable>(_variableExpresison)->GetVariable();
 	auto value = _variableExpresison->GetValue();
-	if (!ValueTool::IsNumber(value)) {
+	if (!ValueTool::IsNumber(value.get())) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::ExpressionDouble, "The value of variable isn't a type of 'number'!");
 		return ExecuteResult::Failed;
 	}
-	auto ret = _calculate->Calculate(value, std::shared_ptr<Value>(new ValueNumber(1)));
+	ValueNumber vn(1);
+	auto ret = _calculate->Calculate(value.get(), &vn);
 	if (!ret) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::ExpressionDouble, "The calculate is failed!");
 		return ExecuteResult::Failed;

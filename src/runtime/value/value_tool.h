@@ -20,20 +20,20 @@ class Value;
 
 class ValueTool {
 public:
-	static bool IsNull(std::shared_ptr<Value> value);
-	static bool IsBool(std::shared_ptr<Value> value);
-	static bool IsNumber(std::shared_ptr<Value> value);
-	static bool IsString(std::shared_ptr<Value> value);
-	static bool IsFunction(std::shared_ptr<Value> value);
-	static bool IsArray(std::shared_ptr<Value> value);
-	static bool IsObject(std::shared_ptr<Value> value);
-	static std::string ToString(std::shared_ptr<Value> value);
-	static std::string ToTypeString(std::shared_ptr<Value> value);
-	static bool ToLogic(std::shared_ptr<Value> value);
-	static bool Equal(std::shared_ptr<Value> a, std::shared_ptr<Value> b);
-	static bool More(std::shared_ptr<Value> a, std::shared_ptr<Value> b);
+	static bool IsNull(Value* value);
+	static bool IsBool(Value* value);
+	static bool IsNumber(Value* value);
+	static bool IsString(Value* value);
+	static bool IsFunction(Value* value);
+	static bool IsArray(Value* value);
+	static bool IsObject(Value* value);
+	static std::string ToString(Value* value);
+	static std::string ToTypeString(Value* value);
+	static bool ToLogic(Value* value);
+	static bool Equal(Value* a, Value* b);
+	static bool More(Value* a, Value* b);
 
-	static bool IsInteger(std::shared_ptr<Value> value);
+	static bool IsInteger(Value* value);
 };
 
 } // namespace peak

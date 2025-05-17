@@ -2,7 +2,7 @@
 
 using namespace peak;
 
-const std::shared_ptr<ValueNull> ValueNull::DEFAULT_VALUE = std::shared_ptr<ValueNull>(new ValueNull());
+const std::shared_ptr<ValueNull> ValueNull::DEFAULT_VALUE = std::make_shared<ValueNull>();
 
 std::string ValueNull::ToString() const {
 	return "null";

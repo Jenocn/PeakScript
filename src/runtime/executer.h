@@ -16,6 +16,7 @@ class Variable;
 class Executer {
 public:
 	static std::shared_ptr<Executer> Create(const std::string& src);
+	Executer(std::shared_ptr<ParseData> data);
 	~Executer();
 	
 	bool Execute();
@@ -26,7 +27,6 @@ public:
 	bool AddVariable(std::shared_ptr<Variable> variable);
 
 private:
-	Executer(std::shared_ptr<ParseData> data);
 
 private:
 	std::shared_ptr<ParseData> _parseData{nullptr};

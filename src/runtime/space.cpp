@@ -5,7 +5,6 @@
 #include "value/value.h"
 #include "variable.h"
 #include "value/value_tool.h"
-#include "value/value_function.h"
 
 using namespace peak;
 
@@ -21,7 +20,7 @@ std::shared_ptr<Space> Space::CopySpace() const {
 	if (_parent) {
 		parent = _parent->CopySpace();
 	}
-	auto space = std::shared_ptr<Space>(new Space(_spaceType, parent));
+	auto space = std::make_shared<Space>(_spaceType, parent);
 	space->_spaceOfUsing = _spaceOfUsing;
 	space->_importModules = _importModules;
 
@@ -73,11 +72,6 @@ bool Space::AddVariable(std::shared_ptr<Variable> value) {
 	}
 	auto findIte = _variables.find(value->GetName());
 	if (findIte != _variables.end()) {
-		if (ValueTool::IsFunction(findIte->second->GetValue()) && ValueTool::IsFunction(value->GetValue())) {
-			if (std::static_pointer_cast<ValueFunction>(findIte->second->GetValue())->AddFunction(std::static_pointer_cast<ValueFunction>(value->GetValue()))) {
-				return true;
-			}
-		}
 		ErrorLogger::LogRuntimeError(value->GetName());
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Space, "The variable \"" + value->GetName() + "\" is exist!");
 		return false;
@@ -119,6 +113,10 @@ std::shared_ptr<Variable> Space::FindVariable(const std::string& name) const {
 
 SpaceType Space::GetSpaceType() const {
 	return _spaceType;
+}
+
+std::unordered_map<std::string, std::shared_ptr<Variable>>& Space::GetVariables() {
+	return _variables;
 }
 
 void Space::AddSpaceOfUsing(std::shared_ptr<Space> space) {

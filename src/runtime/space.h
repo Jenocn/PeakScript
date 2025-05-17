@@ -37,9 +37,8 @@ public:
 	std::shared_ptr<Variable> FindVariableFromTop(const std::string& name) const;
 
 	SpaceType GetSpaceType() const;
-#include <list>
-#include <memory>
-#include <unordered_map>
+	std::unordered_map<std::string, std::shared_ptr<Variable>>& GetVariables();
+
 private:
 	SpaceType _spaceType{SpaceType::None};
 	std::shared_ptr<Space> _parent{nullptr};

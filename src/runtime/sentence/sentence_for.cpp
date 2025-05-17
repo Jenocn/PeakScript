@@ -12,7 +12,7 @@ SentenceFor::SentenceFor(std::shared_ptr<Sentence> sentence0,
 }
 
 ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
-	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
+	auto tempSpace = std::make_shared<Space>(SpaceType::Loop, space);
 	if (_sentence0) {
 		if (!IsSuccess(_sentence0->Execute(tempSpace))) {
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::For, "The 'sentence0' of 'for' execute failed!");
@@ -20,14 +20,14 @@ ExecuteResult SentenceFor::Execute(std::shared_ptr<Space> space) {
 		}
 	}
 
-	auto contentSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, tempSpace));
+	auto contentSpace = std::make_shared<Space>(SpaceType::Loop, tempSpace);
 	while (true) {
 		if (_expression0) {
 			if (!IsSuccess(_expression0->Execute(tempSpace))) {
 				ErrorLogger::LogRuntimeError(ErrorRuntimeCode::For, "The condition0-expression of 'for' execute failed!");
 				return ExecuteResult::Failed;
 			}
-			if (!ValueTool::ToLogic(_expression0->GetValue())) {
+			if (!ValueTool::ToLogic(_expression0->GetValue().get())) {
 				break;
 			}
 		}

@@ -2,8 +2,8 @@
 
 using namespace peak;
 
-const std::shared_ptr<ValueBool> ValueBool::TRUE = std::shared_ptr<ValueBool>(new ValueBool(true));
-const std::shared_ptr<ValueBool> ValueBool::FALSE = std::shared_ptr<ValueBool>(new ValueBool(false));
+const std::shared_ptr<ValueBool> ValueBool::TRUE = std::make_shared<ValueBool>(true);
+const std::shared_ptr<ValueBool> ValueBool::FALSE = std::make_shared<ValueBool>(false);
 
 ValueBool::ValueBool(bool value)
 	: _value(value) {

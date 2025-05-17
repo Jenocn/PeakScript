@@ -21,15 +21,15 @@ std::string ValueArray::ToString() const {
 	return ret;
 }
 std::shared_ptr<Value> ValueArray::Clone() const {
-	auto valueArray = new ValueArray();
+	auto valueArray = std::make_shared<ValueArray>();
 	for (auto item : _value) {
-		auto variable = std::shared_ptr<Variable>(new Variable(item->GetName(), item->GetAttribute()));
+		auto variable = std::make_shared<Variable>(item->GetName(), item->GetAttribute());
 		if (item->GetValue()) {
 			variable->SetValue(item->GetValue()->Clone());
 		}
 		valueArray->EmplaceBack(variable);
 	}
-	return std::shared_ptr<Value>(valueArray);
+	return valueArray;
 }
 
 std::vector<std::shared_ptr<Variable>>& ValueArray::GetArray() {
@@ -43,6 +43,6 @@ void ValueArray::EmplaceBack(std::shared_ptr<Variable> variable) {
 	_value.emplace_back(variable);
 }
 void ValueArray::EmplaceBack(std::shared_ptr<Value> value) {
-	auto variable = std::shared_ptr<Variable>(new Variable("", VariableAttribute::None, value));
+	auto variable = std::make_shared<Variable>("", VariableAttribute::None, value);
 	_value.emplace_back(variable);
 }

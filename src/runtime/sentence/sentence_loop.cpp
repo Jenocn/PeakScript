@@ -14,12 +14,12 @@ ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
 		return ExecuteResult::Failed;
 	}
 	auto value = _condition->GetValue();
-	if (!ValueTool::IsNumber(value)) {
+	if (!ValueTool::IsNumber(value.get())) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Loop, "The value of condition isn't a number!");
 		return ExecuteResult::Failed;
 	}
 	auto count = std::max(0, static_cast<int>(std::static_pointer_cast<ValueNumber>(value)->GetValue()));
-	auto tempSpace = std::shared_ptr<Space>(new Space(SpaceType::Loop, space));
+	auto tempSpace = std::make_shared<Space>(SpaceType::Loop, space);
 	if (_indexParam.empty()) {
 		for (int i = 0; i < count; ++i) {
 			tempSpace->Clear();
@@ -34,14 +34,14 @@ ExecuteResult SentenceLoop::Execute(std::shared_ptr<Space> space) {
 		}
 	} else {
 		tempSpace->Clear();
-		auto indexVariable = std::shared_ptr<Variable>(new Variable(_indexParam, VariableAttribute::None));
+		auto indexVariable = std::make_shared<Variable>(_indexParam, VariableAttribute::None);
 		if (!tempSpace->AddVariable(indexVariable)) {
 			ErrorLogger::LogRuntimeError(_indexParam);
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Loop, "The variable \"" + _indexParam + "\" is exist!");
 			return ExecuteResult::Failed;
 		}
 		for (int i = 0; i < count; ++i) {
-			if (!indexVariable->SetValue(std::shared_ptr<ValueNumber>(new ValueNumber(i)))) {
+			if (!indexVariable->SetValue(std::make_shared<ValueNumber>(i))) {
 				return ExecuteResult::Failed;
 			}
 			auto ret = _sentence->Execute(tempSpace);

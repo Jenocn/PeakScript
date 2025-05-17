@@ -14,13 +14,13 @@ ExecuteResult SentenceExpressionInside::Execute(std::shared_ptr<Space> space) {
 		return ExecuteResult::Failed;
 	}
 	auto headerValue = _header->GetValue();
-	if (!ValueTool::IsObject(headerValue)) {
+	if (!ValueTool::IsObject(headerValue.get())) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Inside, "The header expression isn't a object!");
 		return ExecuteResult::Failed;
 	}
 	auto tempValue = headerValue;
 	for (auto expression : _insides) {
-		if (!ValueTool::IsObject(tempValue)) {
+		if (!ValueTool::IsObject(tempValue.get())) {
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Inside, "The expression isn't a object!");
 			return ExecuteResult::Failed;
 		}

@@ -19,7 +19,7 @@ ExecuteResult SentenceExpressionMath::Execute(std::shared_ptr<Space> space) {
 		return ExecuteResult::Failed;
 	}
 
-	auto value = _calculate->Calculate(_left->GetValue(), _right->GetValue());
+	auto value = _calculate->Calculate(_left->GetValue().get(), _right->GetValue().get());
 	if (!value) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Math, "The math expression execute failed!");
 		return ExecuteResult::Failed;

@@ -18,23 +18,17 @@ ExecuteResult SentenceFunctionDefine::Execute(std::shared_ptr<Space> space) {
 		if (result == ExecuteResult::Return) {
 			return std::static_pointer_cast<SentenceReturn>(_content)->GetReturnValue();
 		}
-		return std::shared_ptr<Value>(new ValueNull());
+		return std::make_shared<ValueNull>();
 	};
 
 	auto variable = space->FindVariableFromTop(_name);
 	if (variable) {
-		auto value = variable->GetValue();
-		if (ValueTool::IsFunction(value)) {
-			if (std::static_pointer_cast<ValueFunction>(value)->AddFunction(_params, func)) {
-				return ExecuteResult::Successed;
-			}
-		}
 		ErrorLogger::LogRuntimeError(_name);
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionDefine, "The \"" + _name + "\" is exist!");
 		return ExecuteResult::Failed;
 	} else {
-		variable = std::shared_ptr<Variable>(new Variable(_name, VariableAttribute::None));
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(_params, func));
+		variable = std::make_shared<Variable>(_name, VariableAttribute::None);
+		auto value = std::make_shared<ValueFunction>(_params, func);
 		variable->SetValue(value);
 		space->AddVariable(variable);
 	}

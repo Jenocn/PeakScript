@@ -34,7 +34,7 @@ std::shared_ptr<Variable> ExpressionVariableAnalysisArrayItem::Execute(std::shar
 
 	auto expressionVecSize = _indexExpressionVec.size();
 	for (auto i = 0u; i < expressionVecSize; ++i) {
-		if (!ValueTool::IsArray(retValue)) {
+		if (!ValueTool::IsArray(retValue.get())) {
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableArrayItemAnalysis, "The result of expression isn't a array!");
 			return nullptr;
 		}
@@ -45,7 +45,7 @@ std::shared_ptr<Variable> ExpressionVariableAnalysisArrayItem::Execute(std::shar
 			return nullptr;
 		}
 		auto indexValue = expression->GetValue();
-		if (!ValueTool::IsInteger(indexValue)) {
+		if (!ValueTool::IsInteger(indexValue.get())) {
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableArrayItemAnalysis, "The index isn't a integer value!");
 			return nullptr;
 		}
@@ -74,14 +74,14 @@ std::shared_ptr<Variable> ExpressionVariableAnalysisInside::Execute(std::shared_
 		return nullptr;
 	}
 	auto headerValue = _header->GetValue();
-	if (!ValueTool::IsObject(headerValue)) {
+	if (!ValueTool::IsObject(headerValue.get())) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableInsideAnalysis, "The header expression isn't a object!");
 		return nullptr;
 	}
 	auto tempValue = headerValue;
 	std::shared_ptr<Variable> retVariable{nullptr};
 	for (auto expression : _insides) {
-		if (!ValueTool::IsObject(tempValue)) {
+		if (!ValueTool::IsObject(tempValue.get())) {
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::VariableInsideAnalysis, "The expression isn't a object!");
 			return nullptr;
 		}

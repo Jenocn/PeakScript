@@ -21,8 +21,8 @@ std::shared_ptr<Variable> BuiltInFunction::FindVariable(const std::string& name)
 
 BuiltInFunction::BuiltInFunction() {
 	auto _Emplace = [this](const std::string& name, std::size_t paramSize, ValueFunction::FunctionType func) {
-		auto value = std::shared_ptr<ValueFunction>(new ValueFunction(paramSize, func));
-		auto variable = std::shared_ptr<Variable>(new Variable(name, VariableAttribute::Const, value));
+		auto value = std::make_shared<ValueFunction>(paramSize, func);
+		auto variable = std::make_shared<Variable>(name, VariableAttribute::Const, value);
 		_variables.emplace(name, variable);
 	};
 
@@ -30,7 +30,7 @@ BuiltInFunction::BuiltInFunction() {
 	_Emplace("print", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
 		std::string ret = "";
 		for (auto arg : args) {
-			ret += ValueTool::ToString(arg);
+			ret += ValueTool::ToString(arg.get());
 		}
 		System::Echo(ret);
 		return ValueNull::DEFAULT_VALUE;
@@ -40,7 +40,7 @@ BuiltInFunction::BuiltInFunction() {
 		if (args.empty()) {
 			return nullptr;
 		}
-		return std::shared_ptr<Value>(new ValueString(ValueTool::ToTypeString(args[0])));
+		return std::make_shared<ValueString>(ValueTool::ToTypeString(args[0].get()));
 	});
 	// is_null
 	_Emplace("is_null", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
@@ -49,9 +49,9 @@ BuiltInFunction::BuiltInFunction() {
 		}
 		bool ret = true;
 		for (auto arg : args) {
-			ret &= ValueTool::IsNull(arg);
+			ret &= ValueTool::IsNull(arg.get());
 		}
-		return std::shared_ptr<Value>(new ValueBool(ret));
+		return std::make_shared<ValueBool>(ret);
 	});
 	// is_number
 	_Emplace("is_number", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
@@ -60,9 +60,9 @@ BuiltInFunction::BuiltInFunction() {
 		}
 		bool ret = true;
 		for (auto arg : args) {
-			ret &= ValueTool::IsNumber(arg);
+			ret &= ValueTool::IsNumber(arg.get());
 		}
-		return std::shared_ptr<Value>(new ValueBool(ret));
+		return std::make_shared<ValueBool>(ret);
 	});
 	// is_bool
 	_Emplace("is_bool", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
@@ -71,9 +71,9 @@ BuiltInFunction::BuiltInFunction() {
 		}
 		bool ret = true;
 		for (auto arg : args) {
-			ret &= ValueTool::IsBool(arg);
+			ret &= ValueTool::IsBool(arg.get());
 		}
-		return std::shared_ptr<Value>(new ValueBool(ret));
+		return std::make_shared<ValueBool>(ret);
 	});
 	// is_string
 	_Emplace("is_string", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
@@ -82,9 +82,9 @@ BuiltInFunction::BuiltInFunction() {
 		}
 		bool ret = true;
 		for (auto arg : args) {
-			ret &= ValueTool::IsString(arg);
+			ret &= ValueTool::IsString(arg.get());
 		}
-		return std::shared_ptr<Value>(new ValueBool(ret));
+		return std::make_shared<ValueBool>(ret);
 	});
 	// is_array
 	_Emplace("is_array", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
@@ -93,9 +93,9 @@ BuiltInFunction::BuiltInFunction() {
 		}
 		bool ret = true;
 		for (auto arg : args) {
-			ret &= ValueTool::IsArray(arg);
+			ret &= ValueTool::IsArray(arg.get());
 		}
-		return std::shared_ptr<Value>(new ValueBool(ret));
+		return std::make_shared<ValueBool>(ret);
 	});
 	// is_function
 	_Emplace("is_function", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
@@ -104,9 +104,9 @@ BuiltInFunction::BuiltInFunction() {
 		}
 		bool ret = true;
 		for (auto arg : args) {
-			ret &= ValueTool::IsFunction(arg);
+			ret &= ValueTool::IsFunction(arg.get());
 		}
-		return std::shared_ptr<Value>(new ValueBool(ret));
+		return std::make_shared<ValueBool>(ret);
 	});
 	// is_object
 	_Emplace("is_object", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
@@ -115,9 +115,9 @@ BuiltInFunction::BuiltInFunction() {
 		}
 		bool ret = true;
 		for (auto arg : args) {
-			ret &= ValueTool::IsObject(arg);
+			ret &= ValueTool::IsObject(arg.get());
 		}
-		return std::shared_ptr<Value>(new ValueBool(ret));
+		return std::make_shared<ValueBool>(ret);
 	});
 	// len
 	_Emplace("len", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
@@ -125,10 +125,10 @@ BuiltInFunction::BuiltInFunction() {
 			return nullptr;
 		}
 		auto value = args[0];
-		if (ValueTool::IsArray(value)) {
-			return std::shared_ptr<Value>(new ValueNumber(static_cast<double>(std::static_pointer_cast<ValueArray>(value)->GetArray().size())));
-		} else if (ValueTool::IsString(value)) {
-			return std::shared_ptr<Value>(new ValueNumber(static_cast<double>(std::static_pointer_cast<ValueString>(value)->GetValue().length())));
+		if (ValueTool::IsArray(value.get())) {
+			return std::make_shared<ValueNumber>(static_cast<double>(std::static_pointer_cast<ValueArray>(value)->GetArray().size()));
+		} else if (ValueTool::IsString(value.get())) {
+			return std::make_shared<ValueNumber>(static_cast<double>(std::static_pointer_cast<ValueString>(value)->GetValue().length()));
 		}
 		return ValueNull::DEFAULT_VALUE;
 	});
@@ -138,7 +138,7 @@ BuiltInFunction::BuiltInFunction() {
 			return nullptr;
 		}
 		auto value = args[0];
-		return std::shared_ptr<Value>(new ValueString(ValueTool::ToString(value)));
+		return std::make_shared<ValueString>(ValueTool::ToString(value.get()));
 	});
 	// to_number
 	_Emplace("to_number", 1, [](const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space>) -> std::shared_ptr<Value> {
@@ -146,10 +146,10 @@ BuiltInFunction::BuiltInFunction() {
 			return nullptr;
 		}
 		auto value = args[0];
-		if (!ValueTool::IsString(value)) {
+		if (!ValueTool::IsString(value.get())) {
 			return nullptr;
 		}
-		return std::shared_ptr<Value>(new ValueNumber(std::atof(std::static_pointer_cast<ValueString>(value)->GetValue().c_str())));
+		return std::make_shared<ValueNumber>(std::atof(std::static_pointer_cast<ValueString>(value)->GetValue().c_str()));
 	});
 }
 

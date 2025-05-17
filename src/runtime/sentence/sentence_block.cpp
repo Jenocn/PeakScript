@@ -4,7 +4,7 @@
 using namespace peak;
 
 ExecuteResult SentenceBlock::Execute(std::shared_ptr<Space> space) {
-	auto tempSpace = std::shared_ptr<Space>(new Space(space->GetSpaceType(), space));
+	auto tempSpace = std::make_shared<Space>(space->GetSpaceType(), space);
 	for (auto sentence : _list) {
 		auto executeRet = sentence->Execute(tempSpace);
 		if (!IsSuccess(executeRet)) {

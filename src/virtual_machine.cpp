@@ -13,7 +13,7 @@ using namespace peak;
 std::shared_ptr<VirtualJourney> VirtualMachine::Load(const std::string& src) {
 	auto executer = Executer::Create(src);
 	if (executer) {
-		return std::shared_ptr<VirtualJourney>(new VirtualJourney(executer));
+		return std::make_shared<VirtualJourney>(executer);
 	}
 	return nullptr;
 }

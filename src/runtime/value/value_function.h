@@ -9,8 +9,6 @@
 
 namespace peak {
 
-
-class Variable;
 class Space;
 
 class ValueFunction : public TypeValue<ValueFunction> {
@@ -24,17 +22,12 @@ public:
 	virtual std::string ToString() const;
 	virtual std::shared_ptr<Value> Clone() const;
 
-	bool AddFunction(std::size_t paramSize, FunctionType func);
-	bool AddFunction(const std::vector<std::string>& params, FunctionType func);
-	bool AddFunction(std::shared_ptr<ValueFunction> valueFunc);
-
-	std::map<std::size_t, std::pair<std::vector<std::string>, FunctionType>>& GetFunctionMap();
-
 private:
 	ValueFunction();
 
 private:
-	std::map<std::size_t, std::pair<std::vector<std::string>, FunctionType>> _functionMap;
+	std::vector<std::string> _params;
+	FunctionType _function;
 };
 
 } // namespace peak
