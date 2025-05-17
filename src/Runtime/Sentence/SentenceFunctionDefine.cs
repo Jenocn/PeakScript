@@ -31,12 +31,6 @@ namespace peak.interpreter {
 
 			var variable = space.FindVariableFromTop(_name);
 			if (variable) {
-				var value = variable.value;
-				if (ValueTool.IsFunction(value)) {
-					if ((value as ValueFunction).AddFunction(_params, func)) {
-						return ExecuteResult.Successed;
-					}
-				}
 				ErrorLogger.LogRuntimeError(_name);
 				ErrorLogger.LogRuntimeError(ErrorRuntimeCode.FunctionDefine, "The \"" + _name + "\" is exist!");
 				return ExecuteResult.Failed;

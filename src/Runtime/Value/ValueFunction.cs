@@ -10,74 +10,53 @@ namespace peak.interpreter {
 
 	public class ValueFunction : TypeValue<ValueFunction> {
 
-		private Dictionary<int, KeyValuePair<List<string>, Func<List<Value>, Space, Value>>> _functionMap = new Dictionary<int, KeyValuePair<List<string>, Func<List<Value>, Space, Value>>>();
+		private List<string> _params = new List<string>();
+		private Func<List<Value>, Space, Value> _function = null;
 		private ValueFunction() {}
 		public ValueFunction(int paramSize, Func<List<Value>, Space, Value> func) {
-			AddFunction(paramSize, func);
+			for (var i=0; i<paramSize; ++i)
+			{
+				_params.Add("%" + i);
+			}
+			_function = func;
 		}
 		public ValueFunction(List<string> params_, Func<List<Value>, Space, Value> func) {
-			AddFunction(params_, func);
+			_params = params_;
+			_function = func;
 		}
 		public Value Call(List<Value> args, Space space) {
-			KeyValuePair<List<string>, Func<List<Value>, Space, Value>> ret;
-			if (!_functionMap.TryGetValue(args.Count, out ret)) {
+			if (_params.Count != args.Count) {
 				ErrorLogger.LogRuntimeError(ErrorRuntimeCode.FunctionCall, "The function (" + args.Count + " params) not found!");
 				return null;
 			}
 			var tempSpace = new Space(SpaceType.Function, space);
-			var params_ = ret.Key;
-			var func = ret.Value;
-			var paramSize = params_.Count;
 			for (int i = 0; i < args.Count; ++i) {
-				if (i >= paramSize) {
-					break;
-				}
-				var tempVariable = new Variable(params_[i], VariableAttribute.None);
+				var tempVariable = new Variable(_params[i], VariableAttribute.None);
 				if (!tempSpace.AddVariable(tempVariable)) {
 					ErrorLogger.LogRuntimeError(ErrorRuntimeCode.FunctionCall, "The function params name is exist!");
 					return null;
 				}
 				tempVariable.SetValue(args[i]);
 			}
-			var result = func.Invoke(args, tempSpace);
+			var result = _function.Invoke(args, tempSpace);
 			tempSpace.Clear();
 			return result;
 		}
 		public override string ToString() {
-			return "function";
-		}
-		public override Value Clone() {
-			var valueFunc = new ValueFunction();
-			valueFunc._functionMap = _functionMap;
-			return valueFunc;
-		}
-
-		public bool AddFunction(int paramSize, Func<List<Value>, Space, Value> func) {
-			if (!_functionMap.ContainsKey(paramSize)) {
-				_functionMap.Add(paramSize, new KeyValuePair<List<string>, Func<List<Value>, Space, Value>>(new List<string>(), func));
-				return true;
-			}
-			return false;
-		}
-		public bool AddFunction(List<string> params_, Func<List<Value>, Space, Value> func) {
-			var size = params_.Count;
-			if (!_functionMap.ContainsKey(size)) {
-				_functionMap.Add(size, new KeyValuePair<List<string>, Func<List<Value>, Space, Value>>(params_, func));
-				return true;
-			}
-			return false;
-		}
-		public bool AddFunction(ValueFunction valueFunc) {
-			foreach (var item in valueFunc._functionMap) {
-				if (_functionMap.ContainsKey(item.Key)) {
-					return false;
+			string ret = "function (";
+			for (var i = 0; i < _params.Count; ++i)
+			{
+				ret += _params[i];
+				if (i < _params.Count - 1)
+				{
+					ret += ", ";
 				}
 			}
-			foreach (var item in valueFunc._functionMap) {
-				_functionMap.Add(item.Key, item.Value);
-			}
-			return true;
+			ret += ")";
+			return ret;
 		}
-
+		public override Value Clone() {
+			return new ValueFunction(_params, _function);
+		}
 	}
 } // namespace peak.interpreter

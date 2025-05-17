@@ -5,9 +5,11 @@
 
 using System.Collections.Generic;
 
-namespace peak.interpreter {
+namespace peak.interpreter
+{
 
-	enum MathSymbol {
+	enum MathSymbol
+	{
 		None,
 		LessEqual, // <=
 		MoreEqual, // >=
@@ -29,20 +31,22 @@ namespace peak.interpreter {
 		Sub, // -
 	}
 
-	enum DoubleSymbol {
+	enum DoubleSymbol
+	{
 		AddAdd, // ++
 		SubSub, // --
 	}
 
-	class Grammar {
+	class Grammar
+	{
 		private static readonly HashSet<char> SET_TEXT_SPACE = new HashSet<char>() { ' ', '\n', '\r', '\t' };
 		private static readonly HashSet<char> SET_TEXT_NEW_LINE = new HashSet<char>() { '\n', '\r' };
 
 		// grammar
 		private static readonly HashSet<char> SET_STRING_SIGN = new HashSet<char>() { '\"', '\'', '`' };
-		private static readonly HashSet<char> SET_END_SIGN = new HashSet<char>() { '\n', '\r', ';', '\0' };
+		private static readonly HashSet<char> SET_END_SIGN = new HashSet<char>() { ';' };
 		private static readonly HashSet<string> SET_VARIABLE_DEFINE_SIGN = new HashSet<string>() { "var", "the" };
-		private static readonly HashSet<string> SET_ASSIGN_SIGN = new HashSet<string>() { "=", "is", "as" };
+		private static readonly HashSet<string> SET_ASSIGN_SIGN = new HashSet<string>() { "=" };
 		private static readonly HashSet<string> SET_BOOL_TRUE_SIGN = new HashSet<string>() { "true", "yes" };
 		private static readonly HashSet<string> SET_BOOL_FALSE_SIGN = new HashSet<string>() { "false", "no" };
 		private static readonly HashSet<string> SET_CONDITION_IF_SIGN = new HashSet<string>() { "if" };
@@ -115,105 +119,139 @@ namespace peak.interpreter {
 		private const char CHAR_ARRAY_END = ']';
 		private const char CHAR_INSIDE_SYMBOL = '.';
 
-		public static bool IsTextSpace(char ch) {
+		public static bool IsTextSpace(char ch)
+		{
 			return SET_TEXT_SPACE.Contains(ch);
 		}
-		public static bool IsTextNewLine(char ch) {
+		public static bool IsTextNewLine(char ch)
+		{
 			return SET_TEXT_NEW_LINE.Contains(ch);
 		}
-		public static bool IsTextSpecialChar(char ch) {
+		public static bool IsTextSpecialChar(char ch)
+		{
 			return (ch >= 0 && ch <= 47) || (ch >= 58 && ch <= 64) || (ch >= 91 && ch <= 94) || (ch == 96) || (ch >= 123 && ch <= 127);
 		}
-		public static bool IsTextNumber(char ch) {
+		public static bool IsTextNumber(char ch)
+		{
 			return ch >= '0' && ch <= '9';
 		}
-		public static bool IsGrammarStringSign(char ch) {
+		public static bool IsGrammarStringSign(char ch)
+		{
 			return SET_STRING_SIGN.Contains(ch);
 		}
-		public static bool IsGrammarEndSign(char ch) {
+		public static bool IsGrammarEndSign(char ch)
+		{
 			return SET_END_SIGN.Contains(ch);
 		}
-		public static bool IsSpecialSign(string value) {
+		public static bool IsSpecialSign(string value)
+		{
 			int pos = 0;
 			int size = value.Length;
-			do {
-				if (MatchVariableDefine(value, size, 0, out pos)) {
+			do
+			{
+				if (MatchVariableDefine(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchNull(value, size, 0, out pos)) {
+				if (MatchNull(value, size, 0, out pos))
+				{
 					break;
 				}
 				bool bBoolValue = false;
-				if (MatchBool(value, size, 0, out pos, out bBoolValue)) {
+				if (MatchBool(value, size, 0, out pos, out bBoolValue))
+				{
 					break;
 				}
-				if (MatchEcho(value, size, 0, out pos)) {
+				if (MatchEcho(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchForeach(value, size, 0, out pos)) {
+				if (MatchForeach(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchFor(value, size, 0, out pos)) {
+				if (MatchFor(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchWhile(value, size, 0, out pos)) {
+				if (MatchWhile(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchLoop(value, size, 0, out pos)) {
+				if (MatchLoop(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchBlockBegin(value, size, 0, out pos)) {
+				if (MatchBlockBegin(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchBlockEnd(value, size, 0, out pos)) {
+				if (MatchBlockEnd(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchTry(value, size, 0, out pos)) {
+				if (MatchTry(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchCatch(value, size, 0, out pos)) {
+				if (MatchCatch(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchFinally(value, size, 0, out pos)) {
+				if (MatchFinally(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchBreak(value, size, 0, out pos)) {
+				if (MatchBreak(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchContinue(value, size, 0, out pos)) {
+				if (MatchContinue(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchDo(value, size, 0, out pos)) {
+				if (MatchDo(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchConditionIf(value, size, 0, out pos)) {
+				if (MatchConditionIf(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchConditionElse(value, size, 0, out pos)) {
+				if (MatchConditionElse(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchReturn(value, size, 0, out pos)) {
+				if (MatchReturn(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchNew(value, size, 0, out pos)) {
+				if (MatchNew(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchAssign(value, size, 0, out pos)) {
+				if (MatchAssign(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchExtends(value, size, 0, out pos)) {
+				if (MatchExtends(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchObject(value, size, 0, out pos)) {
+				if (MatchObject(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchEnum(value, size, 0, out pos)) {
+				if (MatchEnum(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchImport(value, size, 0, out pos)) {
+				if (MatchImport(value, size, 0, out pos))
+				{
 					break;
 				}
-				if (MatchExport(value, size, 0, out pos)) {
+				if (MatchExport(value, size, 0, out pos))
+				{
 					break;
 				}
 				// temp todo...
@@ -223,17 +261,22 @@ namespace peak.interpreter {
 
 			return pos >= size || IsTextSpecialChar(value[pos]);
 		}
-		public static bool IsLeftBrcket(char ch) {
+		public static bool IsLeftBrcket(char ch)
+		{
 			return ch == CHAR_LEFT_BRACKET;
 		}
-		public static bool IsRightBrcket(char ch) {
+		public static bool IsRightBrcket(char ch)
+		{
 			return ch == CHAR_RIGHT_BRACKET;
 		}
-		public static bool IsVariableSelfAssignSymbol(MathSymbol value) {
+		public static bool IsVariableSelfAssignSymbol(MathSymbol value)
+		{
 			return SET_SELF_ASSIGN_SYMBOL.Contains(value);
 		}
-		public static bool IsWordValidSymbol(char ch) {
-			if (!IsTextSpecialChar(ch)) {
+		public static bool IsWordValidSymbol(char ch)
+		{
+			if (!IsTextSpecialChar(ch))
+			{
 				return true;
 			}
 			return IsTextSpace(ch) ||
@@ -244,30 +287,40 @@ namespace peak.interpreter {
 				(ch == CHAR_ARRAY_END) ||
 				(ch == CHAR_INSIDE_SYMBOL);
 		}
-		public static bool SearchNextInside(string src, int size, int pos) {
-				for (var i = pos; i < size; ++i) {
-				if (MatchInsideSymbol(src, size, i, out i)) {
+		public static bool SearchNextInside(string src, int size, int pos)
+		{
+			for (var i = pos; i < size; ++i)
+			{
+				if (MatchInsideSymbol(src, size, i, out i))
+				{
 					return true;
 				}
 				char ch = src[i];
-				if (!IsWordValidSymbol(ch)) {
+				if (!IsWordValidSymbol(ch))
+				{
 					MathSymbol symbol;
-					if (!MatchMathSymbol(src, size, i, out i, out symbol)) {
+					if (!MatchMathSymbol(src, size, i, out i, out symbol))
+					{
 						return false;
 					}
 				}
 			}
 			return false;
 		}
-		public static bool SearchNextArray(string src, int size, int pos) {
-			for (var i = pos; i < size; ++i) {
-				if (MatchArrayBegin(src, size, i, out i)) {
+		public static bool SearchNextArray(string src, int size, int pos)
+		{
+			for (var i = pos; i < size; ++i)
+			{
+				if (MatchArrayBegin(src, size, i, out i))
+				{
 					return true;
 				}
 				char ch = src[i];
-				if (!IsWordValidSymbol(ch)) {
+				if (!IsWordValidSymbol(ch))
+				{
 					MathSymbol symbol;
-					if (!MatchMathSymbol(src, size, i, out i, out symbol)) {
+					if (!MatchMathSymbol(src, size, i, out i, out symbol))
+					{
 						return false;
 					}
 				}
@@ -275,56 +328,66 @@ namespace peak.interpreter {
 			return false;
 		}
 
-		public static int GetMathSymbolLevel(MathSymbol value) {
+		public static int GetMathSymbolLevel(MathSymbol value)
+		{
 			KeyValuePair<int, HashSet<string>> ret;
-			if (MAP_SET_MATH_SYMBOL.TryGetValue(value, out ret)) {
+			if (MAP_SET_MATH_SYMBOL.TryGetValue(value, out ret))
+			{
 				return ret.Key;
 			}
 			return 0;
 		}
-		
-		public static bool MatchExtends(string src, int size, int pos, out int nextPos) {
-			nextPos = pos;
-			foreach (var sign in SET_EXTENDS_SIGN) {
-				if (MatchSign(sign, src, size, pos, out nextPos)) {
-					return true;
-				}
-			}
-			return false;
+
+		public static bool MatchExtends(string src, int size, int pos, out int nextPos)
+		{
+			return MatchSignSet(SET_EXTENDS_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchImport(string src, int size, int pos, out int nextPos) {
+		public static bool MatchImport(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_IMPORT_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchExport(string src, int size, int pos, out int nextPos) {
+		public static bool MatchExport(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_EXPORT_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchEnum(string src, int size, int pos, out int nextPos) {
+		public static bool MatchEnum(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_ENUM_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchObject(string src, int size, int pos, out int nextPos) {
+		public static bool MatchObject(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_OBJECT_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchInsideSymbol(string src, int size, int pos, out int nextPos) {
+		public static bool MatchInsideSymbol(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(CHAR_INSIDE_SYMBOL, src, size, pos, out nextPos);
 		}
-		public static bool MatchNew(string src, int size, int pos, out int nextPos) {
+		public static bool MatchNew(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_NEW_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchObjectBegin(string src, int size, int pos, out int nextPos) {
+		public static bool MatchObjectBegin(string src, int size, int pos, out int nextPos)
+		{
 			return MatchBlockBegin(src, size, pos, out nextPos);
 		}
-		public static bool MatchObjectEnd(string src, int size, int pos, out int nextPos) {
+		public static bool MatchObjectEnd(string src, int size, int pos, out int nextPos)
+		{
 			return MatchBlockEnd(src, size, pos, out nextPos);
 		}
-		public static bool MatchArrayBegin(string src, int size, int pos, out int nextPos) {
+		public static bool MatchArrayBegin(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(CHAR_ARRAY_BEGIN, src, size, pos, out nextPos);
 		}
-		public static bool MatchArrayEnd(string src, int size, int pos, out int nextPos) {
+		public static bool MatchArrayEnd(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(CHAR_ARRAY_END, src, size, pos, out nextPos);
 		}
-		public static bool MatchDoubleSymbol(string src, int size, int pos, out int nextPos, out DoubleSymbol symbol) {
-			foreach (var pair in MAP_DOUBLE_SYMBOL) {
-				if (MatchSign(pair.Value, src, size, pos, out nextPos)) {
+		public static bool MatchDoubleSymbol(string src, int size, int pos, out int nextPos, out DoubleSymbol symbol)
+		{
+			foreach (var pair in MAP_DOUBLE_SYMBOL)
+			{
+				if (MatchSign(pair.Value, src, size, pos, out nextPos))
+				{
 					symbol = pair.Key;
 					return true;
 				}
@@ -333,301 +396,369 @@ namespace peak.interpreter {
 			nextPos = pos;
 			return false;
 		}
-		public static bool MatchNotSymbol(string src, int size, int pos, out int nextPos) {
+		public static bool MatchNotSymbol(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(CHAR_NOT_SYMBOL, src, size, pos, out nextPos);
 		}
-		public static bool MatchConst(string src, int size, int pos, out int nextPos) {
+		public static bool MatchConst(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_CONST_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchReturn(string src, int size, int pos, out int nextPos) {
+		public static bool MatchReturn(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_RETURN_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchSplitSymbol(string src, int size, int pos, out int nextPos) {
+		public static bool MatchSplitSymbol(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(CHAR_SPLIT_SYMBOL, src, size, pos, out nextPos);
 		}
-		public static bool MatchFunction(string src, int size, int pos, out int nextPos) {
+		public static bool MatchFunction(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_FUNCTION_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchBreak(string src, int size, int pos, out int nextPos) {
+		public static bool MatchBreak(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_BREAK_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchContinue(string src, int size, int pos, out int nextPos) {
+		public static bool MatchContinue(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_CONTINUE_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchTry(string src, int size, int pos, out int nextPos) {
+		public static bool MatchTry(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_TRY_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchCatch(string src, int size, int pos, out int nextPos) {
+		public static bool MatchCatch(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_CATCH_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchFinally(string src, int size, int pos, out int nextPos) {
+		public static bool MatchFinally(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_FINALLY_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchEcho(string src, int size, int pos, out int nextPos) {
+		public static bool MatchEcho(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_ECHO_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchBlockBegin(string src, int size, int pos, out int nextPos) {
-			foreach (var sign in SET_BLOCK_BEGIN) {
-				if (MatchSign(sign, src, size, pos, out nextPos)) {
-					return true;
-				}
-			}
-			nextPos = pos;
-			return false;
+		public static bool MatchBlockBegin(string src, int size, int pos, out int nextPos)
+		{
+			return MatchSignSet(SET_BLOCK_BEGIN, src, size, pos, out nextPos);
 		}
-		public static bool MatchBlockEnd(string src, int size, int pos, out int nextPos) {
-			foreach (var sign in SET_BLOCK_END) {
-				if (MatchSign(sign, src, size, pos, out nextPos)) {
-					return true;
-				}
-			}
-			nextPos = pos;
-			return false;
+		public static bool MatchBlockEnd(string src, int size, int pos, out int nextPos)
+		{
+			return MatchSignSet(SET_BLOCK_END, src, size, pos, out nextPos);
 		}
-		public static bool MatchConditionIf(string src, int size, int pos, out int nextPos) {
-			foreach (var sign in SET_CONDITION_IF_SIGN) {
-				if (MatchSign(sign, src, size, pos, out nextPos)) {
-					return true;
-				}
-			}
-			nextPos = pos;
-			return false;
+		public static bool MatchConditionIf(string src, int size, int pos, out int nextPos)
+		{
+			return MatchSignSet(SET_CONDITION_IF_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchConditionElse(string src, int size, int pos, out int nextPos) {
-			foreach (var sign in SET_CONDITION_ELSE_SIGN) {
-				if (MatchSign(sign, src, size, pos, out nextPos)) {
-					return true;
-				}
-			}
-			nextPos = pos;
-			return false;
+		public static bool MatchConditionElse(string src, int size, int pos, out int nextPos)
+		{
+			return MatchSignSet(SET_CONDITION_ELSE_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchFor(string src, int size, int pos, out int nextPos) {
+		public static bool MatchFor(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_FOR_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchForeach(string src, int size, int pos, out int nextPos) {
+		public static bool MatchForeach(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_FOREACH_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchForeachIn(string src, int size, int pos, out int nextPos) {
+		public static bool MatchForeachIn(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_FOREACH_IN_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchWhile(string src, int size, int pos, out int nextPos) {
+		public static bool MatchWhile(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_WHILE_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchDo(string src, int size, int pos, out int nextPos) {
+		public static bool MatchDo(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_DO_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchLoop(string src, int size, int pos, out int nextPos) {
+		public static bool MatchLoop(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_LOOP_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchLeftBrcket(string src, int size, int pos, out int nextPos) {
+		public static bool MatchLeftBrcket(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(CHAR_LEFT_BRACKET, src, size, pos, out nextPos);
 		}
-		public static bool MatchRightBrcket(string src, int size, int pos, out int nextPos) {
+		public static bool MatchRightBrcket(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(CHAR_RIGHT_BRACKET, src, size, pos, out nextPos);
 		}
-		public static bool MatchMathSymbol(string src, int size, int pos, out int nextPos, out MathSymbol symbol) {
-			foreach (var pair in MAP_SET_MATH_SYMBOL) {
+		public static bool MatchMathSymbol(string src, int size, int pos, out int nextPos, out MathSymbol symbol)
+		{
+			symbol = MathSymbol.None;
+			nextPos = pos;
+			int signSize = 0;
+			foreach (var pair in MAP_SET_MATH_SYMBOL)
+			{
 				var setPair = pair.Value;
 				var signSet = setPair.Value;
-				foreach (var sign in signSet) {
-					if (MatchSign(sign, src, size, pos, out nextPos)) {
+				foreach (var sign in signSet)
+				{
+					if (sign.Length <= signSize)
+					{
+						continue;
+					}
+					if (MatchSign(sign, src, size, pos, out var tmpNextPos))
+					{
+						signSize = sign.Length;
 						symbol = pair.Key;
-						return true;
+						nextPos = tmpNextPos;
 					}
 				}
 			}
-			nextPos = pos;
-			symbol = MathSymbol.None;
-			return false;
+			return signSize > 0;
 		}
-		public static bool MatchNull(string src, int size, int pos, out int nextPos) {
+		public static bool MatchNull(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_NULL_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchBool(string src, int size, int pos, out int nextPos, out bool value) {
-			foreach (var sign in SET_BOOL_TRUE_SIGN) {
-				if (MatchSign(sign, src, size, pos, out nextPos)) {
-					value = true;
-					return true;
-				}
-			}
-			foreach (var sign in SET_BOOL_FALSE_SIGN) {
-				if (MatchSign(sign, src, size, pos, out nextPos)) {
-					value = false;
-					return true;
-				}
-			}
+		public static bool MatchBool(string src, int size, int pos, out int nextPos, out bool value)
+		{
 			nextPos = pos;
+			int signSize = 0;
 			value = false;
-			return false;
+			foreach (var sign in SET_BOOL_TRUE_SIGN)
+			{
+				if (sign.Length <= signSize)
+				{
+					continue;
+				}
+				if (MatchSign(sign, src, size, pos, out var tmpNextPos))
+				{
+					signSize = sign.Length;
+					nextPos = tmpNextPos;
+					value = true;
+				}
+			}
+			foreach (var sign in SET_BOOL_FALSE_SIGN)
+			{
+				if (sign.Length <= signSize)
+				{
+					continue;
+				}
+				if (MatchSign(sign, src, size, pos, out var tmpNextPos))
+				{
+					signSize = sign.Length;
+					nextPos = tmpNextPos;
+					value = false;
+				}
+			}
+			return signSize > 0;
 		}
-		public static bool MatchNumber(string src, int size, int pos, out int nextPos, out double number) {
+		public static bool MatchNumber(string src, int size, int pos, out int nextPos, out double number)
+		{
 			nextPos = pos;
 			number = 0;
-			if (pos >= size) {
+			if (pos >= size)
+			{
 				return false;
 			}
 			char ch = src[pos];
 			bool bSub = (ch == '-');
 			bool bPoint = (ch == '.');
 
-			if (!IsTextNumber(ch) && !bSub && !bPoint) {
+			if (!IsTextNumber(ch) && !bSub && !bPoint)
+			{
 				return false;
 			}
 			var beginPos = pos;
 			++pos;
-			while (pos < size) {
+			while (pos < size)
+			{
 				ch = src[pos];
-				if (!IsTextNumber(ch)) {
-					if (ch == '.') {
-						if (bPoint) {
+				if (!IsTextNumber(ch))
+				{
+					if (ch == '.')
+					{
+						if (bPoint)
+						{
 							return false;
 						}
 						bPoint = true;
-					} else {
+					}
+					else
+					{
 						break;
 					}
 				}
 				++pos;
 			}
 
-			if (pos == beginPos) {
+			if (pos == beginPos)
+			{
 				return false;
 			}
 
 			int checkSize = 1;
 			int p = 0;
-			if (bPoint) {
-				if (src[pos - 1] == '.') {
+			if (bPoint)
+			{
+				if (src[pos - 1] == '.')
+				{
 					return false;
 				}
 				++checkSize;
 			}
-			if (bSub) {
+			if (bSub)
+			{
 				++checkSize;
 				p = 1;
 			}
 			var tempSize = pos - beginPos;
-			if (tempSize < checkSize) {
+			if (tempSize < checkSize)
+			{
 				return false;
 			}
 			var tempStr = src.Substring(beginPos, tempSize);
-			if (bPoint) {
+			if (bPoint)
+			{
 				tempStr.Insert(p, "0");
 			}
-			if (!double.TryParse(tempStr, out number)) {
+			if (!double.TryParse(tempStr, out number))
+			{
 				return false;
 			}
 			nextPos = pos;
 			return true;
 		}
-		public static bool MatchName(string src, int size, int pos, out int nextPos, out string name) {
+		public static bool MatchName(string src, int size, int pos, out int nextPos, out string name)
+		{
 			nextPos = pos;
 			name = "";
-			if (pos >= size) {
+			if (pos >= size)
+			{
 				return false;
 			}
 			char ch = src[pos];
-			if (IsTextNumber(ch) || IsTextSpecialChar(ch) || IsTextSpace(ch)) {
+			if (IsTextNumber(ch) || IsTextSpecialChar(ch) || IsTextSpace(ch))
+			{
 				return false;
 			}
 			var beginPos = pos;
-			while (pos < size) {
+			while (pos < size)
+			{
 				ch = src[pos];
-				if (IsTextSpecialChar(ch) || IsTextSpace(ch)) {
+				if (IsTextSpecialChar(ch) || IsTextSpace(ch))
+				{
 					break;
 				}
 				++pos;
 			}
 
-			if (pos == beginPos) {
+			if (pos == beginPos)
+			{
 				return false;
 			}
 			var tempSize = pos - beginPos;
 			name = src.Substring(beginPos, tempSize);
-			if (IsSpecialSign(name)) {
+			if (IsSpecialSign(name))
+			{
 				return false;
 			}
 			nextPos = pos;
 			return true;
 		}
-		public static bool MatchAssign(string src, int size, int pos, out int nextPos) {
-			foreach(var sign in SET_ASSIGN_SIGN) {
-				if (MatchSign(sign, src, size, pos, out nextPos)) {
-					return true;
-				}
-			}
-			nextPos = pos;
-			return false;
+		public static bool MatchAssign(string src, int size, int pos, out int nextPos)
+		{
+			return MatchSignSet(SET_ASSIGN_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchComment(string src, int size, int pos, out int nextPos) {
-			foreach(var sign in SET_COMMENT_SIGN) {
-				if (MatchSign(sign, src, size, pos, out nextPos)) {
-					return true;
-				}
-			}
-			nextPos = pos;
-			return false;
+		public static bool MatchComment(string src, int size, int pos, out int nextPos)
+		{
+			return MatchSignSet(SET_COMMENT_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchCommentBlockBegin(string src, int size, int pos, out int nextPos) {
+		public static bool MatchCommentBlockBegin(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_COMMENT_BLOCK_BEGIN_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchCommentBlockEnd(string src, int size, int pos, out int nextPos) {
+		public static bool MatchCommentBlockEnd(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_COMMENT_BLOCK_END_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchVariableDefine(string src, int size, int pos, out int nextPos) {
-			foreach(var sign in SET_VARIABLE_DEFINE_SIGN) {
-				if (MatchSign(sign, src, size, pos, out nextPos)) {
-					return true;
-				}
-			}
-			nextPos = pos;
-			return false;
+		public static bool MatchVariableDefine(string src, int size, int pos, out int nextPos)
+		{
+			return MatchSignSet(SET_VARIABLE_DEFINE_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchVariableSet(string src, int size, int pos, out int nextPos) {
+		public static bool MatchVariableSet(string src, int size, int pos, out int nextPos)
+		{
 			return MatchSign(STRING_SET_SIGN, src, size, pos, out nextPos);
 		}
-		public static bool MatchSign(string sign, string src, int size, int pos, out int nextPos) {
+		public static bool MatchSignSet(HashSet<string> sign, string src, int size, int pos, out int nextPos)
+		{
+			nextPos = pos;
+			int signSize = 0;
+			foreach (var item in sign)
+			{
+				if (item.Length <= signSize)
+				{
+					continue;
+				}
+				if (MatchSign(item, src, size, pos, out var tmpNextPos))
+				{
+					signSize = item.Length;
+					nextPos = tmpNextPos;
+				}
+			}
+			return signSize > 0;
+		}
+		public static bool MatchSign(string sign, string src, int size, int pos, out int nextPos)
+		{
 			nextPos = pos;
 			var signSize = sign.Length;
-			if (pos + signSize > size) {
+			if (pos + signSize > size)
+			{
 				return false;
 			}
-			for (int i = 0; i < signSize; ++i) {
-				if (sign[i] != src[pos + i]) {
+			for (int i = 0; i < signSize; ++i)
+			{
+				if (sign[i] != src[pos + i])
+				{
 					return false;
 				}
 			}
 			nextPos = pos + signSize;
 			return true;
 		}
-		public static bool MatchSign(char sign, string src, int size, int pos, out int nextPos) {
+		public static bool MatchSign(char sign, string src, int size, int pos, out int nextPos)
+		{
 			nextPos = pos;
-			if (pos >= size) {
+			if (pos >= size)
+			{
 				return false;
 			}
-			if (src[pos] == sign) {
+			if (src[pos] == sign)
+			{
 				nextPos = pos + 1;
 				return true;
 			}
 			return false;
 		}
-		public static bool MatchPair(string signLeft, string signRight, string src, int size, int pos, out int nextPos, out string result) {
+		public static bool MatchPair(string signLeft, string signRight, string src, int size, int pos, out int nextPos, out string result)
+		{
 			nextPos = pos;
 			result = "";
-			if (!MatchSign(signLeft, src, size, pos, out pos)) {
+			if (!MatchSign(signLeft, src, size, pos, out pos))
+			{
 				return false;
 			}
 			bool bSame = signLeft == signRight;
 			var beginPos = pos;
 			int count = 0;
-			while (pos < size) {
-				if (!bSame && MatchSign(signLeft, src, size, pos, out pos)) {
+			while (pos < size)
+			{
+				if (!bSame && MatchSign(signLeft, src, size, pos, out pos))
+				{
 					++count;
 					continue;
 				}
-				if (MatchSign(signRight, src, size, pos, out pos)) {
-					if (count > 0) {
+				if (MatchSign(signRight, src, size, pos, out pos))
+				{
+					if (count > 0)
+					{
 						--count;
 						continue;
 					}
@@ -640,10 +771,12 @@ namespace peak.interpreter {
 			}
 			return false;
 		}
-		public static bool MatchPair(char signLeft, char signRight, string src, int size, int pos, out int nextPos, out string result) {
+		public static bool MatchPair(char signLeft, char signRight, string src, int size, int pos, out int nextPos, out string result)
+		{
 			nextPos = pos;
 			result = "";
-			if (src[pos] != signLeft) {
+			if (src[pos] != signLeft)
+			{
 				return false;
 			}
 			++pos;
@@ -651,18 +784,24 @@ namespace peak.interpreter {
 			var beginPos = pos;
 			int count = 0;
 			bool bIgnore = false;
-			while (pos < size) {
+			while (pos < size)
+			{
 				char ch = src[pos];
-				do {
-					if (bIgnore) {
+				do
+				{
+					if (bIgnore)
+					{
 						break;
 					}
-					if (!bSame && (ch == signLeft)) {
+					if (!bSame && (ch == signLeft))
+					{
 						++count;
 						break;
 					}
-					if (ch == signRight) {
-						if (count > 0) {
+					if (ch == signRight)
+					{
+						if (count > 0)
+						{
 							--count;
 							break;
 						}

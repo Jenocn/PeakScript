@@ -83,7 +83,7 @@ namespace peak.interpreter {
 			var size = src.Length;
 			while (pos < size) {
 				JumpEnd(src, size, pos, out pos);
-				if (pos >= size) {
+				if (pos >= size || src[pos] == '\0') {
 					break;
 				}
 				var parseSentence = ParseSentence(src, size, pos, out pos);

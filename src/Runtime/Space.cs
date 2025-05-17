@@ -26,6 +26,8 @@ namespace peak.interpreter {
 		private Dictionary<string, Module> _importModules = new Dictionary<string, Module>();
 		private HashSet<string> _exportModulesNameSet = new HashSet<string>();
 
+		public Dictionary<string, Variable> variables { get => _variables; }
+
 		public SpaceType spaceType { get => _spaceType; }
 
 		public Space(SpaceType spaceType) {
@@ -69,11 +71,6 @@ namespace peak.interpreter {
 				return false;
 			}
 			if (_variables.TryGetValue(value.name, out var findValue)) {
-				if (ValueTool.IsFunction(findValue.value) && ValueTool.IsFunction(value.value)) {
-					if ((findValue.value as ValueFunction).AddFunction(value.value as ValueFunction)) {
-						return true;
-					}
-				}
 				ErrorLogger.LogRuntimeError(value.name);
 				ErrorLogger.LogRuntimeError(ErrorRuntimeCode.Space, "The variable \"" + value.name + "\" is exist!");
 				return false;
