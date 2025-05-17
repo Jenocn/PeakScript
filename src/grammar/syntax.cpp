@@ -11,10 +11,10 @@ static const std::unordered_set<char> SET_TEXT_NEW_LINE = { '\n', '\r' };
 // grammar
 static const std::unordered_set<char> SET_STRING_SIGN = { '\"', '\'', '`' };
 static const std::unordered_set<char> SET_END_SIGN = { ';' };
-static const std::unordered_set<std::string> SET_VARIABLE_DEFINE_SIGN = { "var", "the" };
+static const std::unordered_set<std::string> SET_VARIABLE_DEFINE_SIGN = { "var" };
 static const std::unordered_set<std::string> SET_ASSIGN_SIGN = { "=" };
-static const std::unordered_set<std::string> SET_BOOL_TRUE_SIGN = { "true", "yes" };
-static const std::unordered_set<std::string> SET_BOOL_FALSE_SIGN = { "false", "no" };
+static const std::unordered_set<std::string> SET_BOOL_TRUE_SIGN = { "true" };
+static const std::unordered_set<std::string> SET_BOOL_FALSE_SIGN = { "false" };
 static const std::unordered_set<std::string> SET_CONDITION_IF_SIGN = { "if" };
 static const std::unordered_set<std::string> SET_CONDITION_ELSE_SIGN = { "else" };
 static const std::unordered_set<std::string> SET_BLOCK_BEGIN = { "{", "begin" };
@@ -69,7 +69,7 @@ static const std::string STRING_NEW_SIGN = "new";
 static const std::string STRING_OBJECT_SIGN = "object";
 static const std::string STRING_ENUM_SIGN = "enum";
 static const std::string STRING_IMPORT_SIGN = "import";
-static const std::string STRING_EXPORT_SIGN = "export";
+static const std::string STRING_IMPORT_AS_SIGN = "as";
 
 static const char CHAR_NOT_SYMBOL = '!';
 static const char CHAR_LEFT_BRACKET = '(';
@@ -164,13 +164,13 @@ bool Syntax::IsSpecialSign(const std::string& value) {
 		if (MatchNew(value, size, 0, &pos)) {
 			break;
 		}
-		if (MatchAssign(value, size, 0, &pos)) {
-			break;
-		}
-		if (MatchExtends(value, size, 0, &pos)) {
-			break;
-		}
 		if (MatchObject(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchFunction(value, size, 0, &pos)) {
+			break;
+		}
+		if (MatchConst(value, size, 0, &pos)) {
 			break;
 		}
 		if (MatchEnum(value, size, 0, &pos)) {
@@ -179,11 +179,6 @@ bool Syntax::IsSpecialSign(const std::string& value) {
 		if (MatchImport(value, size, 0, &pos)) {
 			break;
 		}
-		if (MatchExport(value, size, 0, &pos)) {
-			break;
-		}
-		// temp todo...
-
 		return false;
 	} while (false);
 
@@ -262,8 +257,8 @@ bool Syntax::SearchNextArray(const std::string& src, std::size_t size, std::size
 bool Syntax::MatchImport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
 	return MatchSign(STRING_IMPORT_SIGN, src, size, pos, nextPos);
 }
-bool Syntax::MatchExport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	return MatchSign(STRING_EXPORT_SIGN, src, size, pos, nextPos);
+bool Syntax::MatchImportAs(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
+	return MatchSign(STRING_IMPORT_AS_SIGN, src, size, pos, nextPos);
 }
 
 bool Syntax::MatchEnum(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {

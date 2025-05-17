@@ -20,6 +20,8 @@ std::function<std::string(const std::string&)> System::_funcOpenSrc = [](const s
 	in.read(buffer.data(), size);
 	return buffer;
 };
+std::unordered_set<std::string> System::_searchPathList;
+std::unordered_map<std::string, std::string> System::_abspathToSrcMap;
 
 void System::LocateEcho(std::function<void(const std::string&)> func) {
 	_funcEcho = func;
@@ -33,6 +35,37 @@ void System::Echo(const std::string& message) {
 	_funcEcho(message);
 }
 
-std::string System::OpenSrc(const std::string& filename) {
-	return _funcOpenSrc(filename);
+const std::string& System::OpenSrc(const std::string& filename, std::string& outAbsPath) {
+	auto absPath = std::filesystem::absolute(filename).string();
+	if (auto ite = _abspathToSrcMap.find(absPath); ite != _abspathToSrcMap.end()) {
+		outAbsPath = ite->first;
+		return ite->second;
+	}
+	if (std::filesystem::exists(absPath)) {
+		auto src = _funcOpenSrc(absPath);
+		outAbsPath = absPath;
+		_abspathToSrcMap.emplace(absPath, std::move(src));
+		return _abspathToSrcMap[absPath];
+	}
+	for (auto& path : _searchPathList) {
+		auto target = std::filesystem::path(path) / filename;
+		absPath = std::move(std::filesystem::absolute(target.lexically_normal()).string());
+		if (auto ite = _abspathToSrcMap.find(absPath); ite != _abspathToSrcMap.end()) {
+			outAbsPath = ite->first;
+			return ite->second;
+		}
+		if (!std::filesystem::exists(absPath)) {
+			continue;
+		}
+		auto src = _funcOpenSrc(absPath);
+		outAbsPath = absPath;
+		_abspathToSrcMap.emplace(absPath, std::move(src));
+		return _abspathToSrcMap[absPath];
+	}
+	static std::string DEF;
+	return DEF;
+}
+
+void System::AddSearchDir(const std::string& dir) {
+	_searchPathList.emplace(dir);
 }

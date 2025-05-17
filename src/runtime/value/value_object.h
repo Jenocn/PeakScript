@@ -14,9 +14,10 @@ class Space;
 class ValueObject : public TypeValue<ValueObject> {
 public:
 	ValueObject(std::shared_ptr<Space> indexSpace = nullptr, std::shared_ptr<ValueObject> parent = nullptr);
-	virtual std::shared_ptr<Value> Clone() const;
+	virtual std::shared_ptr<Value> Clone() const override;
 	std::shared_ptr<Space> GetSpace() const;
-	virtual std::string ToString() const;
+	virtual std::string ToString() const override;
+	virtual std::string ToRawString() const override;
 
 private:
 	std::shared_ptr<Space> _space{nullptr};

@@ -23,13 +23,13 @@ std::shared_ptr<Space> ValueObject::GetSpace() const {
 }
 
 std::string ValueObject::ToString() const {
-	std::string ret = "object { ";
+	std::string ret = "{ ";
 	const auto& variables = _space->GetVariables();
 	auto index = 0u;
 	for (auto& item : variables) {
 		ret += item.second->GetName();
 		ret += "=";
-		ret += item.second->GetValue()->ToString();
+		ret += item.second->GetValue()->ToRawString();
 		if (index < variables.size() - 1) {
 			ret += ", ";
 		}
@@ -37,4 +37,8 @@ std::string ValueObject::ToString() const {
 	}
 	ret += " }";
 	return ret;
+}
+
+std::string ValueObject::ToRawString() const {
+	return ToString();
 }

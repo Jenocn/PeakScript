@@ -16,10 +16,13 @@ public:
 
 public:
 	static void Echo(const std::string& message);
-	static std::string OpenSrc(const std::string& filename);
+	static const std::string& OpenSrc(const std::string& filename, std::string& outAbsPath);
+	static void AddSearchDir(const std::string& dir);
 
 private:
 	static std::function<void(const std::string&)> _funcEcho;
 	static std::function<std::string(const std::string&)> _funcOpenSrc;
+	static std::unordered_set<std::string> _searchPathList;
+	static std::unordered_map<std::string, std::string> _abspathToSrcMap;
 };
 } // namespace peak

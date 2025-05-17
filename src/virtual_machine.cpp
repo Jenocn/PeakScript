@@ -5,9 +5,7 @@
 #include "runtime/module_pool.h"
 #include "runtime/system.h"
 #include "virtual_journey.h"
-#include "virtual_tool.h"
 
-using namespace peak;
 using namespace peak;
 
 std::shared_ptr<VirtualJourney> VirtualMachine::Load(const std::string& src) {
@@ -19,8 +17,8 @@ std::shared_ptr<VirtualJourney> VirtualMachine::Load(const std::string& src) {
 }
 
 std::shared_ptr<VirtualJourney> VirtualMachine::LoadFile(const std::string& filename) {
-	const auto& src = VirtualTool::OpenSrc(filename);
-	return Load(src);
+	std::string absPath;
+	return Load(System::OpenSrc(filename, absPath));
 }
 
 void VirtualMachine::LocateLogger(std::function<void(const std::string&)> logger) {

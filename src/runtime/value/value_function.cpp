@@ -49,6 +49,11 @@ std::string ValueFunction::ToString() const {
 	ret += ")";
 	return ret;
 }
+
+std::string ValueFunction::ToRawString() const {
+	return ToString();
+}
+
 std::shared_ptr<Value> ValueFunction::Clone() const {
 	return std::make_unique<ValueFunction>(_params, _function);
 

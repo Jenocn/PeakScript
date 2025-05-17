@@ -11,6 +11,14 @@ const std::string& ValueString::GetValue() const {
 std::string ValueString::ToString() const {
 	return _value;
 }
+std::string ValueString::ToRawString() const {
+	std::string ret;
+	ret.reserve(_value.size() + 2);
+	ret.append("\"");
+	ret.append(_value);
+	ret.append("\"");
+	return ret;
+}
 std::shared_ptr<Value> ValueString::Clone() const {
 	return std::make_shared<ValueString>(_value);
 }

@@ -5,7 +5,6 @@
 #include "runtime/sentence/sentence_do_while.h"
 #include "runtime/sentence/sentence_echo.h"
 #include "runtime/sentence/sentence_enum_define.h"
-#include "runtime/sentence/sentence_export.h"
 #include "runtime/sentence/sentence_expression_double.h"
 #include "runtime/sentence/sentence_expression_function_call.h"
 #include "runtime/sentence/sentence_expression_inside.h"
@@ -52,7 +51,6 @@ Parse::SentenceParseList Parse::_sentenceParseList = {
 	_ParseLoopControl,
 	_ParseReturn,
 	_ParseImport,
-	_ParseExport,
 	_ParseTryCatchFinally,
 	_ParseExpressionToEnd,
 	_ParseFunctioCall,
@@ -295,35 +293,21 @@ std::shared_ptr<Sentence> Parse::_ParseImport(const std::string& src, std::size_
 		return nullptr;
 	}
 
-	if (!JumpEnd(src, size, pos, &pos)) {
-		return nullptr;
-	}
-	*nextPos = pos;
-	return std::make_shared<SentenceImport>(moduleName);
-}
-std::shared_ptr<Sentence> Parse::_ParseExport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (!Syntax::MatchExport(src, size, pos, &pos)) {
-		return nullptr;
-	}
 	Jump(src, size, pos, &pos);
 
-	if (pos >= size) {
-		return nullptr;
-	}
-	char sign = src[pos];
-	if (!Syntax::IsGrammarStringSign(sign)) {
-		return nullptr;
-	}
-	std::string moduleName;
-	if (!Syntax::MatchPair(sign, sign, src, size, pos, &pos, &moduleName)) {
-		return nullptr;
+	std::string alias { "" };
+	if (Syntax::MatchImportAs(src, size, pos, &pos)) {
+		Jump(src, size, pos, &pos);
+		if (!Syntax::MatchName(src, size, pos, &pos, &alias)) {
+			return nullptr;
+		}
 	}
 
 	if (!JumpEnd(src, size, pos, &pos)) {
 		return nullptr;
 	}
 	*nextPos = pos;
-	return std::make_shared<SentenceExport>(moduleName);
+	return std::make_shared<SentenceImport>(moduleName, alias);
 }
 
 std::shared_ptr<Sentence> Parse::_ParseReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
@@ -347,8 +331,11 @@ std::shared_ptr<Sentence> Parse::_ParseReturn(const std::string& src, std::size_
 	return std::make_shared<SentenceReturn>(expression);
 }
 std::shared_ptr<Sentence> Parse::_ParseFunctionDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (Syntax::MatchFunction(src, size, pos, &pos)) {
-		Jump(src, size, pos, &pos);
+	if (!Syntax::MatchFunction(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	if (!Jump(src, size, pos, &pos)) {
+		return nullptr;
 	}
 	std::string name;
 	if (!Syntax::MatchName(src, size, pos, &pos, &name)) {
@@ -451,10 +438,11 @@ std::shared_ptr<Sentence> Parse::_ParseEnumDefine(const std::string& src, std::s
 }
 
 std::shared_ptr<Sentence> Parse::_ParseObjectDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos) {
-	if (Syntax::MatchObject(src, size, pos, &pos)) {
-		if (!Jump(src, size, pos, &pos)) {
-			return nullptr;
-		}
+	if (!Syntax::MatchObject(src, size, pos, &pos)) {
+		return nullptr;
+	}
+	if (!Jump(src, size, pos, &pos)) {
+		return nullptr;
 	}
 	std::string name;
 	if (!Syntax::MatchName(src, size, pos, &pos, &name)) {
@@ -1236,7 +1224,7 @@ std::shared_ptr<SentenceExpression> Parse::_ParseExpressionMathBracket(const std
 			stack0->emplace(expression);
 		}
 		return true;
-		};
+	};
 
 	while (true) {
 		bool bRet = false;

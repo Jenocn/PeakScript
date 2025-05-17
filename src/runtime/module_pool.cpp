@@ -10,18 +10,10 @@ ModulePool* ModulePool::GetInstance() {
 	return &_ins;
 }
 
-void ModulePool::AddSearchDir(const std::string& dir) {
-	if (_searchDirs.find(dir) == _searchDirs.end()) {
-		_searchDirs.emplace(dir);
-	}
-}
-void ModulePool::RemoveSearchDir(const std::string& dir) {
-	if (_searchDirs.find(dir) != _searchDirs.end()) {
-		_searchDirs.erase(dir);
-	}
-}
-
 bool ModulePool::AddModule(const std::string& moduleName, std::shared_ptr<Module> module) {
+	if (!module) {
+		return false;
+	}
 	auto ite = _modulesMap.find(moduleName);
 	if (ite == _modulesMap.end()) {
 		_modulesMap.emplace(moduleName, module);
@@ -37,72 +29,41 @@ void ModulePool::RemoveModule(const std::string& moduleName) {
 	}
 }
 
-bool ModulePool::AddModuleFilename(const std::string& moduleName, const std::string& filename) {
-	if (_moduleToFilesMap.find(moduleName) == _moduleToFilesMap.end()) {
-		_moduleToFilesMap.emplace(moduleName, filename);
-		return true;
-	}
-	return false;
-}
-
 std::shared_ptr<Module> ModulePool::UseModule(const std::string& moduleName) {
-	// exists module
-	do {
-		auto ite = _modulesMap.find(moduleName);
-		if (ite == _modulesMap.end()) {
-			break;
-		}
-		auto mod = ite->second;
-		if (!mod) {
-			_modulesMap.erase(ite);
-			break;
-		}
-		if (!mod->IsExecuted()) {
-			if (!mod->Execute()) {
-				_modulesMap.erase(ite);
-				break;
+	std::shared_ptr<Module> retModule { nullptr };
+	std::string saveKey;
+	auto ite = _modulesMap.find(moduleName);
+	if (ite != _modulesMap.end()) {
+		saveKey = moduleName;
+		retModule = ite->second;
+	} else {
+		std::string absPath;
+		const std::string& src = System::OpenSrc(moduleName, absPath);
+		if (!absPath.empty()) {
+			auto srcIte = _modulesMap.find(absPath);
+			if (srcIte != _modulesMap.end()) {
+				saveKey = std::move(absPath);
+				retModule = srcIte->second;
+			} else {
+				auto executer = Executer::Create(src);
+				if (executer) {
+					saveKey = absPath;
+					retModule = std::make_shared<Module>(moduleName, executer);
+					_modulesMap.emplace(std::move(absPath), retModule);
+				}
 			}
 		}
-		return mod;
-	} while (false);
-
-	// create new module
-	auto executer = _CreateExecuter(moduleName);
-	if (!executer) {
-		auto ite = _moduleToFilesMap.find(moduleName);
-		if (ite != _moduleToFilesMap.end()) {
-			executer = _CreateExecuter(ite->second);
-		}
-
-		if (!executer) {
+	}
+	if (!retModule) {
+		return nullptr;
+	}
+	if (!retModule->IsExecuted()) {
+		if (!retModule->Execute()) {
+			if (!saveKey.empty()) {
+				_modulesMap.erase(saveKey);
+			}
 			return nullptr;
 		}
 	}
-
-	auto ret = std::make_shared<Module>(moduleName, executer);
-	if (ret->Execute()) {
-		_modulesMap.emplace(moduleName, ret);
-	} else {
-		ret = nullptr;
-	}
-	return ret;
-}
-
-std::shared_ptr<Executer> ModulePool::_CreateExecuter(const std::string& filename) const {
-	if (const auto& src = System::OpenSrc(filename); !src.empty()) {
-		auto ret = Executer::Create(src);
-		if (ret) {
-			return ret;
-		}
-	}
-	for (auto& dir : _searchDirs) {
-		const auto& src = System::OpenSrc(dir + filename);
-		if (!src.empty()) {
-			auto ret = Executer::Create(src);
-			if (ret) {
-				return ret;
-			}
-		}
-	}
-	return nullptr;
+	return retModule;
 }

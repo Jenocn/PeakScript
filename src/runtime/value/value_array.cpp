@@ -12,13 +12,16 @@ std::string ValueArray::ToString() const {
 	std::string ret = "[";
 	auto arrSize = _value.size();
 	for (auto i = 0u; i < arrSize; ++i) {
-		ret += _value[i]->GetValue()->ToString();
+		ret += _value[i]->GetValue()->ToRawString();
 		if (i != arrSize - 1) {
 			ret += ", ";
 		}
 	}
 	ret += "]";
 	return ret;
+}
+std::string ValueArray::ToRawString() const {
+	return ToString();
 }
 std::shared_ptr<Value> ValueArray::Clone() const {
 	auto valueArray = std::make_shared<ValueArray>();

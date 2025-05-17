@@ -58,7 +58,7 @@ public:
 
 public:
 	static bool MatchImport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static bool MatchExport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
+	static bool MatchImportAs(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchEnum(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchExtends(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static bool MatchObject(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

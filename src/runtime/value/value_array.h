@@ -15,8 +15,9 @@ class ValueArray : public TypeValue<ValueArray> {
 public:
 	ValueArray();
 	ValueArray(const std::vector<std::shared_ptr<Variable>>& value);
-	virtual std::string ToString() const;
-	virtual std::shared_ptr<Value> Clone() const;
+	virtual std::string ToString() const override;
+	virtual std::string ToRawString() const override;
+	virtual std::shared_ptr<Value> Clone() const override;
 
 	std::vector<std::shared_ptr<Variable>>& GetArray();
 

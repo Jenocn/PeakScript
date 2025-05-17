@@ -22,7 +22,6 @@ std::shared_ptr<Space> Space::CopySpace() const {
 	}
 	auto space = std::make_shared<Space>(_spaceType, parent);
 	space->_spaceOfUsing = _spaceOfUsing;
-	space->_importModules = _importModules;
 
 	for (auto& pair : _variables) {
 		auto tempVariable = pair.second;
@@ -37,33 +36,6 @@ std::shared_ptr<Space> Space::CopySpace() const {
 void Space::Clear() {
 	_variables.clear();
 	_spaceOfUsing.clear();
-	_importModules.clear();
-	auto modulePool = ModulePool::GetInstance();
-	for (auto& name : _exportModulesNameSet) {
-		modulePool->RemoveModule(name);
-	}
-	_exportModulesNameSet.clear();
-}
-
-bool Space::UseModule(std::shared_ptr<Module> module) {
-	if (!module) {
-		return false;
-	}
-	if (_importModules.find(module->GetName()) != _importModules.end()) {
-		ErrorLogger::LogRuntimeError(module->GetName());
-		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Space, "The module \"" + module->GetName() + "\" is exist!");
-		return false;
-	}
-	_importModules.emplace(module->GetName(), module);
-	return true;
-}
-
-bool Space::SetExportModule(const std::string& moduleName) {
-	if (_exportModulesNameSet.find(moduleName) == _exportModulesNameSet.end()) {
-		_exportModulesNameSet.emplace(moduleName);
-		return true;
-	}
-	return false;
 }
 
 bool Space::AddVariable(std::shared_ptr<Variable> value) {
@@ -95,12 +67,6 @@ std::shared_ptr<Variable> Space::FindVariable(const std::string& name) const {
 	}
 	for (auto space : _spaceOfUsing) {
 		auto find = space->FindVariable(name);
-		if (find) {
-			return find;
-		}
-	}
-	for (auto& pair : _importModules) {
-		auto find = pair.second->GetSpace()->FindVariableFromTop(name);
 		if (find) {
 			return find;
 		}

@@ -17,6 +17,10 @@ std::string ValueBool::ToString() const {
 	return _value ? "true" : "false";
 }
 
+std::string ValueBool::ToRawString() const {
+	return ToString();
+}
+
 std::shared_ptr<Value> ValueBool::Clone() const {
 	return _value ? TRUE : FALSE;
 }

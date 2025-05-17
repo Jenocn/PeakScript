@@ -6,9 +6,6 @@
 using namespace peak;
 
 std::shared_ptr<Executer> Executer::Create(const std::string& src) {
-	if (src.empty()) {
-		return nullptr;
-	}
 	auto parseData = Parse::Load(src);
 	if (!parseData->bSuccess) {
 		return nullptr;

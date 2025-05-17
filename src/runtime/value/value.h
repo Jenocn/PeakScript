@@ -14,7 +14,8 @@ public:
 	virtual ~Value() {}
 	virtual int GetType() const = 0;
 	virtual std::shared_ptr<Value> Clone() const = 0;
-	virtual std::string ToString() const { return ""; }
+	virtual std::string ToString() const = 0;
+	virtual std::string ToRawString() const = 0;
 };
 
 class TypeValueCount {

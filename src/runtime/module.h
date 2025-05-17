@@ -25,9 +25,9 @@ public:
 
 private:
 	std::string _name;
-	std::shared_ptr<Executer> _executer{nullptr};
-	std::shared_ptr<Space> _space{nullptr};
-	bool _bExecuted{false};
+	std::shared_ptr<Executer> _executer { nullptr };
+	std::shared_ptr<Space> _space { nullptr };
+	bool _bExecuted { false };
 };
 
 } // namespace peak

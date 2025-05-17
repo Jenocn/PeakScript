@@ -49,7 +49,6 @@ private:
 
 private: // Sentence
 	static std::shared_ptr<Sentence> _ParseImport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
-	static std::shared_ptr<Sentence> _ParseExport(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseReturn(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseFunctionDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);
 	static std::shared_ptr<Sentence> _ParseEnumDefine(const std::string& src, std::size_t size, std::size_t pos, std::size_t* nextPos);

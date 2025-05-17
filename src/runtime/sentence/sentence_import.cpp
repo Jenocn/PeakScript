@@ -1,11 +1,13 @@
 #include "sentence_import.h"
 #include "runtime/module.h"
 #include "runtime/module_pool.h"
+#include "runtime/value/value_tool.h"
+#include "runtime/variable.h"
 
 using namespace peak;
 
-SentenceImport::SentenceImport(const std::string& moduleName)
-	: _moduleName(moduleName) {
+SentenceImport::SentenceImport(const std::string& moduleName, const std::string& alias)
+	: _moduleName(moduleName), _alias(alias) {
 }
 ExecuteResult SentenceImport::Execute(std::shared_ptr<Space> space) {
 	if (space->GetSpaceType() != SpaceType::None) {
@@ -19,10 +21,18 @@ ExecuteResult SentenceImport::Execute(std::shared_ptr<Space> space) {
 		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Import, "The module \"" + _moduleName + "\" not found!");
 		return ExecuteResult::Failed;
 	}
-	if (!space->UseModule(module)) {
-		ErrorLogger::LogRuntimeError(_moduleName);
-		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Import, "The module \"" + _moduleName + "\" already exists!");
-		return ExecuteResult::Failed;
+
+	if (!_alias.empty()) {
+		auto moduleObject = std::make_shared<ValueObject>(module->GetSpace());
+		auto variable = std::make_shared<Variable>(_alias, VariableAttribute::None, moduleObject);
+		if (!space->AddVariable(variable)) {
+			ErrorLogger::LogRuntimeError(_moduleName);
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Import, "The module \"" + _moduleName + "\" already exists!");
+			return ExecuteResult::Failed;
+		}
+	} else {
+		space->AddSpaceOfUsing(module->GetSpace());
 	}
+
 	return ExecuteResult::Successed;
 }

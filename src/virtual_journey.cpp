@@ -5,7 +5,6 @@
 #include "runtime/space.h"
 
 using namespace peak;
-using namespace peak;
 
 VirtualJourney::VirtualJourney(std::shared_ptr<Executer> executer)
 	: _executer(executer) {

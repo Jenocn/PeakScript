@@ -11,10 +11,10 @@ PeakScript是一个脚本语言,在第一次加载脚本时创建一组运行时
 ---  
   
 ## 语句结束符     
-* `;`分号或`\n`换行为一条语句的结束符  
+* `;`分号为一条语句的结束符  
   
 ## 变量声明     
-#### **`var`或`the`**    
+#### **`var`**    
 用于声明一个变量  
 例如:  
 `var num = 0;` 表示声明一个名为num的变量,并初始化为数值0  
@@ -34,7 +34,6 @@ set value = "Hello World"; // value已经存在,则直接赋值
 可以直接作为声明符,后可跟变量声明符    
 例如:  
 `const num = 10;` 声明一个num常量    
-`const var num = 10;`  亦可,同上    
   
 ## 赋值    
 当变量声明之后,则可以直接赋值    
@@ -46,7 +45,7 @@ PeakScript使用的是动态数据类型,number,bool,string,null,array,object
 常见的小数,整数和负数    
   
 #### `bool`类型    
-`true`或`false`两种值,提供两种别名`yes`,`no`    
+`true`或`false`两种值  
   
 #### `string`类型    
 字符串类型,字符串类型符号**有3种**,分别为:  
@@ -70,11 +69,11 @@ PeakScript使用的是动态数据类型,number,bool,string,null,array,object
 `var i = 0;` `arr[i];` `arr[1 + 1];`   
 
 #### `object`类型  
+声明符号`object`
 表示一个对象,对象可以包括一组变量和方法  
 对象声明:  
-```
-// 和function一样, object声明标识可不写,如:`MyObj {}`
-objcet MyObj {
+```  
+object MyObj {
 	var v0 = 0;
 	var v1 = 1;
 	function sum() {
@@ -114,20 +113,13 @@ enum Type {
 ```  
 
 ## 函数    
-函数声明,前置声明符号`function`可写可不写  
+函数声明,声明符号`function`  
 例如声明一个返回两个数总和的函数:  
 ```  
-sum(a, b) {  
+function sum(a, b) {  
 	return a + b;  
 }  
 var ret = sum(1, 2); // 返回3  
-```  
-
-支持函数重载:  
-```
-sum(a, b, c) {
-	return a + b + c;
-}
 ```  
 
 ## 运算符  
@@ -236,7 +228,7 @@ for (var i = 0; i < 10; ++i) {
 #### `break`和`continue`  
 循环中遇到`break`则直接跳出当前循环,遇到`continue`则立即执行下一次循环   
 
-## 模块 import/export  
+## 模块 import  
 #### import 引用模块  
 添加模块后则可以调用对应模块空间的对象  
 格式:  
@@ -245,24 +237,24 @@ import "ModuleName";
 ```
 `ModuleName`:
 * 使用ModulePool事先添加的模块制定名称  
-* 其他代码文件中export的名称  
 * peak脚本代码的文件名  
 
-#### export 导出模块  
-导出当前代码空间  
-格式:  
+导入到name变量中:
 ```
-export "ModuleName";
-```  
-`ModuleName`不能与已存在的模块名重复  
+import "ModuleName" as name;
+name.xxx;
+```
 
 ## 异常处理      
+用于规避运行时错误  
 ```  
 try {  
 	// 执行语句  
 } catch {  
+	// 可省略
 	// 若try当中存在错误的语句,则执行  
 } finally {  
+	// 可省略
 	// 无论如何最后都会执行  
 }  
 ```  

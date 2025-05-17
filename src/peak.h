@@ -15,7 +15,4 @@
 
 #include "virtual_journey.h"
 #include "virtual_machine.h"
-#include "virtual_tool.h"
 
-// using namespace peak;
-// using namespace peak;

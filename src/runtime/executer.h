@@ -27,8 +27,6 @@ public:
 	bool AddVariable(std::shared_ptr<Variable> variable);
 
 private:
-
-private:
 	std::shared_ptr<ParseData> _parseData{nullptr};
 	std::shared_ptr<Space> _space{nullptr};
 	std::shared_ptr<Space> _outsideSpace{nullptr};
