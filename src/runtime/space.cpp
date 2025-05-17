@@ -26,8 +26,9 @@ std::shared_ptr<Space> Space::CopySpace() const {
 	for (auto& pair : _variables) {
 		auto tempVariable = pair.second;
 		auto tempVlaue = tempVariable->GetValue();
-		auto variable = std::shared_ptr<Variable>(
-			new Variable(pair.first, tempVariable->GetAttribute(), tempVlaue ? tempVlaue->Clone() : nullptr));
+		auto variable = std::make_shared<Variable>(
+			pair.first, tempVariable->GetAttribute(), tempVlaue ? tempVlaue->Clone() : nullptr
+		);
 		space->_variables.emplace(pair.first, variable);
 	}
 	return space;
