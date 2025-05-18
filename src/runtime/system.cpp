@@ -27,7 +27,7 @@ void System::LocateEcho(std::function<void(const std::string&)> func) {
 	_funcEcho = func;
 }
 
-void System::LocateOpenSrc(std::function<std::string(const std::string&)> func) {
+void System::LocateLoadText(std::function<std::string(const std::string&)> func) {
 	_funcOpenSrc = func;
 }
 
@@ -66,6 +66,10 @@ const std::string& System::OpenSrc(const std::string& filename, std::string& out
 	return DEF;
 }
 
-void System::AddSearchDir(const std::string& dir) {
+void System::AddSearchSrcDir(const std::string& dir) {
 	_searchPathList.emplace(dir);
+}
+
+std::string System::LoadText(const std::string& filename) {
+	return _funcOpenSrc(filename);
 }

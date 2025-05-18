@@ -15,12 +15,9 @@ ValueFunction::ValueFunction(const std::vector<std::string>& params, FunctionTyp
 	: _params(params), _function(func) {
 }
 
-ValueFunction::ValueFunction() {
-}
-
 std::shared_ptr<Value> ValueFunction::Call(const std::vector<std::shared_ptr<Value>>& args, std::shared_ptr<Space> space) {
 	if (args.size() != _params.size()) {
-		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionCall, "The function (" + std::to_string(args.size()) + " params) not found!");
+		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::FunctionCall, "The number of parameters for the function is incorrect");
 		return nullptr;
 	}
 

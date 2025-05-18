@@ -35,3 +35,7 @@ bool Variable::SetValue(std::shared_ptr<Value> value) {
 std::shared_ptr<Value> Variable::GetValue() const {
 	return _value;
 }
+
+std::shared_ptr<Variable> Variable::Clone() const {
+	return std::make_shared<Variable>(_name, _attribute, _value->Clone());
+}

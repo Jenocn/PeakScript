@@ -2,36 +2,26 @@
 
 using namespace peak;
 
-static const std::unordered_map<int, std::string> TypeStringMap = {
-	{ValueNull::Type(), "null"},
-	{ValueBool::Type(), "bool"},
-	{ValueArray::Type(), "array"},
-	{ValueString::Type(), "string"},
-	{ValueNumber::Type(), "number"},
-	{ValueFunction::Type(), "function"},
-	{ValueObject::Type(), "object"},
-};
-
 bool ValueTool::IsNull(Value* value) {
-	return !value || (value->GetType() == ValueNull::Type());
+	return !value || (value->GetType() == ValueNull::TYPE_INDEX);
 }
 bool ValueTool::IsBool(Value* value) {
-	return value && (value->GetType() == ValueBool::Type());
+	return value && (value->GetType() == ValueBool::TYPE_INDEX);
 }
 bool ValueTool::IsNumber(Value* value) {
-	return value && (value->GetType() == ValueNumber::Type());
+	return value && (value->GetType() == ValueNumber::TYPE_INDEX);
 }
 bool ValueTool::IsString(Value* value) {
-	return value && (value->GetType() == ValueString::Type());
+	return value && (value->GetType() == ValueString::TYPE_INDEX);
 }
 bool ValueTool::IsFunction(Value* value) {
-	return value && (value->GetType() == ValueFunction::Type());
+	return value && (value->GetType() == ValueFunction::TYPE_INDEX);
 }
 bool ValueTool::IsArray(Value* value) {
-	return value && (value->GetType() == ValueArray::Type());
+	return value && (value->GetType() == ValueArray::TYPE_INDEX);
 }
 bool ValueTool::IsObject(Value* value) {
-	return value && (value->GetType() == ValueObject::Type());
+	return value && (value->GetType() == ValueObject::TYPE_INDEX);
 }
 
 std::string ValueTool::ToString(Value* value) {
@@ -42,6 +32,15 @@ std::string ValueTool::ToString(Value* value) {
 }
 
 std::string ValueTool::ToTypeString(Value* value) {
+	static const std::unordered_map<std::type_index, std::string> TypeStringMap = {
+		{ValueNull::TYPE_INDEX, "null"},
+		{ValueBool::TYPE_INDEX, "bool"},
+		{ValueArray::TYPE_INDEX, "array"},
+		{ValueString::TYPE_INDEX, "string"},
+		{ValueNumber::TYPE_INDEX, "number"},
+		{ValueFunction::TYPE_INDEX, "function"},
+		{ValueObject::TYPE_INDEX, "object"},
+	};
 	if (!value) {
 		return ToTypeString(ValueNull::DEFAULT_VALUE.get());
 	}
@@ -66,20 +65,23 @@ bool ValueTool::ToLogic(Value* value) {
 }
 
 bool ValueTool::Equal(Value* a, Value* b) {
+	if (a == b) {
+		return true;
+	}
 	if (a->GetType() != b->GetType()) {
 		return false;
 	}
 	if (IsBool(a)) {
 		return static_cast<ValueBool*>(a)->GetValue() ==
-			   static_cast<ValueBool*>(b)->GetValue();
+			static_cast<ValueBool*>(b)->GetValue();
 	}
 	if (IsNumber(a)) {
 		return static_cast<ValueNumber*>(a)->GetValue() ==
-			   static_cast<ValueNumber*>(b)->GetValue();
+			static_cast<ValueNumber*>(b)->GetValue();
 	}
 	if (IsString(a)) {
 		return static_cast<ValueString*>(a)->GetValue() ==
-			   static_cast<ValueString*>(b)->GetValue();
+			static_cast<ValueString*>(b)->GetValue();
 	}
 	if (IsNull(a)) {
 		return true;
@@ -93,7 +95,7 @@ bool ValueTool::More(Value* a, Value* b) {
 	}
 	if (IsNumber(a)) {
 		return static_cast<ValueNumber*>(a)->GetValue() >
-			   static_cast<ValueNumber*>(b)->GetValue();
+			static_cast<ValueNumber*>(b)->GetValue();
 	}
 	return false;
 }

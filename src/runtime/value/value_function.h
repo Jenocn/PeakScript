@@ -24,7 +24,7 @@ public:
 	virtual std::shared_ptr<Value> Clone() const override;
 
 private:
-	ValueFunction();
+	ValueFunction() = default;
 
 private:
 	std::vector<std::string> _params;

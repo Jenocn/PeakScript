@@ -10,10 +10,12 @@ double ValueNumber::GetValue() const {
 	return _value;
 }
 std::string ValueNumber::ToString() const {
-	char ch[24] { 0 };
-	snprintf(ch, sizeof(ch), "%0.15lg", _value);
-	// sprintf(ch, "%0.15lg", _value);
-	return ch;
+	std::array<char, 64> buffer;
+	auto [ptr, ec] = std::to_chars(buffer.data(), buffer.data() + buffer.size(), _value, std::chars_format::fixed);
+	if (ec != std::errc()) {
+		return "0";
+	}
+	return std::string(buffer.data(), ptr);
 }
 std::string ValueNumber::ToRawString() const {
 	return ToString();

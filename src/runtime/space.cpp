@@ -1,5 +1,5 @@
 #include "space.h"
-#include "builtin_function.h"
+#include "builtin/builtin_function.h"
 #include "module.h"
 #include "module_pool.h"
 #include "value/value.h"
@@ -24,12 +24,7 @@ std::shared_ptr<Space> Space::CopySpace() const {
 	space->_spaceOfUsing = _spaceOfUsing;
 
 	for (auto& pair : _variables) {
-		auto tempVariable = pair.second;
-		auto tempVlaue = tempVariable->GetValue();
-		auto variable = std::make_shared<Variable>(
-			pair.first, tempVariable->GetAttribute(), tempVlaue ? tempVlaue->Clone() : nullptr
-		);
-		space->_variables.emplace(pair.first, variable);
+		space->_variables.emplace(pair.first, pair.second->Clone());
 	}
 	return space;
 }
@@ -66,14 +61,17 @@ std::shared_ptr<Variable> Space::FindVariable(const std::string& name) const {
 	if (ite != _variables.end()) {
 		return ite->second;
 	}
+	if (_parent) {
+		auto ret = _parent->FindVariable(name);
+		if (ret) {
+			return ret;
+		}
+	}
 	for (auto space : _spaceOfUsing) {
 		auto find = space->FindVariable(name);
 		if (find) {
 			return find;
 		}
-	}
-	if (_parent) {
-		return _parent->FindVariable(name);
 	}
 	return BuiltInFunction::GetInstance()->FindVariable(name);
 }

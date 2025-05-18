@@ -23,8 +23,7 @@ ExecuteResult SentenceImport::Execute(std::shared_ptr<Space> space) {
 	}
 
 	if (!_alias.empty()) {
-		auto moduleObject = std::make_shared<ValueObject>(module->GetSpace());
-		auto variable = std::make_shared<Variable>(_alias, VariableAttribute::None, moduleObject);
+		auto variable = std::make_shared<Variable>(_alias, VariableAttribute::None, std::make_shared<ValueObject>(module));
 		if (!space->AddVariable(variable)) {
 			ErrorLogger::LogRuntimeError(_moduleName);
 			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Import, "The module \"" + _moduleName + "\" already exists!");

@@ -27,7 +27,6 @@ public:
 	bool AddVariable(std::shared_ptr<Variable> variable);
 
 	std::shared_ptr<Value> ExecuteFunction(const std::string& name, const std::vector<std::shared_ptr<Value>>& args);
-	std::shared_ptr<Value> ExecuteFunction(const std::string& name);
 
 private:
 	std::shared_ptr<Executer> _executer{nullptr};

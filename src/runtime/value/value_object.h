@@ -10,9 +10,11 @@
 namespace peak {
 
 class Space;
+class Module;
 
-class ValueObject : public TypeValue<ValueObject> {
+class ValueObject: public TypeValue<ValueObject> {
 public:
+	ValueObject(std::shared_ptr<Module> module);
 	ValueObject(std::shared_ptr<Space> indexSpace = nullptr, std::shared_ptr<ValueObject> parent = nullptr);
 	virtual std::shared_ptr<Value> Clone() const override;
 	std::shared_ptr<Space> GetSpace() const;
@@ -20,7 +22,7 @@ public:
 	virtual std::string ToRawString() const override;
 
 private:
-	std::shared_ptr<Space> _space{nullptr};
+	std::shared_ptr<Space> _space { nullptr };
 };
 
 } // namespace peak

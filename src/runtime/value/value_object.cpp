@@ -1,8 +1,13 @@
 #include "value_object.h"
 #include "runtime/space.h"
 #include "runtime/variable.h"
+#include "runtime/module.h"
 
 using namespace peak;
+
+ValueObject::ValueObject(std::shared_ptr<Module> module) {
+	_space = module->GetSpace();
+}
 
 ValueObject::ValueObject(std::shared_ptr<Space> indexSpace, std::shared_ptr<ValueObject> parent) {
 	auto parentSpace = parent ? parent->GetSpace()->CopySpace() : nullptr;
@@ -42,3 +47,4 @@ std::string ValueObject::ToString() const {
 std::string ValueObject::ToRawString() const {
 	return ToString();
 }
+

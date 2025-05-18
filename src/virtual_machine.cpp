@@ -29,8 +29,8 @@ void VirtualMachine::LocateLogger(std::function<void(const std::string&)> echo, 
 	ErrorLogger::Locate(errorLogger);
 }
 
-void VirtualMachine::LocateOpenSrc(std::function<std::string(const std::string&)> func) {
-	System::LocateOpenSrc(func);
+void VirtualMachine::LocateLoadText(std::function<std::string(const std::string&)> func) {
+	System::LocateLoadText(func);
 }
 
 ModulePool* VirtualMachine::GetModulePool() {

@@ -10,6 +10,7 @@
 #include <iostream>
 #include <list>
 #include <map>
+#include <array>
 #include <memory>
 #include <set>
 #include <stack>
@@ -19,6 +20,8 @@
 #include <vector>
 #include <fstream>
 #include <filesystem>
+#include <typeindex>
+#include <charconv>
 
 namespace peak {
 

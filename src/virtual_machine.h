@@ -22,7 +22,7 @@ public:
 
 	static void LocateLogger(std::function<void(const std::string&)> logger);
 	static void LocateLogger(std::function<void(const std::string&)> echo, std::function<void(const std::string&)> errorLogger);
-	static void LocateOpenSrc(std::function<std::string(const std::string&)> func);
+	static void LocateLoadText(std::function<std::string(const std::string&)> func);
 
 	static ModulePool* GetModulePool();
 };

@@ -33,6 +33,3 @@ std::shared_ptr<Value> VirtualJourney::ExecuteFunction(const std::string& name, 
 	return ValueNull::DEFAULT_VALUE;
 }
 
-std::shared_ptr<Value> VirtualJourney::ExecuteFunction(const std::string& name) {
-	return ExecuteFunction(name, {});
-}

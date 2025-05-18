@@ -2,6 +2,7 @@
 #include "executer.h"
 #include "module.h"
 #include "system.h"
+#include "builtin/builtin_module.h"
 
 using namespace peak;
 
@@ -48,14 +49,17 @@ std::shared_ptr<Module> ModulePool::UseModule(const std::string& moduleName) {
 				auto executer = Executer::Create(src);
 				if (executer) {
 					saveKey = absPath;
-					retModule = std::make_shared<Module>(moduleName, executer);
+					retModule = std::make_shared<Module>(executer);
 					_modulesMap.emplace(std::move(absPath), retModule);
 				}
 			}
 		}
 	}
 	if (!retModule) {
-		return nullptr;
+		retModule = BuiltinModule::GetInstance()->FindModule(moduleName);
+		if (!retModule) {
+			return nullptr;
+		}
 	}
 	if (!retModule->IsExecuted()) {
 		if (!retModule->Execute()) {
