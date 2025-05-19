@@ -9,7 +9,6 @@
 
 namespace peak { 
 
-	
 class SentenceBlock : public SentenceReturn {
 public:
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);

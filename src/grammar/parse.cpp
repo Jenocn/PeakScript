@@ -314,13 +314,10 @@ std::shared_ptr<Sentence> Parse::_ParseReturn(const std::string& src, std::size_
 	if (!Syntax::MatchReturn(src, size, pos, &pos)) {
 		return nullptr;
 	}
-	if (!Jump(src, size, pos, &pos)) {
-		return nullptr;
-	}
 
-	auto expression = _ParseExpression(src, size, pos, &pos);
-	if (!expression) {
-		return nullptr;
+	std::shared_ptr<SentenceExpression> expression { nullptr };
+	if (Jump(src, size, pos, &pos)) {
+		expression = _ParseExpression(src, size, pos, &pos);
 	}
 
 	if (!JumpEnd(src, size, pos, &pos)) {

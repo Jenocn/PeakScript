@@ -14,7 +14,7 @@ class SentenceExpression;
 
 class SentenceReturn : public Sentence {
 public:
-	SentenceReturn();
+	SentenceReturn() = default;
 	SentenceReturn(std::shared_ptr<SentenceExpression> expression);
 	virtual ExecuteResult Execute(std::shared_ptr<Space> space);
 

@@ -1,20 +1,22 @@
 #include "sentence_return.h"
 #include "sentence_expression.h"
+#include "runtime/value/value_tool.h"
 
 using namespace peak;
-
-SentenceReturn::SentenceReturn() {
-}
 
 SentenceReturn::SentenceReturn(std::shared_ptr<SentenceExpression> expression)
 	: _returnExpression(expression) {
 }
 ExecuteResult SentenceReturn::Execute(std::shared_ptr<Space> space) {
-	if (!IsSuccess(_returnExpression->Execute(space))) {
-		ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Return, "The expression execute failed!");
-		return ExecuteResult::Failed;
+	if (_returnExpression) {
+		if (!IsSuccess(_returnExpression->Execute(space))) {
+			ErrorLogger::LogRuntimeError(ErrorRuntimeCode::Return, "The expression execute failed!");
+			return ExecuteResult::Failed;
+		}
+		SetReturnValue(_returnExpression->GetValue());
+	} else {
+		SetReturnValue(ValueNull::DEFAULT_VALUE);
 	}
-	SetReturnValue(_returnExpression->GetValue());
 	return ExecuteResult::Return;
 }
 
